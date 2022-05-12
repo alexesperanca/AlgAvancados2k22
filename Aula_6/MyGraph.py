@@ -146,6 +146,25 @@ class MyGraph:
 
         return path, current
 
+    def frontpath(self, s, d):
+        visited = [s]
+        path = {s: 0}
+        current = s
+        while current != d:
+            value = path[current]           # Nº de vezes que andou até este local
+            poss = self.graph[current]      # Possibilidades para andar a partir do local
+            for n in poss:
+                if n in visited: pass
+                elif self.graph[n] == {} and n != d: 
+                    visited.append(n)
+                    pass
+                else:
+                    current = n
+                    path[current] = value + 1
+                    visited.append(n)
+
+        return path, current
+
     def revert_graph(self):
         '''Reverse of the original graph'''
 
