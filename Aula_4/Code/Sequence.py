@@ -33,7 +33,7 @@ class Sequence:
         str
             String with the information of the object
         '''
-        return f"{self.check} sequence:\n{self.seq}"
+        return self.check + ":" + self.seq
         
     def print_seq(self) -> str:
         '''
@@ -45,6 +45,15 @@ class Sequence:
             String of the complete sequence
         '''
         print(self.seq)
+
+    def alphabet(self) -> str:
+        if self.check == "DNA":
+            return 'ACGT'
+        if self.check == "RNA":
+            return 'ACGU'
+        if self.check == "amino":
+            return 'FLIMVSPTAY_HQNKDECWRG'
+
     
     def get_slice(self, i: str, j: str) -> str:
         '''

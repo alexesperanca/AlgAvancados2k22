@@ -1,4 +1,4 @@
-from Trabalho.AlgAvancados2k22.Aula_4.Code.Sequence import Sequence
+from Sequence import Sequence
 import math
 
 
@@ -92,6 +92,20 @@ class Motifs():
             print(*p)
             
     
+    def __create_prof__(self) -> list:
+        '''Auxiliary function of create_profile() that calculates the frequency of each position
+
+        Returns
+        -------
+        matrix : list
+            It returns list with dictionary of the profile
+        '''
+        total = len(self.list_seq) + self.n*self.pseudo
+        matrix = []
+        for line in zip(*self.list_seq):
+            matrix.append({k: (line.count(k)+self.pseudo) for k in self.abc_letters})
+        return matrix
+    
     def create_profile(self) -> list:
         '''Calculates the probabilistic PWM (Position Weighted Matrix) or PSSM (Position Specific Scoring Matrix) profile of a given list of **DNA** sequences.
         Default pseudocount of 0
@@ -107,13 +121,15 @@ class Motifs():
             If the profile selected isn't pwm or pssm
         '''
         total = len(self.list_seq) + self.n*self.pseudo
-        matrix = []
+        matrix = self.__create_prof__()
         if self.profile_type == 'pwm':
-            for line in zip(*self.list_seq):
-                matrix.append({k: (line.count(k)+self.pseudo)/total for k in self.abc_letters})
+            for dic in matrix:
+                for i in dic:
+                    dic[i]= dic[i]/total
         elif self.profile_type == 'pssm':
-            for line in zip(*self.list_seq):
-                matrix.append({k: math.log2(((line.count(k)+self.pseudo)/total)/(1/self.n)) for k in self.abc_letters})
+            for dic in matrix:
+                for i in dic:
+                    dic[i] = math.log2((dic[i]/total)/(1/self.n))
         else:
             raise TypeError("Type of profile invalid")   
         return matrix
@@ -186,48 +202,65 @@ class Motifs():
         str
             Sequence consensus
         '''
-        p_max = 0
+        p_max = 0 
         cons = ''
+        total = len(self.list_seq) + self.n*self.pseudo #só é aplicável ao pwm
         for dic in self.profile:
             m = max(*dic.values())
-            p_max += m
+            p_max += int(m*total)
             key = [k for k, v in dic.items() if v == m][0]
             cons += key
-        return cons
+        return cons, p_max
 
 def test():
     # test
-    from Trabalho.AlgAvancados2k22.Aula_4.Code.Sequence import Sequence
+    from Sequence import Sequence
     import math
-    print('Teste para DNA:')
-    seq1 = "AAAGTT"
-    seq2 = "CACGTG"
-    seq3 = "TTGGGT"
-    seq4 = "GACCGT"
-    seq5 = "AACCAT"
-    seq6 = "AACCCT"
-    seq7 = "AAACCT"
-    seq8 = "GAACCT"
-    lseqs = [seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8]
-    motifs = Motifs(lseqs, pseudo = 0.5)
-    motifs.print_profile()
+    # print('Teste para DNA:')
+    # seq1 = "AAAGTT"
+    # seq2 = "CACGTG"
+    # seq3 = "TTGGGT"
+    # seq4 = "GACCGT"
+    # seq5 = "AACCAT"
+    # seq6 = "AACCCT"
+    # seq7 = "AAACCT"
+    # seq8 = "GAACCT"
+    # lseqs = [seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8]
+    # motifs = Motifs(lseqs, pseudo = 0.5)
+    # motifs.print_profile()
 
-    print('Seq probability:', motifs.prob_seq("AAACCT"))
-    print('Seq probability:', motifs.prob_seq("ATACAG"))
+    # print('Seq probability:', motifs.prob_seq("AAACCT"))
+    # print('Seq probability:', motifs.prob_seq("ATACAG"))
+    # print('Seq most probable:', motifs.seq_most_probable("CTATAAACCTTACATC"))
+    
+    # print('Consensus:', motifs.consensus())
+    
+    # print('\nTeste para Proteínas:')
+    # lprots = ['FLIMVSPTAY_HQ', 'NKDECWRG','NKDEGAGAG','FMVSPFA']
+    # motifsp = Motifs(lprots, pseudo = 0.5, profile_type = 'pssm')
+    # # motifsp.print_profile()
+
+    # print('Seq probability:', motifsp.prob_seq("FLIGMVG"))
+    # print('Seq most probable:', motifsp.seq_most_probable("FLK_IGVKAMVK"))
+    
+    # print('Consensus:', motifsp.consensus())
+
+    print('Teste 2:')
+    seq1 = "aGgtacTt".upper()
+    seq2 = "CcAtacgt".upper()
+    seq3 = "acgtTAgt".upper()
+    seq4 = "acgtCcAt".upper()
+    seq5 = "CcgtacgG".upper()
+    lseqs = [seq1, seq2, seq3, seq4, seq5]
+    motifs = Motifs(lseqs)
+    motifs.print_profile()
+    
+    print('Seq probability:', motifs.prob_seq("ACATCAGG"))
+    print('Seq probability:', motifs.prob_seq("AGGTACGT"))
     print('Seq most probable:', motifs.seq_most_probable("CTATAAACCTTACATC"))
     
     print('Consensus:', motifs.consensus())
     
-    print('\nTeste para Proteínas:')
-    lprots = ['FLIMVSPTAY_HQ', 'NKDECWRG','NKDEGAGAG','FMVSPFA']
-    motifsp = Motifs(lprots, pseudo = 0.5, profile_type = 'pssm')
-    # motifsp.print_profile()
-
-    print('Seq probability:', motifsp.prob_seq("FLIGMVG"))
-    print('Seq most probable:', motifsp.seq_most_probable("FLK_IGVKAMVK"))
-    
-    print('Consensus:', motifsp.consensus())
-
 if __name__ == '__main__':
     test()
 

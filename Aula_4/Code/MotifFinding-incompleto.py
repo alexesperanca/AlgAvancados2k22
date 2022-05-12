@@ -3,8 +3,11 @@
 @author: Alexandre Esperança
 """
 
-from MySeq import MySeq
-from MyMotifs import MyMotifs
+# from MySeq import MySeq
+# from MyMotifs import MyMotifs
+
+from Sequence import Sequence
+from Motifs import Motifs
 
 class MotifFinding:
     
@@ -12,10 +15,10 @@ class MotifFinding:
         self.motifSize = size
         if (seqs != None):
             self.seqs = seqs
-            self.alphabet = seqs[0].alfabeto()
+            self.alphabet = 'DNA' #seqs[0].alphabet()
         else:
             self.seqs = []
-                    
+
     def __len__ (self):
         return len(self.seqs)
     
@@ -27,15 +30,17 @@ class MotifFinding:
     
     def readFile(self, fic, t):
         for s in open(fic, "r"):
-            self.seqs.append(MySeq(s.strip().upper(),t))
-        self.alphabet = self.seqs[0].alfabeto()
-        
+            self.seqs.append(Sequence(s.strip().upper(),t))
+        self.alphabet = self.seqs[0].alphabet()
         
     def createMotifFromIndexes(self, indexes):
         pseqs = []
         for i,ind in enumerate(indexes):
-            pseqs.append( MySeq(self.seqs[i][ind:(ind+self.motifSize)], self.seqs[i].tipo) )
-        return MyMotifs(pseqs)
+            sequencia = self.seqs[i][ind:ind+self.motifSize]
+            # print(sequencia)
+            pseqs.append(sequencia)
+            # pseqs.append(Sequence(self.seqs[i].seq[ind:(ind+self.motifSize)]))
+        return Motifs(pseqs)
         
         
     # SCORES
@@ -43,28 +48,22 @@ class MotifFinding:
     def score(self, s):
         score = 0
         motif = self.createMotifFromIndexes(s)
-        motif.doCounts()
-        mat = motif.counts
-        for j in range(len(mat[0])):
-            maxcol = mat[0][j]
-            for  i in range(1, len(mat)):
-                if mat[i][j] > maxcol: 
-                    maxcol = mat[i][j]
-            score += maxcol
+        mat = motif.__create_prof__()
+        for dic in mat:
+            m = max(*dic.values())
+            score += m
         return score
-   
+    
+    
     def scoreMult(self, s):
         score = 1.0
         motif = self.createMotifFromIndexes(s)
-        motif.createPWM()
-        mat = motif.pwm
-        for j in range(len(mat[0])):
-            maxcol = mat[0][j]
-            for  i in range(1, len(mat)):
-                if mat[i][j] > maxcol: 
-                    maxcol = mat[i][j]
-            score *= maxcol
-        return score     
+        mat = motif.__create_prof__()
+        for dic in mat:
+            m = max(*dic.values())
+            score *= m
+        return score
+ 
        
     # EXHAUSTIVE SEARCH
        
@@ -188,9 +187,12 @@ def test1():
 
 def test2():
     print ("Test exhaustive:")
-    seq1 = MySeq("ATAGAGCTGA","dna")
-    seq2 = MySeq("ACGTAGATGA","dna")
-    seq3 = MySeq("AAGATAGGGG","dna")
+    seq1 = "ATAGAGCTGA"
+    seq2 = "ACGTAGATGA"
+    seq3 = "AAGATAGGGG"
+    seq1 = "ATAGAGCTGA"
+    seq2 = "ACGTAGATGA"
+    seq3 = "AAGATAGGGG"
     mf = MotifFinding(3, [seq1,seq2,seq3])
     sol = mf.exhaustiveSearch()
     print ("Solution", sol)
@@ -231,4 +233,10 @@ def test4():
     print ("Score:" , mf.score(sol2))
     print ("Score mult:" , mf.scoreMult(sol2))
 
-#test4()
+
+if __name__ == '__main__':
+    # test1()
+    test2()
+    # test3()
+    # test4()
+
