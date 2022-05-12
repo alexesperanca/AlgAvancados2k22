@@ -143,7 +143,7 @@ class MyGraph:
                         poss = self.get_predecessors(current) # Ir através dos antecessores
             else:
                 poss = self.graph[current]
-
+        '''Mekieeee'''
         return path, current
 
     def revert_graph(self):
