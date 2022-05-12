@@ -101,69 +101,43 @@ class MyGraph:
                     s += 1
         return res    
 
-    def _path(self, s, d):
-        '''
-        Código testa um caminho em frente nas possibilidades, caso chegue a um ponto sem fim, retorna a 2 anteriores (porque a anterior dará o mesmo resultado)
-        A partir daí volta a testar, caso não haja anteriores (como no teste 4) verificamos os antecessores e corremos caminhos "em frente" por aí
-        Caso não funcione, dará o mesmo erro e portanto devemos testar novamente os antecessores e assim sucessivamente...
-        
-        Disclaimer: Acho que poderá haver casos onde poderia haver um erro a ter o caminho caso seja muito grande o problema ;_;
-                    Mas aqui passa todos os testes
+    def _path(self, graph, s, d):
+        try:
+            visited = [s]
+            path = {s: 0}
+            current = s
+            steps = 0
+            while current != d:
+                if steps >= d + len(graph) or len(visited) == len(graph): break
+                steps += 1
+                value = path[current]           # Nº de vezes que andou até este local
+                for n in graph[current]:
+                    if n in visited: pass
+                    elif n == d:
+                        current = n
+                        path[current] = value + 1
+                    elif graph[n] == {} and n != d: 
+                        visited.append(n)
+                        pass
+                    else:
+                        current = n
+                        if value + 1 == path[list(path.keys())[-1]]:
+                            del path[list(path.keys())[-1]]
+                        path[current] = value + 1
+                        visited.append(n)
 
-        Nova forma: Fazer 1 caminho para a frente e outro para trás, verificar qual mais pequeno e fica esse -> Grafo e o seu contrário fazer caminho normal (com retornos caso sem fim)
-        '''
-        visited = [s]
-        path = {s: 0}
-        current = s
-        poss = self.graph[current]
-        while current != d:
-            value = path[current]
-            for n in poss:
-                previous = current
-                if n in visited: pass
-                elif self.graph[n] == {} and n != d: 
-                    visited.append(n)
-                    pass
-                else:
-                    current = n
-                    path[current] = value + 1
-                    visited.append(n)
-                    break
-            
-            if previous == current:
-                if current != s:
-                    del path[current]
-                    current = list(path.keys())[-1]
-                    poss = self.graph[current]
-                else:
-                    try:
-                        current = list(path.keys())[-2] # Caso esteja no início dos caminhos para dar erro e entrar nos antecessores
-                        poss = self.graph[current]
-                    except:
-                        poss = self.get_predecessors(current) # Ir através dos antecessores
-            else:
-                poss = self.graph[current]
+            if current == d: return path, current
+            else: return {1: float('inf')}, 1 
+        except:
+            return {d: float('inf')}, d
 
-        return path, current
-
-    def frontpath(self, s, d):
-        visited = [s]
-        path = {s: 0}
-        current = s
-        while current != d:
-            value = path[current]           # Nº de vezes que andou até este local
-            poss = self.graph[current]      # Possibilidades para andar a partir do local
-            for n in poss:
-                if n in visited: pass
-                elif self.graph[n] == {} and n != d: 
-                    visited.append(n)
-                    pass
-                else:
-                    current = n
-                    path[current] = value + 1
-                    visited.append(n)
-
-        return path, current
+    def get_path(self, s, d):
+        '''Return the best path'''
+        frontpath, c1 = self._path(self.graph, s, d)
+        rev_graph = self.revert_graph()
+        backpath, c2 = self._path(rev_graph, s, d)
+        if frontpath[c1] <= backpath[c2]: return frontpath, c1
+        else: return backpath, c2
 
     def revert_graph(self):
         '''Reverse of the original graph'''
@@ -180,18 +154,18 @@ class MyGraph:
         for U in self.graph:
             for V in self.graph[U]:
                 novo = add_edge(novo, V, U)
-        return novo
+        return novo        
 
     def distance(self, s, d):
         if s == d: return 0
-        path, last = self._path(s, d)
+        path, last = self.get_path(s, d)
         return path[last]
         
     def shortest_path(self, s, d):
         if s == d: return [s,d]
-        path, l = self._path(s, d)
-        nodes = "".join(f"{i} -> " for i in path)
-        return nodes[:-4]
+        path, last = self.get_path(s, d)
+        nodes = " -> ".join(f"{i}" for i in path)
+        return nodes
         
     def reachable_with_dist(self, s):
         res = []
