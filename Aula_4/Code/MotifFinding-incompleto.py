@@ -174,7 +174,6 @@ class MotifFinding:
     def heuristicStochastic (self):
         from random import randint
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
-        print(search)
         best_score = self.score(search)
         best = False
         while best is False:
@@ -191,10 +190,34 @@ class MotifFinding:
         
     # Gibbs sampling 
 
-    def gibbs (self):
+    def gibbs (self, it):
         from random import randint
-        # ...
-        return None
+        search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
+        ind_s1 = randint(0, len(self.seqs)-1)
+        s1 = self.seqs[ind_s1]
+        # print(s1)
+        list_seqs = self.seqs
+        list_seqs.remove(s1)
+        search_2 = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(list_seqs))] ## acho que tenho de usar search inicial e depois tirar (provavelmente porque tem um for dependente do len(lista)) --- ver depois!!!
+        # print(search_2)
+        motif = self.createMotifFromIndexes(search_2) ## devia criar um perfil com pseudocontagens!!
+        list_prob = []
+        p = 0
+        while len(s1[p:p+self.motifSize]) == len(motif.profile):
+            prob = motif.prob_seq(s1[p:p+self.motifSize])
+            list_prob.append(prob)
+            p +=1
+        position = self.roulette(list_prob)
+        search_2.insert(ind_s1, position)
+        # print(ind_s1)
+        # print(search_2)
+        # score = self.score(search_2)
+        # print(score)            
+        # print('teste')
+        # print(s1)
+        # print(list_seqs)
+        # print(search)
+        return search
 
     def roulette(self, f):
         from random import random
@@ -266,15 +289,16 @@ def test4():
     print ("Score mult:" , mf.scoreMult(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     
-    # sol2 = mf.gibbs(1000)
-    # print ("Score:" , mf.score(sol2))
-    # print ("Score mult:" , mf.scoreMult(sol2))
+    sol2 = mf.gibbs(1000)
+    print ("Score:" , mf.score(sol2))
+    print ("Score mult:" , mf.scoreMult(sol2))
 
 
 if __name__ == '__main__':
-    
-    test1()
-    test2()
-    test3()
+    print(len('agcctccgatgtaagtcatagctgtaactattacctgccacccctattacatcttacgtccatataca'))
+    # test1()
+    # test2()
+    # test3()
     test4()
 
+print(len('agcctccgatgtaagtcatagctgtaactattacctgccacccctattacatcttacgtccatataca'))
