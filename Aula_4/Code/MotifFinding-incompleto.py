@@ -15,7 +15,7 @@ class MotifFinding:
         self.motifSize = size
         if (seqs != None):
             self.seqs = seqs
-            self.alphabet = 'DNA' #seqs[0].alphabet()
+            self.alphabet = 'DNA'
         else:
             self.seqs = []
 
@@ -28,10 +28,10 @@ class MotifFinding:
     def seqSize (self, i):
         return len(self.seqs[i])
     
-    def readFile(self, fic, t):
-        for s in open(fic, "r"):
-            self.seqs.append(Sequence(s.strip().upper(),t))
-        self.alphabet = self.seqs[0].alphabet()
+    def readFile(self, fic):
+        for s in open(fic, 'r'):
+            self.seqs.append(s.strip().upper())
+        # self.alphabet = self.seqs[0].alphabet()
         
     def createMotifFromIndexes(self, indexes):
         pseqs = []
@@ -65,7 +65,7 @@ class MotifFinding:
         return score
  
        
-    # EXHAUSTIVE SEARCH
+    # EXHAUSTIVE SEARCH_type_
        
     def nextSol (self, s):
         nextS = [0]*len(s)
@@ -82,10 +82,10 @@ class MotifFinding:
                 nextS[i] = 0
         return nextS
         
-    def exhaustiveSearch(self):
+    def exhaustiveSearch(self, seqs):
         melhorScore = -1
         res = []
-        s = [0]* len(self.seqs)
+        s = [0]* len(seqs)
         while (s!= None):
             sc = self.score(s)
             if (sc > melhorScore):
@@ -144,11 +144,30 @@ class MotifFinding:
 
     # Consensus (heuristic)
   
-    def heuristicConsensus(self):
-        # ...
-        return None
+    def heuristicConsensus(self) -> list:
+        '''Algoritmo heuristico (tipo consensus) com método exaustivo
+        
+        Returns
+        -------
+        list
+            list of index for each sequence
+        '''
+        motif_finding = MotifFinding(self.motifSize, self.seqs) ## primeiras duas sequencias fixas
+        search = motif_finding.exhaustiveSearch(self.seqs[:2]) # melhores posições para primeiras duas seq
+        for i, seq in enumerate(self.seqs[2:]): # para as restantes sequencias // como tem enumerate, é necessário depois somar 2 ao 'i':
+            search.append(0) # adiciona-se um zero como valor inicial para cada seq adicional (index = 0, é o primeiro a ser testado)
+            best_score = -1
+            best_ind = 0 # index onde ocorre melhor score
+            for ind in range((len(seq))-self.motifSize+1): # testar cada index (com limite do tamanho da sequencia pelo motif)
+                search[i+2] = ind 
+                s_current = self.score(search)
+                if s_current > best_score:
+                    best_score = s_current #melhor score que o atual na lista
+                    best_ind = ind 
+            search[i+2] = best_ind
+        return search
 
-    # Consensus (heuristic)
+    # Consensus (Stochastic)
 
     def heuristicStochastic (self):
         from random import randint
@@ -176,9 +195,10 @@ class MotifFinding:
 
 # tests
 
-def test1():  
+def test1(): 
+    print ("Test 1:")
     sm = MotifFinding()
-    sm.readFile("exemploMotifs.txt","dna")
+    sm.readFile("exemploMotifs.txt")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -186,7 +206,7 @@ def test1():
     print(scm)
 
 def test2():
-    print ("Test exhaustive:")
+    print ("\nTest 2 - exhaustive:")
     seq1 = "ATAGAGCTGA"
     seq2 = "ACGTAGATGA"
     seq3 = "AAGATAGGGG"
@@ -194,25 +214,26 @@ def test2():
     seq2 = "ACGTAGATGA"
     seq3 = "AAGATAGGGG"
     mf = MotifFinding(3, [seq1,seq2,seq3])
-    sol = mf.exhaustiveSearch()
+    sol = mf.exhaustiveSearch([seq1,seq2,seq3])
     print ("Solution", sol)
     print ("Score: ", mf.score(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
 
-    print ("Branch and Bound:")
+    print ("\nTest 2 - Branch and Bound:")
     sol2 = mf.branchAndBound()
     print ("Solution: " , sol2)
     print ("Score:" , mf.score(sol2))
     print("Consensus:", mf.createMotifFromIndexes(sol2).consensus())
     
-    print ("Heuristic consensus: ")
+    print ("\nTest 2 - Heuristic consensus: ")
     sol1 = mf.heuristicConsensus()
     print ("Solution: " , sol1)
     print ("Score:" , mf.score(sol1))
 
 def test3():
+    print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt","dna")
+    mf.readFile("exemploMotifs.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -220,8 +241,9 @@ def test3():
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
 
 def test4():
+    print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt","dna")
+    mf.readFile("exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
@@ -235,8 +257,9 @@ def test4():
 
 
 if __name__ == '__main__':
-    # test1()
+    
+    test1()
     test2()
-    # test3()
-    # test4()
+    test3()
+    test4()
 
