@@ -181,7 +181,6 @@ class MotifFinding:
             motif = self.createMotifFromIndexes(search)
             for i in range(len(self.seqs)):
                 seq_prob, ind = motif.seq_most_probable(self.seqs[i])
-                print(search[i], i, self.seqs[i], ind)
                 search[i] = ind
             score = self.score(search)
             if score > best_score:
@@ -214,7 +213,7 @@ class MotifFinding:
 def test1(): 
     print ("Test 1:")
     sm = MotifFinding()
-    sm.readFile("exemploMotifs.txt")
+    sm.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -249,7 +248,7 @@ def test2():
 def test3():
     print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt")
+    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -274,8 +273,8 @@ def test4():
 
 if __name__ == '__main__':
     
-    # test1()
+    test1()
     test2()
-    # test3()
+    test3()
     test4()
 
