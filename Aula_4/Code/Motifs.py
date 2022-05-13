@@ -185,7 +185,11 @@ class Motifs():
         list_seq = [seq[I:I+len(self.profile)] for I in range(len(seq) - len(self.profile) + 1)]
         probs = [self.prob_seq(s) for s in list_seq]
         score_max = max(probs)
-        return [list_seq[I] for I,p in enumerate(probs) if p == score_max][0]
+        ind = probs.index(score_max)
+        seq = [list_seq[I] for I,p in enumerate(probs) if p == score_max][0]
+    
+        return seq, ind
+
 
     def consensus(self) -> str:
         '''Creates a sequence consensus between two different sequences using the profile created.
@@ -210,40 +214,40 @@ class Motifs():
             p_max += int(m*total)
             key = [k for k, v in dic.items() if v == m][0]
             cons += key
-        return cons, p_max
+        return cons #, p_max
 
 def test():
     # test
     from Sequence import Sequence
     import math
-    # print('Teste para DNA:')
-    # seq1 = "AAAGTT"
-    # seq2 = "CACGTG"
-    # seq3 = "TTGGGT"
-    # seq4 = "GACCGT"
-    # seq5 = "AACCAT"
-    # seq6 = "AACCCT"
-    # seq7 = "AAACCT"
-    # seq8 = "GAACCT"
-    # lseqs = [seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8]
-    # motifs = Motifs(lseqs, pseudo = 0.5)
-    # motifs.print_profile()
+    print('Teste para DNA:')
+    seq1 = "AAAGTT"
+    seq2 = "CACGTG"
+    seq3 = "TTGGGT"
+    seq4 = "GACCGT"
+    seq5 = "AACCAT"
+    seq6 = "AACCCT"
+    seq7 = "AAACCT"
+    seq8 = "GAACCT"
+    lseqs = [seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8]
+    motifs = Motifs(lseqs, pseudo = 0.5)
+    motifs.print_profile()
 
-    # print('Seq probability:', motifs.prob_seq("AAACCT"))
-    # print('Seq probability:', motifs.prob_seq("ATACAG"))
-    # print('Seq most probable:', motifs.seq_most_probable("CTATAAACCTTACATC"))
+    print('Seq probability:', motifs.prob_seq("AAACCT"))
+    print('Seq probability:', motifs.prob_seq("ATACAG"))
+    print('Seq most probable:', motifs.seq_most_probable("CTATAAACCTTACATC"))
     
-    # print('Consensus:', motifs.consensus())
+    print('Consensus:', motifs.consensus())
     
-    # print('\nTeste para Proteínas:')
-    # lprots = ['FLIMVSPTAY_HQ', 'NKDECWRG','NKDEGAGAG','FMVSPFA']
-    # motifsp = Motifs(lprots, pseudo = 0.5, profile_type = 'pssm')
-    # # motifsp.print_profile()
+    print('\nTeste para Proteínas:')
+    lprots = ['FLIMVSPTAY_HQ', 'NKDECWRG','NKDEGAGAG','FMVSPFA']
+    motifsp = Motifs(lprots, pseudo = 0.5, profile_type = 'pssm')
+    # motifsp.print_profile()
 
-    # print('Seq probability:', motifsp.prob_seq("FLIGMVG"))
-    # print('Seq most probable:', motifsp.seq_most_probable("FLK_IGVKAMVK"))
+    print('Seq probability:', motifsp.prob_seq("FLIGMVG"))
+    print('Seq most probable:', motifsp.seq_most_probable("FLK_IGVKAMVK"))
     
-    # print('Consensus:', motifsp.consensus())
+    print('Consensus:', motifsp.consensus())
 
     print('Teste 2:')
     seq1 = "aGgtacTt".upper()

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-@author: Alexandre Esperança
+@authors:
+- Alexandre Esperança
+- Cristiana Martins
+- Mónica Leiras
+- Tomás Sá
 """
 
-# from MySeq import MySeq
-# from MyMotifs import MyMotifs
-
+from sqlalchemy import false
 from Sequence import Sequence
 from Motifs import Motifs
+from random import randint
+
 
 class MotifFinding:
     
@@ -37,9 +41,7 @@ class MotifFinding:
         pseqs = []
         for i,ind in enumerate(indexes):
             sequencia = self.seqs[i][ind:ind+self.motifSize]
-            # print(sequencia)
             pseqs.append(sequencia)
-            # pseqs.append(Sequence(self.seqs[i].seq[ind:(ind+self.motifSize)]))
         return Motifs(pseqs)
         
         
@@ -82,10 +84,10 @@ class MotifFinding:
                 nextS[i] = 0
         return nextS
         
-    def exhaustiveSearch(self, seqs):
+    def exhaustiveSearch(self):
         melhorScore = -1
         res = []
-        s = [0]* len(seqs)
+        s = [0]* len(self.seqs)
         while (s!= None):
             sc = self.score(s)
             if (sc > melhorScore):
@@ -152,8 +154,8 @@ class MotifFinding:
         list
             list of index for each sequence
         '''
-        motif_finding = MotifFinding(self.motifSize, self.seqs) ## primeiras duas sequencias fixas
-        search = motif_finding.exhaustiveSearch(self.seqs[:2]) # melhores posições para primeiras duas seq
+        motif_finding = MotifFinding(self.motifSize, self.seqs[:2]) ## primeiras duas sequencias fixas
+        search = motif_finding.exhaustiveSearch() # melhores posições para primeiras duas seq
         for i, seq in enumerate(self.seqs[2:]): # para as restantes sequencias // como tem enumerate, é necessário depois somar 2 ao 'i':
             search.append(0) # adiciona-se um zero como valor inicial para cada seq adicional (index = 0, é o primeiro a ser testado)
             best_score = -1
@@ -171,9 +173,23 @@ class MotifFinding:
 
     def heuristicStochastic (self):
         from random import randint
-        # ...
-        return None
-
+        search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
+        print(search)
+        best_score = self.score(search)
+        best = False
+        while best is False:
+            motif = self.createMotifFromIndexes(search)
+            for i in range(len(self.seqs)):
+                seq_prob, ind = motif.seq_most_probable(self.seqs[i])
+                print(search[i], i, self.seqs[i], ind)
+                search[i] = ind
+            score = self.score(search)
+            if score > best_score:
+                best_score = score
+                best = True
+        return search
+        
+        
     # Gibbs sampling 
 
     def gibbs (self):
@@ -214,7 +230,7 @@ def test2():
     seq2 = "ACGTAGATGA"
     seq3 = "AAGATAGGGG"
     mf = MotifFinding(3, [seq1,seq2,seq3])
-    sol = mf.exhaustiveSearch([seq1,seq2,seq3])
+    sol = mf.exhaustiveSearch()
     print ("Solution", sol)
     print ("Score: ", mf.score(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
@@ -243,7 +259,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt")
+    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
@@ -251,15 +267,15 @@ def test4():
     print ("Score mult:" , mf.scoreMult(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     
-    sol2 = mf.gibbs(1000)
-    print ("Score:" , mf.score(sol2))
-    print ("Score mult:" , mf.scoreMult(sol2))
+    # sol2 = mf.gibbs(1000)
+    # print ("Score:" , mf.score(sol2))
+    # print ("Score mult:" , mf.scoreMult(sol2))
 
 
 if __name__ == '__main__':
     
-    test1()
+    # test1()
     test2()
-    test3()
+    # test3()
     test4()
 
