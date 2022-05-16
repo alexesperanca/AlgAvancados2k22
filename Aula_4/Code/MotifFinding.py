@@ -7,7 +7,6 @@
 - Tomás Sá
 """
 
-# from sqlalchemy import false
 from Sequence import Sequence
 from Motifs import Motifs
 from random import randint
@@ -190,7 +189,7 @@ class MotifFinding:
     # Gibbs sampling 
 
     def gibbs (self, iterations):
-        search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
+        search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))] # lista de index inicial
         best_search = list(search)
         best_score = self.score(best_search)
         for ite in range(iterations):
@@ -231,7 +230,7 @@ class MotifFinding:
 def test1(): 
     print ("Test 1:")
     sm = MotifFinding()
-    sm.readFile("C:/Users/geral/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    sm.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -266,7 +265,7 @@ def test2():
 def test3():
     print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("C:/Users/geral/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -276,7 +275,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("C:/Users/geral/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
