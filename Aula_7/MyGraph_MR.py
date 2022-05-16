@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Thu Mar 23 01:33:42 2017
+
+@author: miguelrocha
+"""
 
 ## Graph represented as adjacency list using a dictionary
 ## keys are vertices
@@ -37,31 +42,37 @@ class MyGraph:
     
     def add_vertex(self, v):
         ''' Add a vertex to the graph; tests if vertex exists not adding if it does '''
-        if v not in self.graph:
-            self.graph[v] = {}
+        if v not in self.graph.keys():
+            self.graph[v] = []
         
     def add_edge(self, o, d):
         ''' Add edge to the graph; if vertices do not exist, they are added to the graph ''' 
-        if o not in self.graph:
-            self.graph[o] = {d: None}
-        else:
-            g = self.graph[o]
-            g[d] = None
+        if o not in self.graph.keys():
+            self.add_vertex(o)
+        if d not in self.graph.keys():
+            self.add_vertex(d)  
+        if d not in self.graph[o]:
+            self.graph[o].append(d)
 
     ## successors, predecessors, adjacent nodes
         
     def get_successors(self, v):
-        return list(self.graph[v].keys())     # needed to avoid list being overwritten of result of the function is used
+        return list(self.graph[v])     # needed to avoid list being overwritten of result of the function is used           
              
     def get_predecessors(self, v):
-        return [k for k in self.graph.keys() if v in self.graph[k]]
+        res = []
+        for k in self.graph.keys(): 
+            if v in self.graph[k]: 
+                res.append(k)
+        return res
     
     def get_adjacents(self, v):
-        pred = self.get_predecessors(v)
         suc = self.get_successors(v)
-        for i in suc:
-            if i not in pred: pred.append(i)
-        return pred
+        pred = self.get_predecessors(v)
+        res = pred
+        for p in suc: 
+            if p not in res: res.append(p)
+        return res
         
     ## degrees    
     
@@ -88,7 +99,33 @@ class MyGraph:
                     if deg_type == "in" or v not in self.graph[d]:
                         degs[d] = degs[d] + 1
         return degs
+    
+    def highest_degrees(self, all_deg= None, deg_type = "inout", top= 10):
+        if all_deg is None: 
+            all_deg = self.all_degrees(deg_type)
+        ord_deg = sorted(list(all_deg.items()), key=lambda x : x[1], reverse = True)
+        return list(map(lambda x:x[0], ord_deg[:top]))
+        
+    
+    ## topological metrics over degrees
 
+    def mean_degree(self, deg_type = "inout"):
+        degs = self.all_degrees(deg_type)
+        return sum(degs.values()) / float(len(degs))
+        
+    def prob_degree(self, deg_type = "inout"):
+        degs = self.all_degrees(deg_type)
+        res = {}
+        for k in degs.keys():
+            if degs[k] in res.keys():
+                res[degs[k]] += 1
+            else:
+                res[degs[k]] = 1
+        for k in res.keys():
+            res[k] /= float(len(degs))
+        return res    
+    
+    
     ## BFS and DFS searches    
     
     def reachable_bfs(self, v):
@@ -114,64 +151,32 @@ class MyGraph:
                     l.insert(s, elem)
                     s += 1
         return res    
-
-    def _path(self, graph, s, d):
-        visited = [s]
-        path = {s: []}
-        tries = 0
-        try:
-            while tries <= len(graph) and len(visited) != len(graph):
-                tries += 1
-                node = list(path.keys())[0]
-                p = path.pop(node)
-                for elem in graph[node]:
-                    if elem == d:
-                        return p + [node, elem]
-                    elif elem not in visited:
-                        path[elem] = p + [node]
-                        visited.append(elem)
-            return None
-        except:
-            return None
-
-    def get_path(self, s, d):
-        '''Return the best path'''
-        frontpath = self._path(self.graph, s, d)
-        rev_graph = self.revert_graph()
-        backpath = self._path(rev_graph, s, d)
-        if frontpath == None and backpath == None: return None 
-        elif backpath == None and frontpath != None: return frontpath
-        elif frontpath == None and backpath != None: return backpath
-        elif len(frontpath) <= len(backpath): return frontpath
-        else: return backpath
-
-    def revert_graph(self):
-        '''Reverse of the original graph'''
-
-        def add_edge(graph, o, d):
-            if o not in graph:
-                graph[o] = {d: None}
-            else:
-                g = graph[o]
-                g[d] = None
-            return graph
-
-        novo = {}
-        for U in self.graph:
-            for V in self.graph[U]:
-                novo = add_edge(novo, V, U)
-        return novo        
-
+    
     def distance(self, s, d):
         if s == d: return 0
-        path = self.get_path(s, d)
-        return len(path) - 1
+        l = [(s,0)]
+        visited = [s]
+        while len(l) > 0:
+            node, dist = l.pop(0)
+            for elem in self.graph[node]:
+                if elem == d: return dist + 1
+                elif elem not in visited: 
+                    l.append((elem,dist+1))
+                    visited.append(elem)
+        return None
         
     def shortest_path(self, s, d):
-        if s == d: return [s,d]
-        path = self.get_path(s, d)
-        nodes = " -> ".join(f"{i}" for i in path)
-        return nodes
+        if s == d: return 0
+        l = [(s,[])]
+        visited = [s]
+        while len(l) > 0:
+            node, preds = l.pop(0)
+            for elem in self.graph[node]:
+                if elem == d: return preds+[node,elem]
+                elif elem not in visited: 
+                    l.append((elem,preds+[node]))
+                    visited.append(elem)
+        return None
         
     def reachable_with_dist(self, s):
         res = []
@@ -183,7 +188,7 @@ class MyGraph:
                 if not is_in_tuple_list(l,elem) and not is_in_tuple_list(res,elem): 
                     l.append((elem,dist+1))
         return res
-
+ 
     ## mean distances ignoring unreachable nodes
     def mean_distances(self):
         tot = 0
@@ -195,9 +200,39 @@ class MyGraph:
             num_reachable += len(distsk)
         meandist = float(tot) / num_reachable
         n = len(self.get_nodes())
-        return meandist, float(num_reachable)/((n-1)*n) 
-
-## cycles
+        return meandist, float(num_reachable)/((n-1)*n)  
+    
+    def closeness_centrality(self, node):
+        dist = self.reachable_with_dist(node)
+        if len(dist)==0: return 0.0
+        s = 0.0
+        for d in dist: s += d[1]
+        return len(dist) / s
+        
+    
+    def highest_closeness(self, top = 10): 
+        cc = {}
+        for k in self.graph.keys():
+            cc[k] = self.closeness_centrality(k)
+        print(cc)
+        ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
+        return list(map(lambda x:x[0], ord_cl[:top]))
+            
+    
+    def betweenness_centrality(self, node):
+        total_sp = 0
+        sps_with_node = 0
+        for s in self.graph.keys(): 
+            for t in self.graph.keys(): 
+                if s != t and s != node and t != node:
+                    sp = self.shortest_path(s, t)
+                    if sp is not None:
+                        total_sp += 1
+                        if node in sp: sps_with_node += 1 
+        return sps_with_node / total_sp
+                    
+    
+    ## cycles    
     def node_has_cycle (self, v):
         l = [v]
         res = False
@@ -206,36 +241,18 @@ class MyGraph:
             node = l.pop(0)
             for elem in self.graph[node]:
                 if elem == v: return True
-                elif elem not in visited:
+                elif elem not in visited: 
                     l.append(elem)
                     visited.append(elem)
-        return res
-
+        return res       
+    
     def has_cycle(self):
         res = False
         for v in self.graph.keys():
             if self.node_has_cycle(v): return True
         return res
 
-## topological metrics over degrees
-
-    def mean_degree(self, deg_type = "inout"):
-        degs = self.all_degrees(deg_type)
-        return sum(degs.values()) / float(len(degs))
-        
-    def prob_degree(self, deg_type = "inout"):
-        degs = self.all_degrees(deg_type)
-        res = {}
-        for k in degs.keys():
-            if degs[k] in res.keys():
-                res[degs[k]] += 1
-            else:
-                res[degs[k]] = 1
-        for k in res.keys():
-            res[k] /= float(len(degs))
-        return res   
-
-## clustering
+    ## clustering
         
     def clustering_coef(self, v):
         adjs = self.get_adjacents(v)
@@ -272,100 +289,58 @@ class MyGraph:
             ck[k] = float(tot) / len(degs_k[k])
         return ck
 
-def is_in_tuple_list (tl, val):
+
+def is_in_tuple_list(tl, val):
     res = False
     for (x,y) in tl:
         if val == x: return True
     return res
 
-
-def test1():
-    print("* Teste 1 *\n")
-    gr = MyGraph({1:{2: None}, 2:{3: None}, 3:{2: None, 4: None}, 4:{2: None}})
+    
+if __name__ == "__main__":
+    gr = MyGraph()
+    gr.add_vertex(1)
+    gr.add_vertex(2)
+    gr.add_vertex(3)
+    gr.add_vertex(4)
+    gr.add_edge(1,2)
+    gr.add_edge(2,3)
+    gr.add_edge(3,2)
+    gr.add_edge(3,4)
+    gr.add_edge(4,2)
     gr.print_graph()
-    print (gr.get_nodes())
-    print (gr.get_edges())
+    print(gr.size())
     
-
-def test2():
-    print("\n* Teste 2 *\n")
-    gr2 = MyGraph()
-    gr2.add_vertex(1)
-    gr2.add_vertex(2)
-    gr2.add_vertex(3)
-    gr2.add_vertex(4)
-    
-    gr2.add_edge(1,2)
-    gr2.add_edge(2,3)
-    gr2.add_edge(3,2)
-    gr2.add_edge(3,4)
-    gr2.add_edge(4,2)
-    
-    gr2.print_graph()
-    print (gr2.get_nodes())
-    print (gr2.get_edges())
-  
-def test3():
-    print("\n* Teste 3 *\n")
-    gr = MyGraph({1:{2: None}, 2:{3: None}, 3:{2: None, 4: None}, 4:{2: None}})
-    gr.print_graph()
-
     print (gr.get_successors(2))
     print (gr.get_predecessors(2))
     print (gr.get_adjacents(2))
+    
     print (gr.in_degree(2))
     print (gr.out_degree(2))
     print (gr.degree(2))
-
-def test4():
-    print("\n* Teste 4 *\n")
-    gr = MyGraph({1:{2: None}, 2:{3: None}, 3:{2: None, 4: None}, 4:{2: None}})
-    print ("1º Graph:")
-    print (gr.distance(1,4))
-    print (gr.distance(4,3))
     
-    print (gr.shortest_path(1,4))
-    print (gr.shortest_path(4,3))
-
-    print (gr.reachable_with_dist(1))
-    print (gr.reachable_with_dist(3))
+    print(gr.all_degrees("inout"))
+    print(gr.all_degrees("in"))
+    print(gr.all_degrees("out"))
     
-    gr2 = MyGraph({1:{2: None, 3: None}, 2:{4: None}, 3:{5: None}, 4:{}, 5:{}})
-    print ("\n2º Graph:")
-    print (gr2.distance(2,1))
-    print (gr2.distance(1,5))
+    gr2 = MyGraph({1:[2,3,4], 2:[5,6],3:[6,8],4:[8],5:[7],6:[],7:[],8:[]})
+    print(gr2.reachable_bfs(1))
+    print(gr2.reachable_dfs(1))
     
-    print (gr2.shortest_path(1,5))
-    print (gr2.shortest_path(2,1))
-
-    print (gr2.reachable_with_dist(1))
-    print (gr2.reachable_with_dist(5))
+    print(gr2.distance(1,7))
+    print(gr2.shortest_path(1,7))
+    print(gr2.distance(1,8))
+    print(gr2.shortest_path(1,8))
+    print(gr2.distance(6,1))
+    print(gr2.shortest_path(6,1))
     
-def test5():
-    print("\n* Teste 5 *\n")
-    gr = MyGraph({1:{2: None}, 2:{3: None}, 3:{2: None, 4: None}, 4:{2: None}})
-    print (gr.node_has_cycle(2))
-    print (gr.node_has_cycle(1))
-    print (gr.has_cycle())
+    print(gr2.reachable_with_dist(1))
     
-    gr2 = MyGraph({1:{2: None, 3: None}, 2:{4: None}, 3:{5: None}, 4:{}, 5:{}})
-    print (gr2.node_has_cycle(1))
-    print (gr2.has_cycle())
-    print("\n* Test Degrees *\n")
-    print(gr2.all_degrees())
-    print(gr2.mean_degree())
-    print(gr2.prob_degree())
-    print("\n* Test Distances *\n")
-    print(gr2.mean_distances())    
-    print("\n* Test Clustering *\n")
-    print(gr.clustering_coef(3))
-    print(gr.all_clustering_coefs())
-    print(gr.mean_clustering_coef())
-    print(gr.mean_clustering_perdegree())
-
-if __name__ == "__main__":
-    test1()
-    test2()
-    test3()
-    test4()
-    test5()
+    print(gr.has_cycle())
+    print(gr2.has_cycle())
+    
+    print(gr.mean_degree())
+    print(gr.prob_degree())
+    print(gr.mean_distances())
+    print (gr.clustering_coef(1))
+    print (gr.clustering_coef(2))
