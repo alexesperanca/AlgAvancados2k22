@@ -33,6 +33,7 @@ class EAMotifsInt (EvolAlgorithm):
         for i in range(len(indivs)):
             ind = indivs[i]
             sol = ind.getGenes()
+            print(sol)
             fit = self.motifs.score(sol)
             ind.setFitness(fit)
 
@@ -53,10 +54,19 @@ class EAMotifsReal (EvolAlgorithm):
         for i in range(len(indivs)):
             ind = indivs[i]
             sol = ind.getGenes()
-            # sol_int = [int(x) for x in sol]
-            # print(sol_int)
             print(sol)
-            fit = self.motifs.score(sol)
+            ### fazer um motif através da lista de nº reais (nao pode ser pelos index)
+            search = [int(x) for x in sol] #aqui ver a solução certa depois do motif correto
+            
+            ''' Notas:
+            No método evaluate deverá, para cada indivíduo:
+            - Construir uma matriz de dimensão A x L (a PWM)
+            - Normalizar a matriz para que a soma de cada coluna seja 1
+            - Determinar a posição mais provável do motif representado por essa PWM em cada sequência, construindo o vetor s
+            - Calcular o score da solução s construída no passo anterior (este será a fitness)
+            '''
+            print(search)
+            fit = self.motifs.score(search) #fazer uma 
             ind.setFitness(fit)
 
 
@@ -72,5 +82,5 @@ def test2():
     ea.printBestSolution()
 
 
-# test1()
+test1()
 test2()

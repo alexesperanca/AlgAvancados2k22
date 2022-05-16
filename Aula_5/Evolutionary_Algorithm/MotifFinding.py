@@ -49,6 +49,13 @@ class MotifFinding:
             sequencia = self.seqs[i][ind:ind+self.motifSize]
             pseqs.append(sequencia)
         return Motifs(pseqs, pseudo=pseudocontagem)
+    
+    def createMotifFromList(self, lista, pseudocontagem = 0):
+        pseqs = []
+        for i,ind in enumerate(lista):
+            sequencia = self.seqs[i][ind:ind+self.motifSize]
+            pseqs.append(sequencia)
+        return Motifs(pseqs, pseudo=pseudocontagem)
         
         
     # SCORES
