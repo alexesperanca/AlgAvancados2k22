@@ -1,6 +1,5 @@
 from Popul import Popul
 
-
 class EvolAlgorithm:
 
     def __init__(self, popsize, numits, noffspring, indsize):
