@@ -164,6 +164,7 @@ class MetabolicNetwork (MyGraph):
 
     def final_met(self, init_met):
         '''Metabolitos finais produzidos, tendo em conta uma lista inicial de metabolitos'''
+        if self.net_type != "metabolite-reaction": raise Exception("No Metabolites or Reactions represented in the system")
         visited = []
         it = init_met.copy()
         res = []
