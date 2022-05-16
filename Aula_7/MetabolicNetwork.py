@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from sympy import EX
 from MyGraph import MyGraph
 
 class MetabolicNetwork (MyGraph):
@@ -11,7 +12,7 @@ class MetabolicNetwork (MyGraph):
         if network_type == "metabolite-reaction":
             self.node_types["metabolite"] = []
             self.node_types["reaction"] = []
-        self.split_rev =  split_rev
+        self.split_rev = split_rev
     
     def add_vertex_type(self, v, nodetype):
         self.add_vertex(v)
@@ -85,16 +86,88 @@ class MetabolicNetwork (MyGraph):
         
         
     def convert_metabolite_net(self, gmr):
-        for m in gmr.node_types["metabolite"]:
-            pass
-
+        '''Julgo que aqui criamos as redes metabólicas (em conj. com a função abaixo)
+        Cria basicamnete um grafo onde liga os metabolitos que possuem reações entre eles -> Super simples'''
+        for m in gmr.node_types["metabolite"]: # Acede a cada metabolito obtido do ficheiro
+            self.add_vertex(m)
+            sucs = gmr.get_successors(m)
+            for s in sucs:
+                sucs_r = gmr.get_successors(s)
+                for s2 in sucs_r:
+                    if m != s2: self.add_edge(m, s2)
         
-    def convert_reaction_graph(self, gmr): 
-        for r in gmr.node_types["reaction"]:
-            pass
+    def convert_reaction_graph(self, gmr):
+        '''Igual ao anterior, mas cria grafo entre reações'''
+        for r in gmr.node_types["reaction"]: # Acede a cada reação obtido do ficheiro
+            self.add_vertex(r)
+            sucs = gmr.get_successors(r)
+            for s in sucs:
+                sucs_r = gmr.get_successors(s)
+                for s2 in sucs_r:
+                    if r != s2: self.add_edge(r, s2)
 
+    def degrees_centrality(self):
+        res = {}
+        deg = self.all_degrees()
+        for k, v in deg.items():
+            res[k] = v/(len(deg)-1)
+        return res
+
+    def betweenness_centrality(self, s, t):
+        '''
+        Calcula a centralidade de todos os nodos restantes do caminho entre 2 nodos
+        É suposto aqui haver vários caminhos, no entanto, apenas retornamos na outra função o melhor.. Como fazer?
+        Será que verifico apenas se passa?
+        '''
+        path = self.get_path(s, t)
+        if path == None: return "No path found"
+        res = {}
+        for elem in self.graph:
+            if elem in path and elem not in (s, t):
+                res[elem] = 1
+            else: res[elem] = 0
+        return res
+
+    def closeness_centrality(self):
+        '''Daria o mesmo que o degrees_centrality caso consideremos grafo não-direcionado, o que não acontece aqui'''
+        res = {}
+        deg = self.all_degrees()
+        for k, v in deg.items():
+            res[k] = (len(self.graph[k]) / (len(deg) - 1)) * (len(self.graph[k]) / v) # Aqui deveria ser a soma das distâncias entre os nodos em vez de v, mas como estamos num grafo sem pesos assumi que tudo é =1
+        return res
+
+# Exs Portfólio do PP
+
+    def _prod(self, init, f):
+        '''Função auxiliar para as 3 do porfólio já que todas seguem o mesmo padrão (acho eu)'''
+        if self.net_type != "metabolite-reaction": raise Exception("No Metabolites or Reactions represented in the system")
+        n = init.copy()
+        visited = []
+        res = []
+        while len(n) != 0:
+            m = n.pop(0)
+            for j in self.graph[m]:
+                if f in j and j not in res: 
+                    res.append(j)
+                if j not in visited:
+                    visited.append(j)
+                    n.append(j)
+        return res
+
+    def active_reactions(self, met):
+        '''Reações ativas dada uma lista de metabolitos'''
+        return self._prod(met, "R")
+
+    def met_prod(self, reac):
+        '''Metabolitos que poderão ser produzidos dada uma lista de reações'''
+        return self._prod(reac, "M")
+
+    def final_met(self, init_met):
+        '''Metabolitos finais produzidos, tendo em conta uma lista inicial de metabolitos'''
+        return self._prod(init_met, "M")
 
 def test1():
+    print("* Test 1 *\n")
     m = MetabolicNetwork("metabolite-reaction")
     m.add_vertex_type("R1","reaction")
     m.add_vertex_type("R2","reaction")
@@ -124,9 +197,10 @@ def test1():
 
         
 def test2():
+    print("\n* Test 2 *\n")
     print("metabolite-reaction network:")
     mrn = MetabolicNetwork("metabolite-reaction")
-    mrn.load_from_file("example-net.txt")
+    mrn.load_from_file("Aula_7/example-net.txt")
     mrn.print_graph()
     print("Reactions: ", mrn.get_nodes_type("reaction") )
     print("Metabolites: ", mrn.get_nodes_type("metabolite") )
@@ -134,31 +208,41 @@ def test2():
     
     print("metabolite-metabolite network:")
     mmn = MetabolicNetwork("metabolite-metabolite")
-    mmn.load_from_file("example-net.txt")
+    mmn.load_from_file("Aula_7/example-net.txt")
     mmn.print_graph()
     print()
     
     print("reaction-reaction network:")
     rrn = MetabolicNetwork("reaction-reaction")
-    rrn.load_from_file("example-net.txt")
+    rrn.load_from_file("Aula_7/example-net.txt")
     rrn.print_graph()
     print()
     
     print("metabolite-reaction network (splitting reversible):")
     mrsn = MetabolicNetwork("metabolite-reaction", True)
-    mrsn.load_from_file("example-net.txt")
+    mrsn.load_from_file("Aula_7/example-net.txt")
     mrsn.print_graph()
     print()
     
     print("reaction-reaction network (splitting reversible):")
     rrsn = MetabolicNetwork("reaction-reaction", True)
-    rrsn.load_from_file("example-net.txt")
+    rrsn.load_from_file("Aula_7/example-net.txt")
     rrsn.print_graph()
     print()
 
-  
+    print("* TESTES *")
+    mmn.print_graph()
+    print(mmn.degrees_centrality())
+    print(mmn.closeness_centrality())
+    print(mmn.betweenness_centrality('M6', 'M2'))
+
+    print("\n* Portfólio *\n")
+    mrn.print_graph()
+    print(mrn.active_reactions(["M3", "M2"]))
+    # print(rrsn.active_reactions(["M1", "M2"])) -> Funciona bem, levanta exceção como suposto
+    # print(mmn.active_reactions(["M1", "M2"])) -> Funciona bem, levanta exceção como suposto
+    print(mrn.met_prod(["M4"]))
+    print(mrn.final_met(["M5", "M2"])) # Not sure se isto está correto pq estou a considerar ciclos (ou seja, um metabolito produz outro e este porduz o anterior), mas pode n ser o caso
 
 test1()
-print()
 test2()
-
