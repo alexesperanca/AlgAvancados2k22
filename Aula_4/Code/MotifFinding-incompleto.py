@@ -7,7 +7,7 @@
 - Tomás Sá
 """
 
-from sqlalchemy import false
+# from sqlalchemy import false
 from Sequence import Sequence
 from Motifs import Motifs
 from random import randint
@@ -37,12 +37,12 @@ class MotifFinding:
             self.seqs.append(s.strip().upper())
         # self.alphabet = self.seqs[0].alphabet()
         
-    def createMotifFromIndexes(self, indexes):
+    def createMotifFromIndexes(self, indexes, pseudocontagem = 0):
         pseqs = []
         for i,ind in enumerate(indexes):
             sequencia = self.seqs[i][ind:ind+self.motifSize]
             pseqs.append(sequencia)
-        return Motifs(pseqs)
+        return Motifs(pseqs, pseudo=pseudocontagem)
         
         
     # SCORES
@@ -172,7 +172,6 @@ class MotifFinding:
     # Consensus (Stochastic)
 
     def heuristicStochastic (self):
-        from random import randint
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
         best_score = self.score(search)
         best = False
@@ -190,34 +189,30 @@ class MotifFinding:
         
     # Gibbs sampling 
 
-    def gibbs (self, it):
-        from random import randint
+    def gibbs (self, iterations):
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
-        ind_s1 = randint(0, len(self.seqs)-1)
-        s1 = self.seqs[ind_s1]
-        # print(s1)
-        list_seqs = self.seqs
-        list_seqs.remove(s1)
-        search_2 = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(list_seqs))] ## acho que tenho de usar search inicial e depois tirar (provavelmente porque tem um for dependente do len(lista)) --- ver depois!!!
-        # print(search_2)
-        motif = self.createMotifFromIndexes(search_2) ## devia criar um perfil com pseudocontagens!!
-        list_prob = []
-        p = 0
-        while len(s1[p:p+self.motifSize]) == len(motif.profile):
-            prob = motif.prob_seq(s1[p:p+self.motifSize])
-            list_prob.append(prob)
-            p +=1
-        position = self.roulette(list_prob)
-        search_2.insert(ind_s1, position)
-        # print(ind_s1)
-        # print(search_2)
-        # score = self.score(search_2)
-        # print(score)            
-        # print('teste')
-        # print(s1)
-        # print(list_seqs)
-        # print(search)
-        return search
+        best_search = list(search)
+        best_score = self.score(best_search)
+        for ite in range(iterations):
+            ind_s1 = randint(0, len(self.seqs)-1)
+            s1 = self.seqs[ind_s1]
+            self.seqs.remove(s1)
+            search.pop(ind_s1)
+            motif = self.createMotifFromIndexes(search, pseudocontagem = 1)
+            list_prob = []
+            p = 0
+            while len(s1[p:p+self.motifSize]) == len(motif.profile):
+                prob = motif.prob_seq(s1[p:p+self.motifSize])
+                list_prob.append(prob)
+                p +=1
+            position = self.roulette(list_prob)
+            search.insert(ind_s1, position)
+            self.seqs.insert(ind_s1, s1)
+            score = self.score(search)
+            if score > best_score:
+                best_score = score
+                best_search = list(search)
+        return best_search
 
     def roulette(self, f):
         from random import random
@@ -236,7 +231,7 @@ class MotifFinding:
 def test1(): 
     print ("Test 1:")
     sm = MotifFinding()
-    sm.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    sm.readFile("C:/Users/geral/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -271,7 +266,7 @@ def test2():
 def test3():
     print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    mf.readFile("C:/Users/geral/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -281,7 +276,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    mf.readFile("C:/Users/geral/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
@@ -290,15 +285,13 @@ def test4():
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
     
     sol2 = mf.gibbs(1000)
+    print ("Solution 2: " , sol2)
     print ("Score:" , mf.score(sol2))
     print ("Score mult:" , mf.scoreMult(sol2))
 
 
 if __name__ == '__main__':
-    print(len('agcctccgatgtaagtcatagctgtaactattacctgccacccctattacatcttacgtccatataca'))
-    # test1()
-    # test2()
-    # test3()
+    test1()
+    test2()
+    test3()
     test4()
-
-print(len('agcctccgatgtaagtcatagctgtaactattacctgccacccctattacatcttacgtccatataca'))
