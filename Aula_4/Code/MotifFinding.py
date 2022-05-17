@@ -7,7 +7,6 @@
 - Tomás Sá
 """
 
-from Sequence import Sequence
 from Motifs import Motifs
 from random import randint
 
@@ -18,7 +17,7 @@ class MotifFinding:
         self.motifSize = size
         if (seqs != None):
             self.seqs = seqs
-            self.alphabet = 'DNA'
+            self.alphabet = self.alphabet()
         else:
             self.seqs = []
 
@@ -34,15 +33,22 @@ class MotifFinding:
     def readFile(self, fic):
         for s in open(fic, 'r'):
             self.seqs.append(s.strip().upper())
-        # self.alphabet = self.seqs[0].alphabet()
-        
+        self.alphabet = self.alphabet()
+    
+    def alphabet(self) -> str:
+        if all (i in 'ACGT' for i in self.seqs[0]) is True:
+            return 'ACGT'
+        elif all (i in 'ACGU' for i in self.seqs[0]) is True:
+            return 'ACGU'
+        elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True:
+            return 'FLIMVSPTAY_HQNKDECWRG'
+    
     def createMotifFromIndexes(self, indexes, pseudocontagem = 0):
         pseqs = []
         for i,ind in enumerate(indexes):
             sequencia = self.seqs[i][ind:ind+self.motifSize]
             pseqs.append(sequencia)
         return Motifs(pseqs, pseudo=pseudocontagem)
-        
         
     # SCORES
         

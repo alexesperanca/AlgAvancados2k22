@@ -7,7 +7,6 @@
 - Tomás Sá
 """
 
-from Sequence import Sequence
 from Motifs import Motifs
 from random import randint
 
@@ -18,6 +17,7 @@ class MotifFinding:
         self.motifSize = size
         if (seqs != None):
             self.seqs = seqs
+            self.alphabet = self.alphabet()
         else:
             self.seqs = []
 
@@ -50,14 +50,6 @@ class MotifFinding:
             pseqs.append(sequencia)
         return Motifs(pseqs, pseudo=pseudocontagem)
     
-    def createMotifFromList(self, lista, pseudocontagem = 0):
-        pseqs = []
-        for i,ind in enumerate(lista):
-            sequencia = self.seqs[i][ind:ind+self.motifSize]
-            pseqs.append(sequencia)
-        return Motifs(pseqs, pseudo=pseudocontagem)
-        
-        
     # SCORES
         
     def score(self, s):
