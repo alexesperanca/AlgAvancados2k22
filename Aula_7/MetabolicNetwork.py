@@ -139,7 +139,7 @@ class MetabolicNetwork (MyGraph):
 # Exs Portfólio do PP
 
     def _prod(self, init, f):
-        '''Função auxiliar para as 3 do porfólio já que todas seguem o mesmo padrão (acho eu)'''
+        '''Função auxiliar para as 2 primeiras do porfólio já que todas seguem o mesmo padrão (acho eu)'''
         if self.net_type != "metabolite-reaction": raise Exception("No Metabolites or Reactions represented in the system")
         n = init.copy()
         visited = []
@@ -164,7 +164,21 @@ class MetabolicNetwork (MyGraph):
 
     def final_met(self, init_met):
         '''Metabolitos finais produzidos, tendo em conta uma lista inicial de metabolitos'''
-        return self._prod(init_met, "M")
+        if self.net_type != "metabolite-reaction": raise Exception("No Metabolites or Reactions represented in the system")
+        visited = []
+        it = init_met.copy()
+        res = []
+        while len(it) != 0:
+            x = it.pop(0)
+            reac = self.active_reactions([x])
+            met = self.met_prod(reac)
+            for m in met:
+                if m not in visited:
+                    #if x in res: res.remove(x) # Not sure se isto deve de entrar por causa dos ciclos de produção
+                    visited.append(m)
+                    it.append(m)
+                    res.append(m)
+        return res
 
 def test1():
     print("* Test 1 *\n")
@@ -243,6 +257,7 @@ def test2():
     # print(mmn.active_reactions(["M1", "M2"])) -> Funciona bem, levanta exceção como suposto
     print(mrn.met_prod(["M4"]))
     print(mrn.final_met(["M5", "M2"])) # Not sure se isto está correto pq estou a considerar ciclos (ou seja, um metabolito produz outro e este porduz o anterior), mas pode n ser o caso
+    # SLAAAA
 
 test1()
 test2()
