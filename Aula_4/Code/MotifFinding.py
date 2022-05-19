@@ -34,7 +34,7 @@ class MotifFinding:
         for s in open(fic, 'r'):
             self.seqs.append(s.strip().upper())
         self.alphabet = self.alphabet()
-        
+    
     def alphabet(self) -> str:
         if all (i in 'ACGT' for i in self.seqs[0]) is True:
             return 'ACGT'
@@ -42,14 +42,14 @@ class MotifFinding:
             return 'ACGU'
         elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True:
             return 'FLIMVSPTAY_HQNKDECWRG'
-        
+    
     def createMotifFromIndexes(self, indexes, pseudocontagem = 0):
         pseqs = []
         for i,ind in enumerate(indexes):
             sequencia = self.seqs[i][ind:ind+self.motifSize]
             pseqs.append(sequencia)
         return Motifs(pseqs, pseudo=pseudocontagem)
-    
+        
     # SCORES
         
     def score(self, s):
