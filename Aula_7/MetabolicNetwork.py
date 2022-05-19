@@ -257,7 +257,7 @@ def test2():
     # print(mmn.active_reactions(["M1", "M2"])) -> Funciona bem, levanta exceção como suposto
     print(mrn.met_prod(["M4"]))
     print(mrn.final_met(["M5", "M2"])) # Not sure se isto está correto pq estou a considerar ciclos (ou seja, um metabolito produz outro e este porduz o anterior), mas pode n ser o caso
-    # SLAAAA
+    # 222222222222
 
 test1()
 test2()
