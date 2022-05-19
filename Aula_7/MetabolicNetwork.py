@@ -154,8 +154,19 @@ class MetabolicNetwork (MyGraph):
                     n.append(j)
         return res
 
-    def active_reactions(self, met):
-        '''Reações ativas dada uma lista de metabolitos'''
+    def active_reactions(self, met: list) -> list:
+        '''_summary_
+
+        Parameters
+        ----------
+        met : list
+            _description_
+
+        Returns
+        -------
+        list
+            _description_
+        '''
         return self._prod(met, "R")
 
     def met_prod(self, reac):
