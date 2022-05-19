@@ -185,7 +185,6 @@ class MetabolicNetwork (MyGraph):
             met = self.met_prod(reac)
             for m in met:
                 if m not in visited:
-                    #if x in res: res.remove(x) # Not sure se isto deve de entrar por causa dos ciclos de produção
                     visited.append(m)
                     it.append(m)
                     res.append(m)
