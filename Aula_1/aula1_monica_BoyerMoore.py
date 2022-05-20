@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #Hello world
+# E que otário
 from numpy import empty
 
 
