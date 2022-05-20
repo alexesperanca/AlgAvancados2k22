@@ -54,7 +54,8 @@ class OverlapGraph(MyGraph):
     
     def seq_from_path(self, path):
         # ...
-        return seq    
+        #return seq
+        pass    
    
                     
 # auxiliary
