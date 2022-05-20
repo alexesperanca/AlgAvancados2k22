@@ -154,8 +154,19 @@ class MetabolicNetwork (MyGraph):
                     n.append(j)
         return res
 
-    def active_reactions(self, met):
-        '''Reações ativas dada uma lista de metabolitos'''
+    def active_reactions(self, met: list) -> list:
+        '''_summary_
+
+        Parameters
+        ----------
+        met : list
+            _description_
+
+        Returns
+        -------
+        list
+            _description_
+        '''
         return self._prod(met, "R")
 
     def met_prod(self, reac):
@@ -174,7 +185,6 @@ class MetabolicNetwork (MyGraph):
             met = self.met_prod(reac)
             for m in met:
                 if m not in visited:
-                    #if x in res: res.remove(x) # Not sure se isto deve de entrar por causa dos ciclos de produção
                     visited.append(m)
                     it.append(m)
                     res.append(m)
