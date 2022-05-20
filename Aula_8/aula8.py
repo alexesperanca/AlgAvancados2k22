@@ -18,10 +18,10 @@ def get_edges(kmers):
 
             
 
-#print(kmers)
+print(kmers)
 
 
-#print(get_edges(kmers))
+print(get_edges(kmers))
 
 
 #print(sorted(kmers))

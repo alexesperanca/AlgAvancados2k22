@@ -6,7 +6,7 @@ class DeBruijnGraph (MyGraph):
     
     def __init__(self, frags):
         MyGraph.__init__(self, {})
-        self.create_deBruijn_graph(frags)
+        self.create_deBruijn_graph(frags) # Maybe senão for em frags e sim uma string, chamar composition para originar os frags
 
     def add_edge(self, o, d):
         if o not in self.graph.keys():
@@ -22,7 +22,7 @@ class DeBruijnGraph (MyGraph):
                 res += self.graph[k].count(v)
         return res
 
-    def create_deBruijn_graph(self, frags):
+    def create_deBruijn_graph(self, frags):        
         pass
 
     def seq_from_path(self, path):
@@ -46,12 +46,10 @@ def composition(k, seq):
     return res
 
 
-
 def test1():
-    frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
+    frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
-    
     
 def test2():
 frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
@@ -65,7 +63,6 @@ def test3():
     orig_sequence = "ATGCAATGGTCTG"
     frags = composition(3, orig_sequence)
     # ... completar
-
 
 
 test1()

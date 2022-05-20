@@ -272,6 +272,20 @@ class MyGraph:
             ck[k] = float(tot) / len(degs_k[k])
         return ck
 
+
+## Caminhos Hamiltonianos
+
+    def check_if_valid_path(self, p ):
+        if p[0] not in self.graph.keys(): return False
+        for i in range(1,len(p)):
+            if p[i] not in self.graph.keys() or p[i] not in self.graph[p[i-1]]:
+                return False
+        return True
+
+    def check_if_hamiltonian_path (self, p):
+        if not self.check_if_valid_path(p): return False
+        #... 
+
 def is_in_tuple_list (tl, val):
     res = False
     for (x,y) in tl:
