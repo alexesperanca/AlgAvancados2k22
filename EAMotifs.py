@@ -137,13 +137,13 @@ class EAMotifsReal (EvolAlgorithm):
             
 
 def test1():
-    ea = EAMotifsInt(100, 1000, 50, "Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    ea = EAMotifsInt(100, 1000, 50, "AlgAvancados2k22/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 
 
 def test2():
-    ea = EAMotifsReal(100, 2000, 50, "Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    ea = EAMotifsReal(100, 2000, 50, "AlgAvancados2k22/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 

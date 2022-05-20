@@ -34,7 +34,7 @@ class MotifFinding:
         for s in open(fic, 'r'):
             self.seqs.append(s.strip().upper())
         self.alphabet = self.alphabet()
-        
+    
     def alphabet(self) -> str:
         if all (i in 'ACGT' for i in self.seqs[0]) is True:
             return 'ACGT'
@@ -42,14 +42,14 @@ class MotifFinding:
             return 'ACGU'
         elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True:
             return 'FLIMVSPTAY_HQNKDECWRG'
-        
+    
     def createMotifFromIndexes(self, indexes, pseudocontagem = 0):
         pseqs = []
         for i,ind in enumerate(indexes):
             sequencia = self.seqs[i][ind:ind+self.motifSize]
             pseqs.append(sequencia)
         return Motifs(pseqs, pseudo=pseudocontagem)
-    
+        
     # SCORES
         
     def score(self, s):
@@ -236,7 +236,7 @@ class MotifFinding:
 def test1(): 
     print ("Test 1:")
     sm = MotifFinding()
-    sm.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    sm.readFile("AlgAvancados2k22/exemploMotifs.txt")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -271,7 +271,7 @@ def test2():
 def test3():
     print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    mf.readFile("AlgAvancados2k22/exemploMotifs.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -281,7 +281,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("Trabalho/AlgAvancados2k22/Aula_4/Code/exemploMotifs.txt")
+    mf.readFile("AlgAvancados2k22/exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
