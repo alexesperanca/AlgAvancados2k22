@@ -274,16 +274,49 @@ class MyGraph:
 
 ## Caminhos Hamiltonianos
 
-    def check_if_valid_path(self, p ):
+    def check_if_valid_path(self, p:list) -> bool:
         if p[0] not in self.graph.keys(): return False
         for i in range(1,len(p)):
             if p[i] not in self.graph.keys() or p[i] not in self.graph[p[i-1]]:
                 return False
         return True
 
-    def check_if_hamiltonian_path (self, p):
+    def check_if_hamiltonian_path (self, p:list) -> bool:
         if not self.check_if_valid_path(p): return False
-        #... 
+        to_visit = list(self.get_nodes())
+        if len(p) != len(to_visit): return False
+        for i in range(len(p)):
+            if p[i] in to_visit: to_visit.remove(p[i])
+            else: return False
+        if not to_visit: return True
+        else: return False
+
+    def search_hamiltonian_path(self) -> list:
+        for ke in self.graph.keys():
+            p = self.search_hamiltonian_path_from_node(ke)
+            if p != None: return p
+        return None
+
+    def search_hamiltonian_path_from_node(self, start: str) -> list:
+        current = start
+        visited = {start:0}
+        path = [start]
+        while len(path) < len(self.get_nodes()):
+            nxt_index = visited[current]                                # Indíce de visitados de cada caminho 
+            if len(self.graph[current]) > nxt_index:                    # Verifica se já passamos por todos os pontos
+                nxt_node = list(self.graph[current].keys())[nxt_index]  # Obtém o ponto a visitar
+                visited[current] += 1
+                if nxt_node not in path:
+                    path.append(nxt_node)
+                    visited[nxt_node] = 0
+                    current = nxt_node
+            else:
+                if len(path) > 1:                                       # Se não é o 1º não removemos e retornamos None para terminar a iteração
+                    rmv_node = path.pop()
+                    del visited[rmv_node]
+                    current = path[-1]
+                else: return None
+        return path
 
 def is_in_tuple_list (tl, val):
     res = False

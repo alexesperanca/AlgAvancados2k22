@@ -53,9 +53,12 @@ class OverlapGraph(MyGraph):
         else: return node
     
     def seq_from_path(self, path):
-        # ...
-        #return seq
-        pass    
+        if not self.check_if_hamiltonian_path(path): return None
+        seq = self.get_seq(path[0])
+        for i in range(1, len(path)):
+            next = self.get_seq(path[i])
+            seq += next[-1]
+        return seq
    
                     
 # auxiliary
@@ -106,11 +109,11 @@ def test4():
 
 def test5():
     print("\n* Test 5 *\n")
-    frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
+    frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     ovgr = OverlapGraph(frags, True)
 
     path = ovgr.search_hamiltonian_path()
-    print(path)
+    print (path)
     print (ovgr.check_if_hamiltonian_path(path))
     print (ovgr.seq_from_path(path))
 
@@ -129,5 +132,5 @@ test1()
 test2()
 test3()
 test4()
-#test5()
-#test6()
+test5()
+test6()
