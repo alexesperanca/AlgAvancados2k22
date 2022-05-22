@@ -4,7 +4,7 @@ from MyGraph import MyGraph
 
 class DeBruijnGraph (MyGraph):
     
-    def __init__(self, frags):
+    def __init__(self, frags:list):
         MyGraph.__init__(self, {})
         self.create_deBruijn_graph(frags) # Maybe senão for em frags e sim uma string, chamar composition para originar os frags
 
@@ -22,7 +22,7 @@ class DeBruijnGraph (MyGraph):
                 res += self.graph[k].count(v)
         return res
 
-    def create_deBruijn_graph(self, frags):        
+    def create_deBruijn_graph(self, frags:list):        
         pass
 
     def seq_from_path(self, path):
@@ -47,27 +47,27 @@ def composition(k, seq):
 
 
 def test1():
+    print("* Test 1 *\n")
     frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
     
 def test2():
-frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
-dbgr = DeBruijnGraph(frags)
-dbgr.print_graph()
-print (dbgr.check_nearly_balanced_graph())
-print (dbgr.eulerian_path())
+    print("* Test 2 *\n")
+    frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
+    dbgr = DeBruijnGraph(frags)
+    dbgr.print_graph()
+    print (dbgr.check_nearly_balanced_graph())
+    print (dbgr.eulerian_path())
 
 
 def test3():
+    print("* Test 3 *\n")
     orig_sequence = "ATGCAATGGTCTG"
     frags = composition(3, orig_sequence)
     # ... completar
 
-
 test1()
-print()
 #test2()
-#print()
 #test3()
     
