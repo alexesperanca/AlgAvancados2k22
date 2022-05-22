@@ -318,6 +318,64 @@ class MyGraph:
                 else: return None
         return path
 
+## Ciclos Eulerianos
+
+    def check_balanced_node(self, node):
+        return self.in_degree(node) == self.out_degree(node)
+    
+    def check_balanced_graph(self):
+        for n in self.graph.keys():
+            if not self.check_balanced_node(n): return False
+        return True
+
+    def eulerian_cycle(self) -> list:
+        if not self.check_balanced_graph(): return None
+        edges_visit = list(self.get_edges())
+        res = []
+        while edges_visit:
+            pair = edges_visit[0]
+            i = 1
+            if res != []:
+                while pair[0] not in res:
+                    pair = edges_visit[i]
+                    i = i + 1
+            edges_visit.remove(pair)
+            start, nxt = pair
+            cycle = [start, nxt]
+            while nxt != start:
+                for suc in self.graph[nxt]:
+                    if (nxt, suc) in edges_visit:
+                        pair = (nxt,suc)
+                        nxt = suc
+                        cycle.append(nxt)
+                        edges_visit.remove(pair)
+            if not res: res = cycle
+            else:
+                pos = res.index(cycle[0])
+                for i in range(len(cycle)-1): res.insert(pos + i +1, cycle[i+1])
+        return res
+
+    def check_nearly_balanced_graph(self):
+        res = None, None
+        for n in self.graph.keys():
+            indeg = self.in_degree(n)
+            outdeg = self.out_degree(n)
+            if indeg - outdeg == 1 and res[1] is None: res = res[0], n
+            elif indeg - outdeg == -1 and res[0] is None: res = n, res[1]
+            elif indeg == outdeg: pass
+            else: return None, None # pass maybe?
+        return res
+
+    def eulerian_path(self):
+        unb = self.check_nearly_balanced_graph()
+        if unb[0] is None or unb[1] is None: return None
+        self.graph[unb[1]][unb[0]] = None
+        cycle = self.eulerian_cycle()
+        for i in range(len(cycle)-1):
+            if cycle[i] == unb[1] and cycle[i+1] == unb[0]: break
+        path = cycle[i+1:] + cycle[1:i+1]
+        return path
+
 def is_in_tuple_list (tl, val):
     res = False
     for (x,y) in tl:
