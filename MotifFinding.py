@@ -13,7 +13,17 @@ from random import randint
 
 class MotifFinding:
     
-    def __init__(self, size = 8, seqs = None):
+    def __init__(self, size: int = 8, seqs: list = None):
+        '''Class that implements algorithms for finding conserved motifs, given a list of sequences,
+        i.e. optimization algorithms for motif discovery/inference.
+
+        Parameters
+        ----------
+        size : int, optional
+            size of motif to find, by default 8
+        seqs : _type_, optional
+            list of sequences, by default None
+        '''
         self.motifSize = size
         if (seqs != None):
             self.seqs = seqs
@@ -21,38 +31,110 @@ class MotifFinding:
         else:
             self.seqs = []
 
-    def __len__ (self):
+    def __len__ (self) -> int:
+        '''Method that returns length of the list of sequences.
+
+        Returns
+        -------
+        int
+            length of the list of sequences
+        '''
         return len(self.seqs)
     
-    def __getitem__(self, n):
+    def __getitem__(self, n: int) -> str:
+        '''Method that returns a sequence with index n of the list of sequences
+
+        Parameters
+        ----------
+        n : int
+            number of the index
+
+        Returns
+        -------
+        str
+            sequence with index n
+        '''
         return self.seqs[n]
     
-    def seqSize (self, i):
+    def seqSize (self, i: int) -> int:
+        '''Method that returns the length of the sequence with index n of the list of sequences
+
+        Parameters
+        ----------
+        i : int
+            number of the index
+
+        Returns
+        -------
+        int
+            length of the sequence n
+        '''
         return len(self.seqs[i])
     
-    def readFile(self, fic):
+    def readFile(self, fic: str):
+        '''Method that reads a txt file with a list of sequences and appends them on the self.seqs
+
+        Parameters
+        ----------
+        fic : str
+            name of the file, example: 'file.txt'
+        '''
         for s in open(fic, 'r'):
             self.seqs.append(s.strip().upper())
         self.alphabet = self.alphabet()
     
     def alphabet(self) -> str:
-        if all (i in 'ACGT' for i in self.seqs[0]) is True:
+        '''Method that determines the type of alphabet of the sequences
+
+        Returns
+        -------
+        str
+            alphabet of all the sequences 
+        '''
+        if all (i in 'ACGT' for i in self.seqs[0]) is True: #DNA
             return 'ACGT'
-        elif all (i in 'ACGU' for i in self.seqs[0]) is True:
+        elif all (i in 'ACGU' for i in self.seqs[0]) is True: #RNA
             return 'ACGU'
-        elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True:
+        elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True: #AMINO
             return 'FLIMVSPTAY_HQNKDECWRG'
     
-    def createMotifFromIndexes(self, indexes, pseudocontagem = 0):
+    def createMotifFromIndexes(self, indexes: list, pseudocount: int or float = 0) -> list:
+        '''Creates an instance of the Motifs Class - which calculates the probabilistic PWM (Position Weighted Matrix) profile of a given list of sequences.
+        In this case, it is given also the indexes of the sequences to create this profile.
+
+        Parameters
+        ----------
+        indexes : list
+            list of indexes of the sequences
+        pseudocount : int or float, optional
+            pseudocount of the profile, by default 0
+
+        Returns
+        -------
+        list
+            Instance of the Class Motifs (a list of dictionaries)
+        '''
         pseqs = []
         for i,ind in enumerate(indexes):
-            sequencia = self.seqs[i][ind:ind+self.motifSize]
-            pseqs.append(sequencia)
-        return Motifs(pseqs, pseudo=pseudocontagem)
-        
+            sequence = self.seqs[i][ind:ind+self.motifSize]
+            pseqs.append(sequence)
+        return Motifs(pseqs, pseudo = pseudocount)
+
     # SCORES
         
-    def score(self, s):
+    def score(self, s: list) -> float or int:
+        '''Method that determines the additive score, given a list of indexes (calculating a profile)
+
+        Parameters
+        ----------
+        s : list
+            list of indexes
+
+        Returns
+        -------
+        float or int
+            score
+        '''
         score = 0
         motif = self.createMotifFromIndexes(s)
         mat = motif.__create_prof__()
@@ -62,7 +144,19 @@ class MotifFinding:
         return score
     
     
-    def scoreMult(self, s):
+    def scoreMult(self, s: list) -> float:
+        '''Method that determines the multiplicative score, given a list of indexes (calculating a profile)
+
+        Parameters
+        ----------
+        s : list
+            list of indexes
+
+        Returns
+        -------
+        int or float
+            score
+        '''
         score = 1.0
         motif = self.createMotifFromIndexes(s)
         mat = motif.__create_prof__()
@@ -71,13 +165,25 @@ class MotifFinding:
             score *= m
         return score
  
-       
+
     # EXHAUSTIVE SEARCH_type_
        
-    def nextSol (self, s):
+    def nextSol (self, s: list) -> list:
+        '''Auxiliary method (to exhaustiveSearch) that gives the next vector of starting positions.
+
+        Parameters
+        ----------
+        s : list
+            current vector of starting positions s
+
+        Returns
+        -------
+        list
+            the next vector of starting positions s
+        '''
         nextS = [0]*len(s)
         pos = len(s) - 1     
-        while pos >=0 and s[pos] == self.seqSize(pos) - self.motifSize:
+        while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize:
             pos -= 1
         if (pos < 0): 
             nextS = None
@@ -89,7 +195,16 @@ class MotifFinding:
                 nextS[i] = 0
         return nextS
         
-    def exhaustiveSearch(self):
+    def exhaustiveSearch(self) -> list:
+        '''Method that calculates the score of each possible vector of starting positions s.
+        The best score determines the respective profile and consensus pattern (Method score).
+        The objective is to maximize Score(s,seqs) by varying the starting positions.
+
+        Returns
+        -------
+        list
+            vector of starting positions s
+        '''
         melhorScore = -1
         res = []
         s = [0]* len(self.seqs)
@@ -98,7 +213,7 @@ class MotifFinding:
             if (sc > melhorScore):
                 melhorScore = sc
                 res = s
-            s = self.nextSol(s)
+            s = self.nextSol(s) # auxiliary method 
         return res
      
     # BRANCH AND BOUND     
@@ -203,7 +318,7 @@ class MotifFinding:
             s1 = self.seqs[ind_s1]
             self.seqs.remove(s1)
             search.pop(ind_s1)
-            motif = self.createMotifFromIndexes(search, pseudocontagem = 1)
+            motif = self.createMotifFromIndexes(search, pseudocount = 1)
             list_prob = []
             p = 0
             while len(s1[p:p+self.motifSize]) == len(motif.profile):
@@ -245,9 +360,6 @@ def test1():
 
 def test2():
     print ("\nTest 2 - exhaustive:")
-    seq1 = "ATAGAGCTGA"
-    seq2 = "ACGTAGATGA"
-    seq3 = "AAGATAGGGG"
     seq1 = "ATAGAGCTGA"
     seq2 = "ACGTAGATGA"
     seq3 = "AAGATAGGGG"
