@@ -17,7 +17,7 @@ class DeBruijnGraph (MyGraph):
 
     def in_degree(self, v):
         res = 0
-        for k in self.graph.keys(): 
+        for k in self.graph.keys():
             if v in self.graph[k]:
                 res += list(self.graph[k].keys()).count(v)
         return res
@@ -75,6 +75,14 @@ def test3():
     print (p)
     print (dbgr.seq_from_path(p))
 
+def test4():
+    gr = MyGraph( {1:[2], 2:[3,1], 3:[4], 4:[2,5],
+    5:[6], 6:[4]} )
+    gr.print_graph()
+    print (gr.check_balanced_graph() )
+    print (gr.eulerian_cycle() )
+
 test1()
 test2()
+test4()
 test3()
