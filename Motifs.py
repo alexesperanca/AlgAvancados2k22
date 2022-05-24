@@ -1,9 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the :class:`Motifs` class, for creating probabilistic profiles given a list of sequences.
+This class includes diverse methods that allows exploring these, such as:
+    - prob_seq(): returns the probability of a given sequence based on the profile originally created.
+    - seq_most_probable(): returns the subsequence with the highest probability according to the associated profile.
+    - consensus(): returns the consensus between two different sequences using the profile created.
+"""
+
 from Sequence import Sequence
 import math
 
 
 class Motifs():
-    def __init__(self, list_seq: list, **kwargs):
+    def __init__(self, list_seq: list, **kwargs) -> None:
         '''Class that allows creating and displaying probabilistic profiles (PWM or PSSM) and calculate the probability of a sequence and calculate the most probable sequence of the profile created.
 
         Parameters
@@ -48,7 +60,7 @@ class Motifs():
 
         Returns
         -------
-        str: str
+        str
             Type of the sequence ('DNA', 'RNA' or 'AMINO')
         '''
         test = Sequence(seq)
@@ -97,7 +109,7 @@ class Motifs():
 
         Returns
         -------
-        matrix : list
+        list
             It returns list with dictionary of the profile
         '''
         total = len(self.list_seq) + self.n*self.pseudo
@@ -112,7 +124,7 @@ class Motifs():
 
         Returns
         -------
-        matrix : list
+        list
             It returns list with a dictionary of the probabilistic profile (PWM or PSSM)
 
         Raises
@@ -146,7 +158,7 @@ class Motifs():
 
         Returns
         -------
-        p : float
+        float
             A float number representative of the probability of the given sequence
 
         Raises

@@ -1,7 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the :class:`Sequence` class, for verifying sequences and determing the type (DNA, RNA or PROTEIN).
+This class includes diverse methods, including: transcription, comp_inverse, transcript, get_orfs, translation, get_all_prots, and others.
+"""
+
 import re
 
 class Sequence:
-    def __init__(self, seq: str):
+    def __init__(self, seq: str) -> None:
         '''
         Verifies and capitalizes the sequence inputted by the user implementing an error in case the sequence submitted is invalid
         
@@ -72,7 +81,7 @@ class Sequence:
         
         Returns
         ------------
-        count: dict
+        dict
             Dictionary with the characters and percentage
         '''
         count = {c: 0 for c in self.seq}
@@ -160,7 +169,7 @@ class Sequence:
         
         Returns
         ------------
-        new: str
+        str
             Returns the string that represents the complementary DNA of the original object sequence
         '''
         assert self.check == "RNA", "Introduced sequence must be RNA!"
@@ -182,7 +191,7 @@ class Sequence:
                
         Returns
         ------------
-        orfs: dict
+        dict
             Returns the dictionary with each orf and the corresponding list of codons
         '''
         assert self.check == "DNA", "Introduced sequence must be DNA!"
@@ -230,7 +239,7 @@ class Sequence:
         
         Returns
         ------------
-        aa: str
+        str
             Amino acid chain string resulting from the translation of the DNA sequence
         '''
         assert self.check == "DNA", "Introduced sequence must be DNA!"
@@ -262,7 +271,7 @@ class Sequence:
 
         Returns
         ------------
-        list_prots: list
+        list
             Returns a list with all the proteins in the sequence
         '''
         assert self.check == "DNA" or self.check == "AMINO", "Introduced sequence must be DNA or AMINO!"
@@ -331,7 +340,7 @@ class Sequence:
 
         Returns
         ------------
-        orfs_aa: dict
+        dict
             Returns a dictionary with the ORFs and amino acid chain
         '''
         assert self.check == "DNA", "Introduced sequence must be DNA!"
@@ -361,7 +370,7 @@ class Sequence:
        
         Returns
         ------------
-        orfs_prot: dict
+        dict
             Returns a dictionary with the ORFs and possible proteins
         '''
         assert self.check == "DNA", "Introduced sequence must be DNA!"
