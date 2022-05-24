@@ -3,14 +3,35 @@ from Popul import PopulInt, PopulReal
 from MotifFinding import MotifFinding
 
 
-def createMatZeros(nl, nc):
+def createMatZeros(nl: int, nc: int) -> list:
+    '''Method that creates a matrix of zeros given the number of lines and columns.
+
+    Parameters
+    ----------
+    nl : int
+        number of lines
+    nc : int
+        number of columns
+
+    Returns
+    -------
+    list
+        matrix with 'nl' lines and 'nc' columns filled with zeros
+    '''
     res = []
     for _ in range(0, nl):
         res.append([0]*nc)
     return res
 
 
-def printMat(mat):
+def printMat(mat: list):
+    '''Method that prints a matrix with better formatting
+
+    Parameters
+    ----------
+    mat : list
+        matrix
+    '''
     for i in range(0, len(mat)):
         for j in range(len(mat[i])):
             print(f"{mat[i][j]:.3f}", end=' ')
@@ -18,17 +39,37 @@ def printMat(mat):
 
 
 class EAMotifsInt (EvolAlgorithm):
-    def __init__(self, popsize, numits, noffspring, filename):
+    def __init__(self, popsize: int, numits: int, noffspring: int, filename: str):
+        '''Class EAMotifsInt that 
+
+        Parameters
+        ----------
+        popsize : int
+            _description_
+        numits : int
+            _description_
+        noffspring : int
+            _description_
+        filename : str
+            _description_
+        '''
         self.motifs = MotifFinding()
         self.motifs.readFile(filename)
         indsize = len(self.motifs)
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
-    def initPopul(self, indsize):
+    def initPopul(self, indsize: int):
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize
         self.popul = PopulInt(self.popsize, indsize, maxvalue, [])
 
-    def evaluate(self, indivs):
+    def evaluate(self, indivs: list):
+        '''Method that calculates the score for each individual, setting its fitness.
+
+        Parameters
+        ----------
+        indivs : list
+            list that represents the individuals solution (list of lists with int numbers)
+        '''
         for i in range(len(indivs)):
             ind = indivs[i]
             sol = ind.getGenes()
@@ -38,32 +79,45 @@ class EAMotifsInt (EvolAlgorithm):
 
 class EAMotifsReal (EvolAlgorithm):
     
-    def __init__(self, popsize, numits, noffspring, filename):
+    def __init__(self, popsize: int, numits: int, noffspring: int, filename: str):
+        '''Class EAMotifs Real
+
+        Parameters
+        ----------
+        popsize : int
+            _description_
+        numits : int
+            _description_
+        noffspring : int
+            _description_
+        filename : str
+            _description_
+        '''
         self.motifs = MotifFinding()
         self.motifs.readFile(filename)
         indsize = len(self.motifs)*len(self.motifs.alphabet)
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
-    def initPopul(self, indsize):
+    def initPopul(self, indsize: int):
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize
         self.popul = PopulReal(self.popsize, indsize, 0.0, maxvalue, [])
 
-    def profile(self, lista):
+    def profile(self, pwm_list: list) -> list:
         '''Creates a PWM profile of a given list of probabilistic values, with normnalized values (sum of each column(nucleotide) is 1).
 
         Parameters
         ----------
-        profile : list
+        pwm_list : list
             List with values
 
         Returns
         -------
-        matrix : list
-            It returns list with a dictionary of the probabilistic profile
+        mat : list
+            It returns a list with dictionaries of the probabilistic profile
         '''
         mat = []
-        for i in range(0, len(lista), len(self.motifs.alphabet)):
-            dic = dict(zip(self.motifs.alphabet, lista[i:]))
+        for i in range(0, len(pwm_list), len(self.motifs.alphabet)):
+            dic = dict(zip(self.motifs.alphabet, pwm_list[i:]))
             mat.append(dic)
         for n in self.motifs.alphabet:
             soma = 0
@@ -87,7 +141,6 @@ class EAMotifsReal (EvolAlgorithm):
         -------
         p : float
             A float number representative of the probability of the given sequence
-
         '''
         assert len(seq) == len(profile), 'Sequence size does not match associated profile size'
         p = 1
@@ -96,6 +149,7 @@ class EAMotifsReal (EvolAlgorithm):
         return round(p, 5)
     
     def seq_most_probable(self, seq: str, profile: list) -> str:
+        
         '''Calculates the probability of each subsequence of a given sequence, and returns the subsequence with the highest probability according to the associated profile
 
         Parameters
@@ -107,18 +161,26 @@ class EAMotifsReal (EvolAlgorithm):
 
         Returns
         -------
-        str
+        seq : str
             Subsequence with the highest probability
+        ind : int
+            Index of seq (Subsequence with the highest probability)
         '''
         list_seq = [seq[I:I+len(profile)] for I in range(len(seq) - len(profile) + 1)]
         probs = [self.prob_seq(s, profile) for s in list_seq]
         score_max = max(probs)
         ind = probs.index(score_max)
         seq = [list_seq[I] for I,p in enumerate(probs) if p == score_max][0]
-    
         return seq, ind
 
-    def evaluate(self, indivs):
+    def evaluate(self, indivs: list):
+        '''Method that builds a pwm profile (normalized) for each individual, determines the most probable position of the motif and calculates the score of the final solution, setting the fitness for that individual. 
+
+        Parameters
+        ----------
+        indivs : list
+            list that represents the individuals (list of lists with float numbers - pwm profile)
+        '''
         for i in range(len(indivs)):
             ind = indivs[i]
             sol = ind.getGenes()         

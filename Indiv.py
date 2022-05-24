@@ -1,20 +1,35 @@
 from random import randint, random, shuffle, uniform
 
-
 class Indiv:
 
-    def __init__(self, size, genes=[], lb=0, ub=1):
+    def __init__(self, size: int, genes: list = [], lb: int = 0, ub: int = 1):
+        '''Class to implement individuals with binary representations, with the atributes:
+        - list of genes (representative of genome)
+        - lb/ub (lower and upper limits of the range for representing genes)
+        - fitness (stores fitness value for each individual
+
+        Parameters
+        ----------
+        size : int
+            _description_
+        genes : list, optional
+            _description_, by default []
+        lb : int, optional
+            _description_, by default 0
+        ub : int, optional
+            _description_, by default 1
+        '''
         self.lb = lb
         self.ub = ub
         self.genes = genes
         self.fitness = None
-        if not self.genes:
+        if not self.genes: # random generation of list of genes:
             self.initRandom(size)
 
     # comparadores.
     # Permitem usar sorted, max, min
 
-    def __eq__(self, solution):
+    def __eq__(self, solution: list) -> bool:
         if isinstance(solution, self.__class__):
             return self.genes.sort() == solution.genes.sort()
         return False

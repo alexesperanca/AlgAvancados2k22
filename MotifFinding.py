@@ -98,7 +98,7 @@ class MotifFinding:
         elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True: #AMINO
             return 'FLIMVSPTAY_HQNKDECWRG'
     
-    def createMotifFromIndexes(self, indexes: list, pseudocount: int or float = 0) -> list:
+    def createMotifFromIndexes(self, indexes: list, pseudocount: int | float = 0) -> list:
         '''Creates an instance of the Motifs Class - which calculates the probabilistic PWM (Position Weighted Matrix) profile of a given list of sequences.
         In this case, it is given also the indexes of the sequences to create this profile.
 
@@ -122,7 +122,7 @@ class MotifFinding:
 
     # SCORES
         
-    def score(self, s: list) -> float or int:
+    def score(self, s: list) -> float | int:
         '''Method that determines the additive score, given a list of indexes (calculating a profile)
 
         Parameters
