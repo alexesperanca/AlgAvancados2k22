@@ -4,44 +4,86 @@
 ## keys are vertices
 ## values of the dictionary represent the list of adjacent vertices of the key node
 
+from typing import Union
+
 class MyGraph:
-    
-    def __init__(self, g = {}):
-        ''' Constructor - takes dictionary to fill the graph as input; default is empty dictionary '''
+    '''_summary_
+    '''
+    def __init__(self, g: dict = {}):
+        '''Constrution of the initial graph represented by a dictionary
+
+        Parameters
+        ----------
+        g : dict, optional
+            Dictionary given to represent the graph, by default {}
+        '''
         self.graph = g    
 
     def print_graph(self):
-        ''' Prints the content of the graph as adjacency list '''
+        '''Prints the content of the graph as adjacency list 
+        '''
         for v in self.graph.keys():
             print (v, " -> ", self.graph[v])
 
-    ## get basic info
+## Basic info
 
-    def get_nodes(self):
-        ''' Returns list of nodes in the graph '''
+    def get_nodes(self) -> list:
+        '''Obtain list of nodes in the graph
+
+        Returns
+        -------
+        list
+            Nodes of the graph
+        '''
         return list(self.graph.keys())
         
-    def get_edges(self): 
-        ''' Returns edges in the graph as a list of tuples (origin, destination) '''
+    def get_edges(self) -> list: 
+        '''Method that gets the edges in the graph as a list of tuples (origin, destination)
+
+        Returns
+        -------
+        list
+            List of tuples with information about the origin and destination
+        '''
         edges = []
         for v in self.graph.keys():
             for d in self.graph[v]:
                 edges.append((v,d))
         return edges
       
-    def size(self):
-        ''' Returns size of the graph : number of nodes, number of edges '''
+    def size(self) -> tuple:
+        '''Method that obtains the size of the graph: number of nodes and number of edges
+
+        Returns
+        -------
+        tuple
+            Respectively, number of nodes and number of edges
+        '''
         return len(self.get_nodes()), len(self.get_edges())
       
     ## add nodes and edges    
     
-    def add_vertex(self, v):
-        ''' Add a vertex to the graph; tests if vertex exists not adding if it does '''
+    def add_vertex(self, v: Union[str, int, float]):
+        '''Add a vertex to the graph and tests if vertex exists or not, adding if True
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Element to add in the graph
+        '''
         if v not in self.graph:
             self.graph[v] = {}
         
-    def add_edge(self, o, d):
-        ''' Add edge to the graph; if vertices do not exist, they are added to the graph ''' 
+    def add_edge(self, o: Union[str, int, float], d: Union[str, int, float]):
+        '''Add edge to the graph; if vertices do not exist, they are added to the graph
+
+        Parameters
+        ----------
+        o : Union[str, int, float]
+            Element to add in the beginning of the graph and edge with "d"
+        d: Union[str, int, float]
+            Element to edge with "o"
+        ''' 
         if o not in self.graph:
             self.graph[o] = {d: None}
         else:
@@ -50,13 +92,49 @@ class MyGraph:
 
     ## successors, predecessors, adjacent nodes
         
-    def get_successors(self, v):
-        return list(self.graph[v].keys())     # needed to avoid list being overwritten of result of the function is used
+    def get_successors(self, v: Union[str, int, float]) -> list:
+        '''Obtain successors of the given element
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Element from which successors are returned
+
+        Returns
+        -------
+        list
+            Successors of the given element
+        '''
+        return list(self.graph[v].keys())
              
-    def get_predecessors(self, v):
+    def get_predecessors(self, v: Union[str, int, float]) -> list:
+        '''Obtain predecessors of the given element
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Element from which predecessors are returned
+
+        Returns
+        -------
+        list
+            Predecessors of the given element
+        '''
         return [k for k in self.graph.keys() if v in self.graph[k]]
     
-    def get_adjacents(self, v):
+    def get_adjacents(self, v: Union[str, int, float]) -> list:
+        '''Obtain adjacents of the given element
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Element from which adjacents are obtained
+
+        Returns
+        -------
+        list
+            Adjacents of the given element
+        '''
         pred = self.get_predecessors(v)
         suc = self.get_successors(v)
         for i in suc:
@@ -65,18 +143,67 @@ class MyGraph:
         
     ## degrees    
     
-    def out_degree(self, v):
+    def out_degree(self, v: Union[str, int, float]) -> int:
+        '''Obtain the number of out degree. Represents the number of successors/ramifications this node of the graph possesses 
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Node to obtain number of out degree
+
+        Returns
+        -------
+        int
+            Number of successors/ramifications from the given node "v"
+        '''
         return len(self.graph[v])
     
-    def in_degree(self, v):
+    def in_degree(self, v: Union[str, int, float]) -> int:
+        '''Obtain number of in degree. Represents the number of predecessors this node of the graph possesses
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Node to obtain number of in degree
+
+        Returns
+        -------
+        int
+            Number of predecessors from the given node "v"
+        '''
         return len(self.get_predecessors(v))
         
-    def degree(self, v):
+    def degree(self, v: Union[str, int, float]) -> int:
+        '''Obtain the number of degree. Represents the number adjacentes nodes of the given one
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Node to obtain number of degree
+
+        Returns
+        -------
+        int
+            Number of adjacent nodes of the given one "v"
+        '''
         return len(self.get_adjacents(v))
         
-    def all_degrees(self, deg_type = "inout"):
-        ''' Computes the degree (of a given type) for all nodes.
-        deg_type can be "in", "out", or "inout" '''
+    def all_degrees(self, deg_type: str = "inout") -> dict:
+        '''Computes the degree (of a given type) for all nodes. "Deg_type" can be "in", "out", or "inout"
+
+        Parameters
+        ----------
+        deg_type : str, optional
+            Informs which type of degree to compute and return, by default "inout".
+            "inout": Count of the in degree and out degree
+            "in": Count of the in degree
+            "out": Count of the out degree
+
+        Returns
+        -------
+        dict
+            Dictionary with all the nodes of the graph and respective degree value
+        '''
         degs = {}
         for v in self.graph.keys():
             if deg_type == "out" or deg_type == "inout":
@@ -91,7 +218,19 @@ class MyGraph:
 
     ## BFS and DFS searches    
     
-    def reachable_bfs(self, v):
+    def reachable_bfs(self, v: Union[str, int, float]) -> list:
+        '''Method that obtains the reachable nodes from a given one using the BFS algorithm. BFS algorithm searches each level of the graph before passing to the following one
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Node to search for the reachables ones
+
+        Returns
+        -------
+        list
+            List of reachables nodes
+        '''
         l = [v]
         res = []
         while len(l) > 0:
@@ -102,7 +241,19 @@ class MyGraph:
                     l.append(elem)
         return res
         
-    def reachable_dfs(self, v):
+    def reachable_dfs(self, v: Union[str, int, float]) -> list:
+        '''Method that obtains the reachable nodes from a given one using the DFS algorithm. DFS algorithm searches all successors (all levels) of an node before passing to the following one
+
+        Parameters
+        ----------
+        v : Union[str, int, float]
+            Node to search for the reachables ones
+
+        Returns
+        -------
+        list
+            List of reachables nodes
+        '''
         l = [v]
         res = []
         while len(l) > 0:
@@ -115,7 +266,23 @@ class MyGraph:
                     s += 1
         return res    
 
-    def _path(self, graph, s, d):
+    def _path(self, graph: dict, s: Union[str, int, float], d: Union[str, int, float]) -> list:
+        '''Auxiliary function that obtains the path performed to reach from node "s" to "d"
+
+        Parameters
+        ----------
+        graph : dict
+            Path to analyze
+        s : Union[str, int, float]
+            Node where the path begins
+        d : Union[str, int, float]
+            Node where the path ends
+
+        Returns
+        -------
+        list
+            Path performed to reach from "s" to "d"
+        '''
         visited = [s]
         path = {s: []}
         tries = 0
@@ -134,8 +301,21 @@ class MyGraph:
         except:
             return None
 
-    def get_path(self, s, d):
-        '''Return the best path'''
+    def get_path(self, s: Union[str, int, float], d: Union[str, int, float]) -> list:
+        '''Decision of the best path to perform. Methos executes the path for the normal graph and reverted graph.
+
+        Parameters
+        ----------
+        s : Union[str, int, float]
+            Node where the path begins
+        d : Union[str, int, float]
+            Node where the path ends
+
+        Returns
+        -------
+        list
+            Path performed to reach from "s" to "d"
+        '''
         frontpath = self._path(self.graph, s, d)
         rev_graph = self.revert_graph()
         backpath = self._path(rev_graph, s, d)
@@ -145,10 +325,31 @@ class MyGraph:
         elif len(frontpath) <= len(backpath): return frontpath
         else: return backpath
 
-    def revert_graph(self):
-        '''Reverse of the original graph'''
+    def revert_graph(self) -> dict:
+        '''Reversion of the original graph
 
-        def add_edge(graph, o, d):
+        Returns
+        -------
+        dict
+            Reverted graph
+        '''
+        def add_edge(graph: dict, o: Union[str, int, float], d: Union[str, int, float]) -> dict:
+            '''Edge addition to the new graph. Auxillary function to obtain the reverted graph.
+
+            Parameters
+            ----------
+            graph : dict
+                Actual graph to be modified
+            o : Union[str, int, float]
+                Element to add in the beginning of the graph and edge with "d"
+            d : Union[str, int, float]
+                Element to edge with "o"
+
+            Returns
+            -------
+            dict
+                Actual graph
+            '''
             if o not in graph:
                 graph[o] = {d: None}
             else:
@@ -162,18 +363,58 @@ class MyGraph:
                 novo = add_edge(novo, V, U)
         return novo        
 
-    def distance(self, s, d):
+    def distance(self, s: Union[str, int, float], d: Union[str, int, float]) -> int:
+        '''Method that calculates the distance of the path performed to reach from the node "s" to "d"
+
+        Parameters
+        ----------
+        s : Union[str, int, float]
+            Node where the path begins
+        d : Union[str, int, float]
+            Node where the path ends
+
+        Returns
+        -------
+        int
+            Distance of the path
+        '''
         if s == d: return 0
         path = self.get_path(s, d)
         return len(path) - 1
         
-    def shortest_path(self, s, d):
+    def shortest_path(self, s: Union[str, int, float], d: Union[str, int, float]) -> str:
+        '''Print of the shortest path obtained
+
+        Parameters
+        ----------
+        s : Union[str, int, float]
+            Node where the path begins
+        d : Union[str, int, float]
+            Node where the path ends
+
+        Returns
+        -------
+        str
+            Shortest path performed
+        '''
         if s == d: return [s,d]
         path = self.get_path(s, d)
         nodes = " -> ".join(f"{i}" for i in path)
         return nodes
         
-    def reachable_with_dist(self, s):
+    def reachable_with_dist(self, s: Union[str, int, float]) -> list:
+        '''Method that returns an list of the reachable nodes from the given "s" and respective distance needed
+
+        Parameters
+        ----------
+        s : Union[str, int, float]
+            Node to get the reachable ones
+
+        Returns
+        -------
+        list
+            Tuples of the reachable nodes and distance: (Node, Distance)
+        '''
         res = []
         l = [(s,0)]
         while len(l) > 0:
@@ -441,6 +682,10 @@ def test4():
     
     print (gr2.shortest_path(1,5))
     print (gr2.shortest_path(2,1))
+
+    print("\n* Reachable *\n")
+    print (gr2.reachable_bfs(1))
+    print (gr2.reachable_dfs(1))
 
     print (gr2.reachable_with_dist(1))
     print (gr2.reachable_with_dist(5))
