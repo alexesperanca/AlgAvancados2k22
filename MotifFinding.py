@@ -150,7 +150,7 @@ class MotifFinding:
         return score
     
     
-    def scoreMult(self, s: list) -> float:
+    def scoreMult(self, s: list) -> int | float:
         '''Method that determines the multiplicative score, given a list of indexes (calculating a profile)
 
         Parameters
@@ -224,7 +224,19 @@ class MotifFinding:
      
     # BRANCH AND BOUND     
      
-    def nextVertex (self, s):
+    def nextVertex (self, s: list) -> list:
+        '''_summary_
+
+        Parameters
+        ----------
+        s : list
+            current vector of starting positions s (current Vertex)
+
+        Returns
+        -------
+        list
+            the next vector of starting positions s (next Vertex)
+        '''
         res =  []
         if len(s) < len(self.seqs): # internal node -> down one level
             for i in range(len(s)): 
@@ -241,7 +253,19 @@ class MotifFinding:
         return res
     
     
-    def bypass (self, s):
+    def bypass (self, s: list) -> list:
+        '''Method that skips ahead of the branches of a given vertex (bypass).
+
+        Parameters
+        ----------
+        s : list
+            current vector of starting positions s (current vertex)
+
+        Returns
+        -------
+        list
+            the next vector of starting positions s (next Vertex)
+        '''
         res =  []
         pos = len(s) -1
         while pos >=0 and s[pos] == self.seqSize(pos) - self.motifSize:
@@ -252,7 +276,14 @@ class MotifFinding:
             res.append(s[pos]+1)
         return res
         
-    def branchAndBound (self):
+    def branchAndBound (self) -> list:
+        '''Method that implements Branch and Bound algorithm with four types of movements: next leaf; visit all leaves (similar to exhaustive search); visit next node, and bypass.
+
+        Returns
+        -------
+        list
+            the vector of starting positions s (representative of the best motif found)
+        '''
         melhorScore = -1
         melhorMotif = None
         size = len(self.seqs)
@@ -273,12 +304,14 @@ class MotifFinding:
     # Consensus (heuristic)
   
     def heuristicConsensus(self) -> list:
-        '''Algoritmo heuristico (tipo consensus) com método exaustivo
-        
+        '''Method that computes the heuristic consensus algorithm: 
+        - Considering only the first two sequences, choose the initial positions s1 and s2 that give a better score.
+        - For each of the following sequences, iteratively, choose the best starting position in the sequence, in order to maximize the score.
+
         Returns
         -------
         list
-            list of index for each sequence
+            the vector of starting positions s (representative of the best motif found)
         '''
         motif_finding = MotifFinding(self.motifSize, self.seqs[:2]) ## primeiras duas sequencias fixas
         search = motif_finding.exhaustiveSearch() # melhores posições para primeiras duas seq
@@ -297,7 +330,14 @@ class MotifFinding:
 
     # Consensus (Stochastic)
 
-    def heuristicStochastic (self):
+    def heuristicStochastic (self) -> list:
+        '''Method that computes the heuristic stochastic consensus algorithm, using the most likely segments to adjust starting positions to achieve the best profile (motif).
+
+        Returns
+        -------
+        list
+            the vector of starting positions s (representative of the best motif found)
+        '''
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
         best_score = self.score(search)
         best = False
@@ -315,7 +355,19 @@ class MotifFinding:
         
     # Gibbs sampling 
 
-    def gibbs (self, iterations):
+    def gibbs (self, iterations: int) -> list:
+        '''Method that implements the Gibbs Sampling algorithm, by choosing new segments at random (increasing the possibilities of converging to a correct solution).
+
+        Parameters
+        ----------
+        iterations : int
+            maximum number of iterations
+
+        Returns
+        -------
+        list
+            the vector of starting positions s (representative of the best motif found)
+        '''
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))] # lista de index inicial
         best_search = list(search)
         best_score = self.score(best_search)
@@ -340,7 +392,19 @@ class MotifFinding:
                 best_search = list(search)
         return best_search
 
-    def roulette(self, f):
+    def roulette(self, f: list) -> int:
+        '''Method auxiliary that determines the chosen position by its probability (probability of choosing a certain position is proportional to its score).
+
+        Parameters
+        ----------
+        f : list
+            list of probabilities 
+
+        Returns
+        -------
+        int
+            chosen position 
+        '''
         from random import random
         tot = 0.0
         for x in f: tot += (0.01+x)
