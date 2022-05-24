@@ -183,20 +183,20 @@ class EAMotifsReal (EvolAlgorithm):
         '''
         for i in range(len(indivs)):
             ind = indivs[i]
-            sol = ind.getGenes()         
+            sol = ind.getGenes()
             #criar função auxiliar pwm ou pssm (soma de cada coluna é igual a 1 - normalizar valores)
             pwm = self.profile(sol) # criar o perfil pwm com a lista anterior (por ordem de 4 em 4 (se abcedario é DNA))
             # para cada sequencia, calcular a posição mais provavel do motif no pwm criado (vetor search)
-            search = []            
+            search = []
             for x in range(len(self.motifs.seqs)):
                 ## fazer função auxiliar para seq mais provavel (nao dá para utilizar função da Classe Motifs porque não é criada uma instancia, fazemos o perfil direto da lista)
                 seq_prob, index = self.seq_most_probable(self.motifs.seqs[x], pwm)
                 search.append(index)
-            
+
             # calcular o score
             fit = self.motifs.score(search)
             ind.setFitness(fit)
-            
+
 
 def test1():
     ea = EAMotifsInt(100, 1000, 50, "AlgAvancados2k22/exemploMotifs.txt")

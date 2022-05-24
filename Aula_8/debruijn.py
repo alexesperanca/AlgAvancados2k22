@@ -13,7 +13,7 @@ class DeBruijnGraph (MyGraph):
             self.add_vertex(o)
         if d not in self.graph.keys():
             self.add_vertex(d)
-        self.graph[o][d] = None
+        self.graph[o][d] = None ## verificar aqui se não é necessario fazer append 
 
     def in_degree(self, v):
         res = 0
@@ -55,7 +55,8 @@ def test1():
     frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
-    
+    ## aqui será que tem de se adicionar o mesmo arco varias vezes? senão a regra de passar só uma vez vai fazer erro se não tiver -- testar na criação do grafo
+
 def test2():
     print("\n* Test 2 *\n")
     frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
