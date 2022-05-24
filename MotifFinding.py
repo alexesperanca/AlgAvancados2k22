@@ -1,10 +1,16 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
 """
-@authors:
-- Alexandre Esperança
-- Cristiana Martins
-- Mónica Leiras
-- Tomás Sá
+This module provides the :class:`MotifFinding` class, for finding conserved motifs, given a list of sequences.
+This class includes diverse strategies for this, such as:
+    - Exhaustive search type
+    - Branch & Bound (search trees)
+    - Consensus (heuristic algorithms)
+    - Consensus (estochastic algorithms)
+    - Gibbs sampling
+
 """
 
 from Motifs import Motifs
