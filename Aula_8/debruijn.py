@@ -79,8 +79,8 @@ def test4():
     gr = MyGraph( {1:[2], 2:[3,1], 3:[4], 4:[2,5],
     5:[6], 6:[4]} )
     gr.print_graph()
-    print (gr.check_balanced_graph() )
-    print (gr.eulerian_cycle() )
+    print (gr.check_balanced_graph())
+    print (gr.eulerian_cycle())
 
 test1()
 test2()
