@@ -1,23 +1,23 @@
 from random import randint, random, shuffle, uniform
+from typing import Type
 
 class Indiv:
 
-    def __init__(self, size: int, genes: list = [], lb: int = 0, ub: int = 1):
+    def __init__(self, size: int, genes: list = [], lb: int = 0, ub: int = 1) -> None:
         '''Class to implement individuals with binary representations, with the atributes:
-        - list of genes (representative of genome)
         - lb/ub (lower and upper limits of the range for representing genes)
         - fitness (stores fitness value for each individual
 
         Parameters
         ----------
         size : int
-            _description_
+            size of the list of genes
         genes : list, optional
-            _description_, by default []
+            list of genes (representative of genome), by default []
         lb : int, optional
-            _description_, by default 0
+            lower limits of the range for representing genes, by default 0
         ub : int, optional
-            _description_, by default 1
+            upper limits of the range for representing genes, by default 1
         '''
         self.lb = lb
         self.ub = ub
@@ -60,7 +60,7 @@ class Indiv:
     def __repr__(self):
         return self.__str__()
 
-    def setFitness(self, fit):
+    def setFitness(self, fit) -> None:
         self.fitness = fit
 
     def getFitness(self):
@@ -69,12 +69,14 @@ class Indiv:
     def getGenes(self):
         return self.genes
 
-    def initRandom(self, size):
+    def initRandom(self, size) -> None:
         self.genes = []
         for _ in range(size):
             self.genes.append(randint(self.lb, self.ub))
 
-    def mutation(self):
+    def mutation(self) -> None:
+        '''Method for binary representations that alters a single gene (mutation)
+        '''
         s = len(self.genes)
         pos = randint(0, s-1)
         if self.genes[pos] == 0:
@@ -82,10 +84,34 @@ class Indiv:
         else:
             self.genes[pos] = 0
 
-    def crossover(self, indiv2):
+    def crossover(self, indiv2) -> tuple:
+        '''Method that makes a crossover between two individuals
+
+        Parameters
+        ----------
+        indiv2 : type[Indiv]
+            _description_
+
+        Returns
+        -------
+        tuple
+            _description_
+        '''
         return self.one_pt_crossover(indiv2)
 
-    def one_pt_crossover(self, indiv2):
+    def one_pt_crossover(self, indiv2) -> tuple:
+        '''Auxiliary method that makes a crossover between two individuals
+
+        Parameters
+        ----------
+        indiv2 : type[Indiv]
+            _description_
+
+        Returns
+        -------
+        tuple
+            _description_
+        '''
         offsp1 = []
         offsp2 = []
         s = len(self.genes)
