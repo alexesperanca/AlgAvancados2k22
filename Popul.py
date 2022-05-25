@@ -111,7 +111,7 @@ class Popul:
         Returns
         -------
         list
-            selection list
+            individual (selection list)
         '''
         res = []
         fitnesses = list(self.linscaling(self.getFitnesses(indivs)))
@@ -121,7 +121,19 @@ class Popul:
             res.append(sel)
         return res
 
-    def roulette(self, f):
+    def roulette(self, f: list) -> int:
+        '''Method that selects a specific individual based on the probability of its fitnesses
+
+        Parameters
+        ----------
+        f : list
+            list of fitnesses
+
+        Returns
+        -------
+        int
+            index of individual selected
+        '''
         tot = sum(f)
         val = random()
         acum = 0.0
@@ -131,7 +143,19 @@ class Popul:
             ind += 1
         return ind-1
 
-    def linscaling(self, fitnesses):
+    def linscaling(self, fitnesses: list) -> list:
+        '''Method that normalizes the fitnesses values (0,1)
+
+        Parameters
+        ----------
+        fitnesses : list
+            list of fitnesses
+
+        Returns
+        -------
+        list
+            list of normalized fitnesses
+        '''
         mx = max(fitnesses)
         mn = min(fitnesses)
         res = []
@@ -140,7 +164,21 @@ class Popul:
             res.append(val)
         return res
 
-    def recombination(self, parents, noffspring):
+    def recombination(self, parents: list, noffspring: int) -> list:
+        '''Method that returns the offspring after crossover between two parents and mutation.
+
+        Parameters
+        ----------
+        parents : list
+            list of individuals (parents)
+        noffspring : int
+            number of offspring individuals to create
+
+        Returns
+        -------
+        list
+            list of individuals (offspring)
+        '''
         offspring = []
         new_inds = 0
         while new_inds < noffspring:
@@ -154,7 +192,14 @@ class Popul:
             new_inds += 2
         return offspring
 
-    def reinsertion(self, offspring):
+    def reinsertion(self, offspring: list) -> None:
+        '''Method that reinserts individuals (offspring)
+
+        Parameters
+        ----------
+        offspring : list
+            list of individuals (offspring)
+        '''
         tokeep = self.selection(self.popsize-len(offspring))
         ind_offsp = 0
         for i in range(self.popsize):
@@ -162,14 +207,28 @@ class Popul:
                 self.indivs[i] = offspring[ind_offsp]
                 ind_offsp += 1
 
-
 class PopulInt(Popul):
 
-    def __init__(self, popsize, indsize, ub, indivs=[]):
+    def __init__(self, popsize: int, indsize: int, ub: int, indivs: list = []) -> None:
+        '''Subclass that implements a binary representation of the population with a given size.
+
+        Parameters
+        ----------
+        popsize : int
+            size of population 
+        indsize : int
+            size of individuals (list of genes)
+        ub : int
+            upper limits of the range for representing genes
+        indivs : list, optional
+            list of genes, by default []
+        '''
         self.ub = ub
         Popul.__init__(self, popsize, indsize, indivs)
 
-    def initRandomPop(self):
+    def initRandomPop(self) -> None:
+        '''Method that initializes the population (creates instances of IndivInt class)
+        '''
         self.indivs = []
         for _ in range(self.popsize):
             indiv_i = IndivInt(self.indsize, [], 0, self.ub)
@@ -178,12 +237,29 @@ class PopulInt(Popul):
 
 class PopulReal(Popul):
   
-    def __init__(self, popsize, indsize, lb=0.0, ub=1.0, indivs=[]):
+    def __init__(self, popsize: int, indsize: int, lb: float = 0.0, ub: float = 1.0, indivs: list = []) -> None:
+        '''Subclass that implements a real representation of the population with a given size.
+
+        Parameters
+        ----------
+        popsize : int
+            size of population 
+        indsize : int
+            size of individuals (list of genes)
+        lb : float, optional
+            lower limits of the range for representing genes, by default 0.0
+        ub : float, optional
+            upper limits of the range for representing genes, by default 1.0
+        indivs : list, optional
+            list of genes, by default []
+        '''
         self.ub = ub
         self.lb = lb
         Popul.__init__(self, popsize, indsize, indivs)
 
-    def initRandomPop(self):
+    def initRandomPop(self) -> None:
+        '''Method that initializes the population (creates instances of IndivReal class)
+        '''
         self.indivs = []
         for _ in range(self.popsize):
             indiv_r = IndivReal(self.indsize, [], self.lb, self.ub)
