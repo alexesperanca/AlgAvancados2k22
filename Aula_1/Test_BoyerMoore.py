@@ -13,6 +13,7 @@ class TestBoyerMoore (unittest.TestCase):
         self.assertEqual(self.t2.search_pattern('CGTGCCTACTTACTTACTTACTTACGCGAA'),[8, 12, 16, 20])
         self.assertEqual(self.t3.search_pattern("ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"),('No match!'))
         self.assertEqual(self.t4.search_pattern("atagaaccaatgaaccatgatgaaccatggatacccaaccacc"),[5, 13, 23, 37])
+        self.assertEqual(self.t1.search_pattern("ACTGACTGACTGACTGACTGGTGTAGCAGGAGCGAGCAGGTATTATATGC"),('No match!'))
 
 if __name__ == '__main__':
     unittest.main()
