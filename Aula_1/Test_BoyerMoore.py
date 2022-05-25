@@ -14,7 +14,5 @@ class TestBoyerMoore (unittest.TestCase):
         self.assertEqual(self.t3.search_pattern("ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"),('No match!'))
         self.assertEqual(self.t4.search_pattern("atagaaccaatgaaccatgatgaaccatggatacccaaccacc"),[5, 13, 23, 37])
 
-
-
 if __name__ == '__main__':
     unittest.main()

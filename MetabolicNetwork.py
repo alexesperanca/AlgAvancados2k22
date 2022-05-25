@@ -2,7 +2,7 @@
 # Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
 
 """
-This module provides the :class:`MetabolicNetwork` class, for construction of graphs, given a dictionary of values or strings.
+This module provides the :class:`MetabolicNetwork` class.
 This class includes diverse strategies for the construction of graphs based in metabolites and reactions and information retained, such as:
     - Loading of external files
     - Addition of vertex to the graph
@@ -11,7 +11,6 @@ This class includes diverse strategies for the construction of graphs based in m
     - Obtain active reactions
 """
 
-from sympy import EX
 from MyGraph import MyGraph
 
 class MetabolicNetwork (MyGraph):
