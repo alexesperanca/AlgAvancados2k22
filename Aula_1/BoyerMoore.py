@@ -65,7 +65,6 @@ class BoyerMoore:
         else: 
             return res
 
-<<<<<<< HEAD
 # BoyerMoore('ACTG','ACWA').search_pattern("ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC")
 # def test(pattern, text):
 #     bm = BoyerMoore('ACTG', pattern)
@@ -83,15 +82,3 @@ class BoyerMoore:
 # print(seq)
 
 # test('CTTA', seq)
-=======
-def test():
-    text = "ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"
-    pattern = "ACCA"
-    bm = BoyerMoore('ACTG', pattern)
-    print (bm.search_pattern(text))
-
-if __name__ == "__main__":
-    test()
-
-# result: [5, 13, 23, 37]
->>>>>>> 09f98916052deedd3941ba8fb7368e802e1bc9dd
