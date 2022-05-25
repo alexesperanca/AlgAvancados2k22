@@ -1,4 +1,12 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the `Popul` class and its subclasses `PopulInt` and `PopulReal`, for creating populations of individuals (needed for Evolutionary Algorithm: `EvolAlgorithm` class).
+This class includes a binary and a real representation of the population.
+
+"""
 
 from Indiv import Indiv, IndivInt, IndivReal
 from random import random
@@ -6,7 +14,18 @@ from random import random
 
 class Popul:
 
-    def __init__(self, popsize, indsize, indivs=[]):
+    def __init__(self, popsize: int, indsize: int, indivs: list = []) -> None:
+        '''Class that implements the population with a given size.
+
+        Parameters
+        ----------
+        popsize : int
+            size of population 
+        indsize : int
+            size of individuals (list of genes)
+        indivs : list, optional
+            list of genes, by default []
+        '''
         self.popsize = popsize
         self.indsize = indsize
         if indivs:
@@ -14,16 +33,42 @@ class Popul:
         else:
             self.initRandomPop()
 
-    def getIndiv(self, index):
+    def getIndiv(self, index: int) -> list:
+        '''Method that returns a specific individual from the list, given its index.
+
+        Parameters
+        ----------
+        index : int
+            index of the individual on the list self.indivs
+
+        Returns
+        -------
+        list
+            list of information about individual: list of genes and fitness (Instance of the class Indiv)
+        '''
         return self.indivs[index]
 
-    def initRandomPop(self):
+    def initRandomPop(self) -> None:
+        '''Method that initializes the population (creates instances of Indiv class)
+        '''
         self.indivs = []
         for _ in range(self.popsize):
             indiv_i = Indiv(self.indsize, [])
             self.indivs.append(indiv_i)
 
-    def getFitnesses(self, indivs=None):
+    def getFitnesses(self, indivs: list = None) -> list:
+        '''Method that returns the fitness information about all the individuals
+
+        Parameters
+        ----------
+        indivs : list, optional
+            list of individuals, by default None
+
+        Returns
+        -------
+        list
+            list of fitness of all the individuals
+        '''
         fitnesses = []
         if not indivs:
             indivs = self.indivs
@@ -31,15 +76,43 @@ class Popul:
             fitnesses.append(ind.getFitness())
         return fitnesses
 
-    def bestSolution(self):
+    def bestSolution(self) -> list:
+        '''Method that returns the best solution of all the individuals (that has the best fitness).
+
+        Returns
+        -------
+        list
+            the best solution
+        '''
         return max(self.indivs)
 
-    def bestFitness(self):
+    def bestFitness(self) -> int | float:
+        '''Method that returns the best fitness of all the individuals
+
+        Returns
+        -------
+        int | float
+            the best fitness 
+        '''
         indv = self.bestSolution()
         return indv.getFitness()
 
 
-    def selection(self, n, indivs=None):
+    def selection(self, n: int, indivs: list = None) -> list:
+        '''_summary_
+
+        Parameters
+        ----------
+        n : int
+            size of selection (parents)
+        indivs : _type_, optional
+            list that represents the individuals, by default None
+
+        Returns
+        -------
+        list
+            selection list
+        '''
         res = []
         fitnesses = list(self.linscaling(self.getFitnesses(indivs)))
         for _ in range(n):
