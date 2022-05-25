@@ -420,7 +420,7 @@ class MotifFinding:
 def test1(): 
     print ("Test 1:")
     sm = MotifFinding()
-    sm.readFile("AlgAvancados2k22/exemploMotifs.txt")
+    sm.readFile("exemploMotifs.txt")
     sol = [25,20,2,55,59]
     sa = sm.score(sol)
     print(sa)
@@ -452,7 +452,7 @@ def test2():
 def test3():
     print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("AlgAvancados2k22/exemploMotifs.txt")
+    mf.readFile("exemploMotifs.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -462,7 +462,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("AlgAvancados2k22/exemploMotifs.txt")
+    mf.readFile("exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
