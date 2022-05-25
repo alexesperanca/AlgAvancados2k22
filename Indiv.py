@@ -1,12 +1,20 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the :class:`Indiv` class, that implements individuals with binary (IndivInt subclass) or real representations (IndivReal subclass).
+This class includes diverse methods, such as: mutation(), crossover(), and others.
+"""
+
 from random import randint, random, shuffle, uniform
-from typing import Type
 
 class Indiv:
 
     def __init__(self, size: int, genes: list = [], lb: int = 0, ub: int = 1) -> None:
-        '''Class to implement individuals with binary representations, with the atributes:
+        '''Class to implement individuals with binary and real representations, with the atributes:
         - lb/ub (lower and upper limits of the range for representing genes)
-        - fitness (stores fitness value for each individual
+        - fitness (stores fitness value for each individual)
 
         Parameters
         ----------
@@ -30,46 +38,148 @@ class Indiv:
     # Permitem usar sorted, max, min
 
     def __eq__(self, solution: list) -> bool:
+        '''Method auxiliary that determines if the solution is an instance of Indiv class.
+
+        Parameters
+        ----------
+        solution : list
+            individual (instance of class if true)
+
+        Returns
+        -------
+        bool
+            True if solution is instance of this class
+        '''
         if isinstance(solution, self.__class__):
             return self.genes.sort() == solution.genes.sort()
         return False
 
-    def __gt__(self, solution):
+    def __gt__(self, solution: list) -> bool:
+        '''Method auxiliary that determines if the current fitness is greater than the solutions' fitness.
+
+        Parameters
+        ----------
+        solution : list
+            individual (instance of class if true)
+
+        Returns
+        -------
+        bool
+            True if current fitness is greater than its solution
+        '''
         if isinstance(solution, self.__class__):
             return self.fitness > solution.fitness
         return False
 
-    def __ge__(self, solution):
+    def __ge__(self, solution: list) -> bool:
+        '''Method auxiliary that determines if the current fitness is greater or equal than the solutions' fitness.
+
+        Parameters
+        ----------
+        solution : list
+            individual (instance of class if true)
+
+        Returns
+        -------
+        bool
+            True if current fitness is greater or equal than its solution
+        '''
         if isinstance(solution, self.__class__):
             return self.fitness >= solution.fitness
         return False
 
-    def __lt__(self, solution):
+    def __lt__(self, solution: list) -> bool:
+        '''Method auxiliary that determines if the solution fitness is greater than the current.
+
+        Parameters
+        ----------
+        solution : list
+            individual (instance of class if true)
+
+        Returns
+        -------
+        bool
+            True if the solution fitness is greater than the curent fitness
+        '''
         if isinstance(solution, self.__class__):
             return self.fitness < solution.fitness
         return False
 
-    def __le__(self, solution):
+    def __le__(self, solution: list) -> bool:
+        '''Method auxiliary that determines if the solution fitness is greater or equal than the current.
+
+        Parameters
+        ----------
+        solution : list
+            individual (instance of class if true)
+
+        Returns
+        -------
+        bool
+            True if the solution fitness is greater or equal than the curent fitness
+        '''
         if isinstance(solution, self.__class__):
             return self.fitness <= solution.fitness
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
+        ''' Method that writes the information about the object: the list of genes and its fitness
+        
+        Returns
+        ------------
+        str
+            String with the information of the object
+        '''
         return f"{str(self.genes)} {self.getFitness()}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        ''' Method that shows the information about the object
+        
+        Returns
+        ------------
+        str
+            String with the information of the object
+        '''
         return self.__str__()
 
-    def setFitness(self, fit) -> None:
+    def setFitness(self, fit: int | float) -> None:
+        '''Method that sets the new fitness of the individual 
+
+        Parameters
+        ----------
+        fit : int
+            fitness of the individual
+        '''
         self.fitness = fit
 
-    def getFitness(self):
+    def getFitness(self) -> int | float:
+        '''Method that shows the fitness of the individual 
+
+        Returns
+        -------
+        int
+            fitness of the individual
+        '''
         return self.fitness
 
-    def getGenes(self):
+    def getGenes(self) -> list:
+        '''Method that shows the list of genes of the individual 
+
+        Returns
+        -------
+        list
+            list of genes of the individual
+        '''
         return self.genes
 
-    def initRandom(self, size) -> None:
+    def initRandom(self, size: int) -> None:
+        '''Method that generates a list of genes of the individual (random int numbers between upper and lower bounds) 
+
+        Parameters
+        ----------
+        size : int
+            number of genes to generate
+        '''
         self.genes = []
         for _ in range(size):
             self.genes.append(randint(self.lb, self.ub))
@@ -99,18 +209,18 @@ class Indiv:
         '''
         return self.one_pt_crossover(indiv2)
 
-    def one_pt_crossover(self, indiv2) -> tuple:
+    def one_pt_crossover(self, indiv2: list) -> tuple:
         '''Auxiliary method that makes a crossover between two individuals
 
         Parameters
         ----------
-        indiv2 : type[Indiv]
-            _description_
+        indiv2 : list
+            individual (instance of Indiv class)
 
         Returns
         -------
         tuple
-            _description_
+            the new individuals with list of genes crossed-over 
         '''
         offsp1 = []
         offsp2 = []
@@ -129,7 +239,20 @@ class Indiv:
 
 class IndivInt (Indiv):
 
-    def __init__(self, size, genes=[], lb=0, ub=1):
+    def __init__(self, size: int, genes: list = [], lb: int = 0, ub: int = 1) -> None:
+        '''Subclass to implement individuals with binary representation.
+
+        Parameters
+        ----------
+        size : int
+            size of the list of genes
+        genes : list, optional
+            list of genes (representative of genome), by default []
+        lb : int, optional
+            lower limits of the range for representing genes, by default 0
+        ub : int, optional
+            upper limits of the range for representing genes, by default 1
+        '''
         self.lb = lb
         self.ub = ub
         self.genes = genes
@@ -137,20 +260,35 @@ class IndivInt (Indiv):
         if not self.genes:
             self.initRandom(size)
 
-    def initRandom(self, size):
+    def initRandom(self, size: int) -> None:
+        '''Method that generates a list of genes of the individual (random int numbers between upper and lower bounds) 
+
+        Parameters
+        ----------
+        size : int
+            number of genes to generate
+        '''
         self.genes = []
         for _ in range(size):
             self.genes.append(randint(self.lb, self.ub))
 
-    def mutation(self):
-        s = len(self.genes)
-        pos = randint(0, s-1)
-        self.genes[pos] = randint(self.lb, self.ub)
-
 
 class IndivReal(Indiv):
     
-    def __init__(self, size, genes=[], lb=0.0, ub=1.0):
+    def __init__(self, size: int, genes: list = [], lb: float = 0.0, ub: float = 1.0) -> None:
+        '''Subclass to implement individuals with real representation.
+
+        Parameters
+        ----------
+        size : int
+            size of the list of genes
+        genes : list, optional
+            list of genes (representative of genome), by default []
+        lb : int, optional
+            lower limits of the range for representing genes, by default 0.0
+        ub : int, optional
+            upper limits of the range for representing genes, by default 1.0
+        '''
         self.lb = lb
         self.ub = ub
         self.genes = genes
@@ -158,12 +296,21 @@ class IndivReal(Indiv):
         if not self.genes:
             self.initRandom(size)
 
-    def initRandom(self, size):
+    def initRandom(self, size: int) -> None:
+        '''Method that generates a list of genes of the individual (random float numbers between upper and lower bounds) 
+
+        Parameters
+        ----------
+        size : int
+            number of genes to generate
+        '''
         self.genes = []
         for _ in range(size):
             self.genes.append(uniform(self.lb, self.ub))
 
-    def mutation(self):
+    def mutation(self) -> None:
+        '''Method for real representations that alters a single gene (mutation)
+        '''
         s = len(self.genes)
         pos = randint(0, s-1)
         self.genes[pos] = uniform(self.lb, self.ub)

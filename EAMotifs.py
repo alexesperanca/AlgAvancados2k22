@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the `EAMotifsInt` and `EAMotifsReal` subclasses of `EvolAlgorithm` class, a part of a Genetic and Evolutionary Algorithm. 
+
+The `EAMotifsInt` subclass is a binary representation, while the `EAMotifsReal` subclass is a real representation of the Evolutionary Algorithm for founding motifs.
+
+"""
+
 from EvolAlgorithm import EvolAlgorithm
 from Popul import PopulInt, PopulReal
 from MotifFinding import MotifFinding
@@ -39,30 +50,37 @@ def printMat(mat: list):
 
 
 class EAMotifsInt (EvolAlgorithm):
-    def __init__(self, popsize: int, numits: int, noffspring: int, filename: str):
-        '''Class EAMotifsInt that 
+    def __init__(self, popsize: int, numits: int, noffspring: int, filename: str) -> None:
+        '''SubClass EAMotifsInt, a binary representation of EA algorithm for motif finding. 
 
         Parameters
         ----------
         popsize : int
-            _description_
+            size of population 
         numits : int
-            _description_
+            number of iterations to perform
         noffspring : int
-            _description_
+            number of new individuals (descendants)
         filename : str
-            _description_
+            name of the file to read the sequences, example: 'file.txt'
         '''
         self.motifs = MotifFinding()
         self.motifs.readFile(filename)
         indsize = len(self.motifs)
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
-    def initPopul(self, indsize: int):
+    def initPopul(self, indsize: int) -> None:
+        '''Method that initializes the population with a given size for individuals (binary representation).
+
+        Parameters
+        ----------
+        indsize : int
+            size of individuals (list of genes)
+        '''
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize
         self.popul = PopulInt(self.popsize, indsize, maxvalue, [])
 
-    def evaluate(self, indivs: list):
+    def evaluate(self, indivs: list) -> None:
         '''Method that calculates the score for each individual, setting its fitness.
 
         Parameters
@@ -79,26 +97,33 @@ class EAMotifsInt (EvolAlgorithm):
 
 class EAMotifsReal (EvolAlgorithm):
     
-    def __init__(self, popsize: int, numits: int, noffspring: int, filename: str):
-        '''Class EAMotifs Real
+    def __init__(self, popsize: int, numits: int, noffspring: int, filename: str) -> None:
+        '''SubClass EAMotifsReal, a real representation of EA algorithm for motif finding. 
 
         Parameters
         ----------
         popsize : int
-            _description_
+            size of population 
         numits : int
-            _description_
+            number of iterations to perform
         noffspring : int
-            _description_
+            number of new individuals (descendants)
         filename : str
-            _description_
+            name of the file to read the sequences, example: 'file.txt'
         '''
         self.motifs = MotifFinding()
         self.motifs.readFile(filename)
         indsize = len(self.motifs)*len(self.motifs.alphabet)
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
-    def initPopul(self, indsize: int):
+    def initPopul(self, indsize: int) -> None:
+        '''Method that initializes the population with a given size for individuals (real representation).
+
+        Parameters
+        ----------
+        indsize : int
+            size of individuals (list of genes)
+        '''
         maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize
         self.popul = PopulReal(self.popsize, indsize, 0.0, maxvalue, [])
 
@@ -148,8 +173,7 @@ class EAMotifsReal (EvolAlgorithm):
             p *= c[b]
         return round(p, 5)
     
-    def seq_most_probable(self, seq: str, profile: list) -> str:
-        
+    def seq_most_probable(self, seq: str, profile: list) -> tuple:
         '''Calculates the probability of each subsequence of a given sequence, and returns the subsequence with the highest probability according to the associated profile
 
         Parameters
@@ -173,7 +197,7 @@ class EAMotifsReal (EvolAlgorithm):
         seq = [list_seq[I] for I,p in enumerate(probs) if p == score_max][0]
         return seq, ind
 
-    def evaluate(self, indivs: list):
+    def evaluate(self, indivs: list) -> None:
         '''Method that builds a pwm profile (normalized) for each individual, determines the most probable position of the motif and calculates the score of the final solution, setting the fitness for that individual. 
 
         Parameters
@@ -199,16 +223,19 @@ class EAMotifsReal (EvolAlgorithm):
 
 
 def test1():
+    print('Test 1')
     ea = EAMotifsInt(100, 1000, 50, "AlgAvancados2k22/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 
 
 def test2():
+    print('Test 2')
     ea = EAMotifsReal(100, 2000, 50, "AlgAvancados2k22/exemploMotifs.txt")
     ea.run()
     ea.printBestSolution()
 
 
-test1()
-test2()
+if __name__ == "__main__":
+    test1()
+    test2()
