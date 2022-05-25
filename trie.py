@@ -3,12 +3,12 @@
 
 """
 This module provides the :class:`Trie` class and :class: `SuffixTree` class, allows the user to construct a wide tree with several ramifications enabling improved analysis.
-`Trie` class includes diverse strategies for obtain pattern repeats, pattern recognition and sequence addition, such as:
+`Trie` class includes diverse strategies for obtain pattern repeats, pattern recognition, and sequence addition, such as:
     - Incremention of sequences to the tree
     - Obtain mathes between a given sequence and patterns in the tree
 
 `SuffixTrie` class has `Trie` as its parent class, allows the user to construct a wide tree of a given initial sequence.
-This class includes diverse strategies for suffix addition and tree analysis, such as:
+This class includes diverse strategies for suffix addition, and tree analysis, such as:
 	- Addition of suffix to the tree constructed
 	- Obtainment of sequences by a singles leaf given to the class
 	- Encountering of patterns in the tree crossing with a sequence
