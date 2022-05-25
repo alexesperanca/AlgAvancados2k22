@@ -10,7 +10,6 @@ This class includes diverse strategies for this, such as:
     - Consensus (heuristic algorithms)
     - Consensus (estochastic algorithms)
     - Gibbs sampling
-
 """
 
 from Motifs import Motifs
