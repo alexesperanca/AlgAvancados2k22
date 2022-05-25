@@ -6,8 +6,8 @@ from numpy import empty
 class BoyerMoore:
     
     def __init__(self, alphabet, pattern):
-        self.alphabet = alphabet
-        self.pattern = pattern
+        self.alphabet = alphabet.upper()
+        self.pattern = pattern.upper()
         self.preprocess()
 
     def preprocess(self):
@@ -45,9 +45,10 @@ class BoyerMoore:
 
         return self.s
         
-    def search_pattern(self, text):
+    def search_pattern(self, text: str) -> list:
         res = []
         i = 0
+        text=text.upper()
         while i <= (len(text)-len(self.pattern)):
             j = len(self.pattern) - 1
             while j >= 0 and self.pattern[j] == text[j+i]:
@@ -58,8 +59,31 @@ class BoyerMoore:
             else:
                 c = text[j+i]
                 i += max(self.s[j+1], j-self.occ[c])
-        return res
+        # return res
+        if len(res) == 0:
+            return 'No match!'
+        else: 
+            return res
 
+<<<<<<< HEAD
+# BoyerMoore('ACTG','ACWA').search_pattern("ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC")
+# def test(pattern, text):
+#     bm = BoyerMoore('ACTG', pattern)
+#     print (bm.search_pattern(text))
+
+# texto = "ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"
+# padrao = "ACCA"
+
+# test(padrao, texto)
+
+# # result: [5, 13, 23, 37]
+
+
+# seq = ''.join('C G T G C C T A C T T A C T T A C T T A C T T A C G C G A A'.split())
+# print(seq)
+
+# test('CTTA', seq)
+=======
 def test():
     text = "ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"
     pattern = "ACCA"
@@ -70,3 +94,4 @@ if __name__ == "__main__":
     test()
 
 # result: [5, 13, 23, 37]
+>>>>>>> 09f98916052deedd3941ba8fb7368e802e1bc9dd
