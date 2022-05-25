@@ -55,7 +55,6 @@ class Automata:
         return res
         
     def occurencesPattern(self, text):
-        q = 0  
         m = re.search(self.pattern, text)
         res = m.span()
         return res
@@ -72,7 +71,8 @@ def test():
     print (auto.applySeq("CACAACAA"))
     print (auto.occurencesPattern("CACAACAA"))
 
-test()
+if __name__ == "__main__":
+    test()
 
 #States:  4
 #Alphabet:  AC

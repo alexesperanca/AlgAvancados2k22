@@ -60,19 +60,13 @@ class BoyerMoore:
                 i += max(self.s[j+1], j-self.occ[c])
         return res
 
-def test(pattern, text):
+def test():
+    text = "ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"
+    pattern = "ACCA"
     bm = BoyerMoore('ACTG', pattern)
     print (bm.search_pattern(text))
 
-texto = "ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"
-padrao = "ACCA"
-
-test(padrao, texto)
+if __name__ == "__main__":
+    test()
 
 # result: [5, 13, 23, 37]
-
-
-seq = ''.join('C G T G C C T A C T T A C T T A C T T A C T T A C G C G A A'.split())
-print(seq)
-
-test('CTTA', seq)

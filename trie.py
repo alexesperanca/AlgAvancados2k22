@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
 
-'''Trie Script
+"""
+This module provides the :class:`Trie` class and :class: `SuffixTree` class, allows the user to construct a wide tree with several ramifications enabling improved analysis.
+`Trie` class includes diverse strategies for obtain pattern repeats, pattern recognition and sequence addition, such as:
+    - Incremention of sequences to the tree
+    - Obtain mathes between a given sequence and patterns in the tree
 
-This script allows the user to cross different sequences to recognize patterns and regulate different expressions.
+`SuffixTrie` class has `Trie` as its parent class, allows the user to construct a wide tree of a given initial sequence.
+This class includes diverse strategies for suffix addition and tree analysis, such as:
+	- Addition of suffix to the tree constructed
+	- Obtainment of sequences by a singles leaf given to the class
+	- Encountering of patterns in the tree crossing with a sequence
+	- Sequence repeats identification in the tree
+"""
 
-Accepts a innumerable list of sequences to construct a wide tree with several ramifications enabling improved analysis. Furthermore, pattern repeats, recognition and sequence addition are supported functions in the script.
-
-This file requires "pprint" module importion.
-'''
 import pprint
 
 class Trie:
@@ -122,7 +129,7 @@ class SuffixTree(Trie):
 	Parameters
 	----------
 	Trie : class
-		_description_
+		 Class that implements an tree structured with sequences provided and enables the user to iterate, cross sequences and recognize patterns 
 	'''
 	def __init__(self, seq:str):
 		'''Costruction of the suffix tree from a given sequence. Sequence is deconstructed in several smaller sequences to run Trie class innitialization 
@@ -240,7 +247,8 @@ def test4():
 	print(st.find_pattern("ACTA"))
 	print(st.repeats("TA"))
 
-#test()
-#test2()
-#test3()
-#test4()
+if __name__ == "__main__":
+	test()
+	test2()
+	test3()
+	test4()

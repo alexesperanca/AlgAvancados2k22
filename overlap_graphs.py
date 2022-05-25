@@ -4,10 +4,6 @@ from MyGraph import MyGraph
 
 class OverlapGraph(MyGraph):
     
-#    def __init__(self, frags):
-#        MyGraph.__init__(self, {})
-#        self.create_overlap_graph(frags)
-
     def __init__(self, frags:list, reps = False):
         MyGraph.__init__(self, {})
         if reps: self.create_overlap_graph_with_reps(frags)
@@ -56,8 +52,8 @@ class OverlapGraph(MyGraph):
         if not self.check_if_hamiltonian_path(path): return None
         seq = self.get_seq(path[0])
         for i in range(1, len(path)):
-            next = self.get_seq(path[i])
-            seq += next[-1]
+            n = self.get_seq(path[i])
+            seq += n[-1]
         return seq
    
                     
@@ -99,10 +95,11 @@ def test4():
     print("\n* Test 4 *\n")
     frags = ["ATA",  "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA" , "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     ovgr = OverlapGraph(frags, True)
-    path = ['ACC−2', 'CCA−8', 'CAT−5', 'ATG−3']
+    path = ['ACC-2', 'CCA-8', 'CAT-5', 'ATG-3']
+    ovgr.print_graph()
     print (ovgr.check_if_valid_path(path))
     print (ovgr.check_if_hamiltonian_path(path))
-    path2 = ['ACC−2', 'CCA−8', 'CAT−5', 'ATG−3', 'TGG−13', 'GGC−10', 'GCA−9', 'CAT−6', 'ATT−4', 'TTT−15', 'TTC−14', 'TCA−12', 'CAT−7', 'ATA−1', 'TAA−11']
+    path2 = ['ACC-2', 'CCA-8', 'CAT-5', 'ATG-3', 'TGG-13', 'GGC-10', 'GCA-9', 'CAT-6', 'ATT-4', 'TTT-15', 'TTC-14', 'TCA-12', 'CAT-7', 'ATA-1', 'TAA-11']
     print (ovgr.check_if_valid_path(path2))
     print (ovgr.check_if_hamiltonian_path(path2))
     print (ovgr.seq_from_path(path2))
@@ -111,7 +108,7 @@ def test5():
     print("\n* Test 5 *\n")
     frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     ovgr = OverlapGraph(frags, True)
-
+    ovgr.print_graph()
     path = ovgr.search_hamiltonian_path()
     print (path)
     print (ovgr.check_if_hamiltonian_path(path))
@@ -126,11 +123,13 @@ def test6():
     ovgr.print_graph()
     path = ovgr.search_hamiltonian_path()
     print (path)
+    print (ovgr.check_if_hamiltonian_path(path))
     print (ovgr.seq_from_path(path))
-   
-test1()
-test2()
-test3()
-test4()
-test5()
-test6()
+
+if __name__ == "__main__":
+    test1()
+    test2()
+    test3()
+    test4()
+    test5()
+    test6()
