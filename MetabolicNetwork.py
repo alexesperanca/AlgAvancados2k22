@@ -224,7 +224,7 @@ def test2():
     print("\n* Test 2 *\n")
     print("metabolite-reaction network:")
     mrn = MetabolicNetwork("metabolite-reaction")
-    mrn.load_from_file("Aula_7/example-net.txt")
+    mrn.load_from_file("example-net.txt")
     mrn.print_graph()
     print("Reactions: ", mrn.get_nodes_type("reaction") )
     print("Metabolites: ", mrn.get_nodes_type("metabolite") )
@@ -232,25 +232,25 @@ def test2():
     
     print("metabolite-metabolite network:")
     mmn = MetabolicNetwork("metabolite-metabolite")
-    mmn.load_from_file("Aula_7/example-net.txt")
+    mmn.load_from_file("example-net.txt")
     mmn.print_graph()
     print()
     
     print("reaction-reaction network:")
     rrn = MetabolicNetwork("reaction-reaction")
-    rrn.load_from_file("Aula_7/example-net.txt")
+    rrn.load_from_file("example-net.txt")
     rrn.print_graph()
     print()
     
     print("metabolite-reaction network (splitting reversible):")
     mrsn = MetabolicNetwork("metabolite-reaction", True)
-    mrsn.load_from_file("Aula_7/example-net.txt")
+    mrsn.load_from_file("example-net.txt")
     mrsn.print_graph()
     print()
     
     print("reaction-reaction network (splitting reversible):")
     rrsn = MetabolicNetwork("reaction-reaction", True)
-    rrsn.load_from_file("Aula_7/example-net.txt")
+    rrsn.load_from_file("example-net.txt")
     rrsn.print_graph()
     print()
 
@@ -268,5 +268,6 @@ def test2():
     print(mrn.met_prod(["M4"]))
     print(mrn.final_met(["M5", "M2"])) # Not sure se isto está correto pq estou a considerar ciclos (ou seja, um metabolito produz outro e este porduz o anterior), mas pode n ser o caso
 
-test1()
-test2()
+if __name__ == "__main__":
+    test1()
+    test2()

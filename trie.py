@@ -240,7 +240,8 @@ def test4():
 	print(st.find_pattern("ACTA"))
 	print(st.repeats("TA"))
 
-#test()
-#test2()
-#test3()
-#test4()
+if __name__ == "__main__":
+	test()
+	test2()
+	test3()
+	test4()
