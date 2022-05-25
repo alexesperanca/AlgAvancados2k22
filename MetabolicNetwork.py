@@ -1,11 +1,36 @@
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the :class:`MetabolicNetwork` class, for construction of graphs, given a dictionary of values or strings.
+This class includes diverse strategies for (...), such as:
+"""
 
 from sympy import EX
 from MyGraph import MyGraph
 
 class MetabolicNetwork (MyGraph):
+    '''_summary_
+
+    Parameters
+    ----------
+    MyGraph : _type_
+        _description_
+    '''
     
-    def __init__(self, network_type = "metabolite-reaction", split_rev = False):
+    def __init__(self, network_type: str = "metabolite-reaction", split_rev: bool = False):
+        '''Construction of a graph with metabolites and/or reactions provided to the class
+
+        Parameters
+        ----------
+        network_type : str, optional
+            Informs the type of graph network the algorithm is working with, by default "metabolite-reaction"
+            "metabolite-reaction": Graph with metabolites and reactions occuring 
+            "metabolite-metabolite": Graph with the metabolite that origin others
+            "reaction-reaction": Graph with all the reactions that induce others to happen
+        split_rev : bool, optional
+            Indicates if the reactions are considered reversible or not, by default False
+        '''
         MyGraph.__init__(self, {})
         self.net_type = network_type
         self.node_types = {}
@@ -14,16 +39,53 @@ class MetabolicNetwork (MyGraph):
             self.node_types["reaction"] = []
         self.split_rev = split_rev
     
-    def add_vertex_type(self, v, nodetype):
+    def add_vertex_type(self, v: str, nodetype: str):
+        '''Addition of vertex to the graph constructed
+
+        Parameters
+        ----------
+        v : str
+            Vertex to be added
+        nodetype : str
+            Vertex type, only "metabolite" or "reaction" supported
+        '''
+        assert nodetype in ["metabolite", "reaction"], "Node type given not supported"
         self.add_vertex(v)
         self.node_types[nodetype].append(v)
     
-    def get_nodes_type(self, node_type):
-        if node_type in self.node_types:
-            return self.node_types[node_type]
+    def get_nodes_type(self, nodetype: str) -> list:
+        '''Obtain the nodes of a given node type
+
+        Parameters
+        ----------
+        nodetype : str
+            Node type, only "metabolite" or "reaction" supported
+
+        Returns
+        -------
+        list
+            List of nodes in the type provided
+        '''
+        assert nodetype in ["metabolite", "reaction"], "Nodetype given not supported"
+        if nodetype in self.nodetypes:
+            return self.nodetypes[nodetype]
         else: return None
     
-    def load_from_file(self, filename):
+    def load_from_file(self, filename: str):
+        '''Loading of a file content to graph
+
+        Parameters
+        ----------
+        filename : str
+            File name with the content desired to be loaded to a graph. Restrictive content exhibition is required
+
+        Raises
+        ------
+        Exception
+            Invalid line exhibited in the file loaded
+        Exception
+            Invalid line exhibited in the file loaded
+        '''
         rf = open(filename)
         gmr = MetabolicNetwork("metabolite-reaction")
         for line in rf:
@@ -85,9 +147,14 @@ class MetabolicNetwork (MyGraph):
         else: self.graph = {}
         
         
-    def convert_metabolite_net(self, gmr):
-        '''Julgo que aqui criamos as redes metabólicas (em conj. com a função abaixo)
-        Cria basicamnete um grafo onde liga os metabolitos que possuem reações entre eles -> Super simples'''
+    def convert_metabolite_net(self, gmr: dict):
+        '''Addition to the main graph the metabolites that possess an relation, information extracted from the loaded file
+
+        Parameters
+        ----------
+        gmr : dict
+            Current graph
+        '''
         for m in gmr.node_types["metabolite"]: # Acede a cada metabolito obtido do ficheiro
             self.add_vertex(m)
             sucs = gmr.get_successors(m)
@@ -96,9 +163,16 @@ class MetabolicNetwork (MyGraph):
                 for s2 in sucs_r:
                     if m != s2: self.add_edge(m, s2)
         
-    def convert_reaction_graph(self, gmr):
-        '''Igual ao anterior, mas cria grafo entre reações'''
-        for r in gmr.node_types["reaction"]: # Acede a cada reação obtido do ficheiro
+    def convert_reaction_graph(self, gmr: dict):
+        '''Addition to the main graph the reactions that possess an relation, information extracted from the loaded file
+
+
+        Parameters
+        ----------
+        gmr : dict
+            Current graph
+        '''
+        for r in gmr.node_types["reaction"]:
             self.add_vertex(r)
             sucs = gmr.get_successors(r)
             for s in sucs:
@@ -106,7 +180,7 @@ class MetabolicNetwork (MyGraph):
                 for s2 in sucs_r:
                     if r != s2: self.add_edge(r, s2)
 
-    def degrees_centrality(self):
+    def degrees_centrality(self) -> dict:
         res = {}
         deg = self.all_degrees()
         for k, v in deg.items():

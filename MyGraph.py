@@ -1,13 +1,23 @@
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
 
-## Graph represented as adjacency list using a dictionary
-## keys are vertices
-## values of the dictionary represent the list of adjacent vertices of the key node
+"""
+This module provides the :class:`MyGraph` class, for construction of graphs, given a dictionary of values or strings.
+This class includes diverse strategies for graph iteration, path discovery, etc, such as:
+    - Incremention of nodes and edges construction
+    - Obtain successors, predecessors and adjacent nodes
+    - Degrees calculation
+    - Reachables nodes obtainment
+    - Path discovery between differente locations (nodes)
+    - Calculation of clustering coefficients
+    - Hamiltonian path discovery
+    - Eulerian path discovery
+"""
 
 from typing import Union
 
 class MyGraph:
-    '''_summary_
+    '''Class MyGraph is a parent class of several different ones such as: MetabolicNetwork, OverlapGraph and DeBruijnGraph. This class essential builds graphs with a given dictionary of values or strings.
     '''
     def __init__(self, g: dict = {}):
         '''Constrution of the initial graph represented by a dictionary
