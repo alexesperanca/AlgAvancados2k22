@@ -41,40 +41,8 @@ class Automata:
         '''
         for q in range(self.numstates):
             for a in self.alphabet:
-                if q % 2 == 0:
-                    if pattern.find(a) == 0:
-                        self.transitionTable[(q, a)] = self._obtain_transition(q)
-                    
-                    elif pattern.find(a) == 1:
-                        self.transitionTable[(q, a)] = max(0, q - 2)
-
-                else:
-                    if pattern.find(a) == 0:
-                        if q - 2 < 0:
-                            self.transitionTable[(q, a)] = q
-                        else:
-                            self.transitionTable[(q, a)] = q - 2
-
-                    elif pattern.find(a) == 1:
-                        self.transitionTable[(q, a)] = self._obtain_transition(q)
-    
-    def _obtain_transition(self, q: int) -> int:
-        '''Auxiliary function of "buildTransitionTable" that returns the respective transition value in the transition table
-
-        Parameters
-        ----------
-        q : int
-            Current transition value
-
-        Returns
-        -------
-        int
-            New transition value
-        '''
-        if q + 1 == self.numstates:
-            return q - 1
-        else:
-            return q + 1
+                prefix = pattern[0:q] + a
+                self.transitionTable[(q, a)] = overlap(prefix, pattern)
 
     def printAutomata(self):
         '''Pretty print the automata data. States, alphabet, and transition table information printed
@@ -136,12 +104,13 @@ class Automata:
         tuple
             Tuple with the occurences of the pattern in the "text"
         '''
-        try:   
-            m = re.search(self.pattern, text)
-            res = m.span()
-            return res
-        except:
-            return None
+        q = 0
+        res = []
+        for i in range(len(text)):
+            q = self.nextState(q, text[i])
+            if q == self.numstates - 1:
+                res.append(i - self.numstates + 2)
+        return res
 
 def overlap(s1: str, s2: str) -> int:
     '''Mathod to get the size of the overlap between two sequences. The biggest sufix of sequence "s1" that is prefix in "s2"
