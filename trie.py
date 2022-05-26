@@ -100,7 +100,7 @@ class Trie:
 		res = []
 		for i in range(len(seq)):
 			m = self._get_match(seq[i:])
-			if m != None: res.append((m, i))
+			if m != None and len(m) > 1: res.append((m, i))
 		return res
 
 	def trie_matches(self, pat:str):

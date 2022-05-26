@@ -10,6 +10,13 @@ from MyGraph import MyGraph
 
 class DeBruijnGraph (MyGraph):
     def __init__(self, frags:list):
+        '''_summary_
+
+        Parameters
+        ----------
+        frags : list
+            _description_
+        '''
         MyGraph.__init__(self, {})
         self.create_deBruijn_graph(frags)
 
@@ -18,7 +25,7 @@ class DeBruijnGraph (MyGraph):
             self.add_vertex(o)
         if d not in self.graph.keys():
             self.add_vertex(d)
-        self.graph[o][d] = None ## verificar aqui se não é necessario fazer append 
+        self.graph[o][d] = None
 
     def in_degree(self, v):
         res = 0
@@ -27,7 +34,14 @@ class DeBruijnGraph (MyGraph):
                 res += list(self.graph[k].keys()).count(v)
         return res
 
-    def create_deBruijn_graph(self, frags:list):        
+    def create_deBruijn_graph(self, frags:list):
+        '''Creation of a deBruijn graph where the prefixes of each element of the "frags" has an edge with its suffix
+
+        Parameters
+        ----------
+        frags : list
+            List of fragments of sequence to add to the graph
+        '''
         for seq in frags:
             pref = prefix(seq)
             self.add_vertex(pref)
@@ -36,7 +50,10 @@ class DeBruijnGraph (MyGraph):
             self.add_edge(pref, suf)
 
     def seq_from_path(self, path:list) -> str:
-        seq = path[0]
+        try:
+            seq = path[0]
+        except:
+            return None
         for i in range(1,len(path)):
             nxt = path[i]
             seq += nxt[-1]
@@ -73,7 +90,7 @@ def test2():
 def test3():
     print("\n* Test 3 *\n")
     orig_sequence = "ATGCAATGGTCTG"
-    frags = composition(3, orig_sequence)
+    frags = composition(4, orig_sequence)
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
     print (dbgr.check_nearly_balanced_graph())
@@ -82,6 +99,7 @@ def test3():
     print (dbgr.seq_from_path(p))
 
 def test4():
+    print("\n* Test 4 *\n")
     gr = MyGraph( {1:[2], 2:[3,1], 3:[4], 4:[2,5],
     5:[6], 6:[4]} )
     gr.print_graph()
@@ -90,5 +108,5 @@ def test4():
 
 test1()
 test2()
-test4()
 test3()
+test4()

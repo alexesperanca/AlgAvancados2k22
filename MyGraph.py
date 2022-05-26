@@ -739,38 +739,65 @@ class MyGraph:
 ## Ciclos Eulerianos
 
     def check_balanced_node(self, node: Union[str, int, float]) -> bool:
+        '''Fuction that verifies if a given node is balanced. It is balanced if the degree of entry of the node is equal to its out degree 
+
+        Parameters
+        ----------
+        node : Union[str, int, float]
+            Node to verify balancing
+
+        Returns
+        -------
+        bool
+            If balanced return True, otherwise False
+        '''
         return self.in_degree(node) == self.out_degree(node)
     
     def check_balanced_graph(self) -> bool:
+        '''Fuction that verifies if the graph is balanced
+
+        Returns
+        -------
+        bool
+            If balanced return True, otherwise False
+        '''
         for n in self.graph.keys():
             if not self.check_balanced_node(n): return False
         return True
 
     def eulerian_cycle(self) -> list:
+        '''Method that obtains an eulerian cycle from the graph
+
+        Returns
+        -------
+        list
+            List of the nodes that form the path cycle
+        '''
+        # Execução: Obtém todos os edges de visita a partir daí tenta criar logo um ciclo pelo 1º, retirando sistematicamente os caminhos realizados dos "edges_visit"
+        #           Caso ainda n esteja vazio o "edges_visit", volta a fazer um ciclo para com os edges não visitados ainda
+        #           No fnal, junta o novo ciclo/ciclos ao realizado(s) anteriormente a partir do lugar do nodo inicial
         if not self.check_balanced_graph(): return None
         edges_visit = list(self.get_edges())
         res = []
         while edges_visit:
-            pair = edges_visit[0]
-            i = 1
-            if res != []:
-                while pair[0] not in res:
-                    pair = edges_visit[i]
-                    i = i + 1
-            edges_visit.remove(pair)
-            start, nxt = pair
-            cycle = [start, nxt]
-            while nxt != start:
-                for suc in self.graph[nxt]:
-                    if (nxt, suc) in edges_visit:
-                        pair = (nxt,suc)
-                        nxt = suc
+            if res:
+                for i in range(len(edges_visit)):
+                    if edges_visit[i][0] in res:
+                        cycle = list(edges_visit.pop(i))
+                        break
+            else: cycle = list(edges_visit.pop(0))
+            nxt = cycle[1]
+            while nxt != cycle[0]:
+                for new in self.graph[nxt]:
+                    if (nxt, new) in edges_visit:
+                        edges_visit.remove((nxt, new))
+                        nxt = new
                         cycle.append(nxt)
-                        edges_visit.remove(pair)
             if not res: res = cycle
             else:
                 pos = res.index(cycle[0])
-                for i in range(len(cycle)-1): res.insert(pos + i +1, cycle[i+1])
+                for i in range(len(cycle) - 1): res.insert(pos + i + 1, cycle[i + 1])
+                        
         return res
 
     def check_nearly_balanced_graph(self) -> tuple:
@@ -784,13 +811,15 @@ class MyGraph:
             else: return None, None
         return res
 
+    # Para construir o caminho Euleriano, fazer ciclos e caso ainda não seja Euleriano -> usar um elemento do ciclo anterior e criar um novo -> Juntar os 2 ciclos para formar 1 
+    # Isto sucessivamente
     def eulerian_path(self) -> list:
         unb = self.check_nearly_balanced_graph()
         if unb[0] is None or unb[1] is None: return None
         self.graph[unb[1]][unb[0]] = None
         cycle = self.eulerian_cycle()
-        for i in range(len(cycle)-1):
-            if cycle[i] == unb[1] and cycle[i+1] == unb[0]: break
+        for i in range(len(cycle) - 1):
+            if cycle[i] == unb[1] and cycle[i + 1] == unb[0]: break
         path = cycle[i+1:] + cycle[1:i+1]
         return path
 
