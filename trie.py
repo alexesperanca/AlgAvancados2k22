@@ -101,7 +101,10 @@ class Trie:
 		for i in range(len(seq)):
 			m = self._get_match(seq[i:])
 			if m != None and len(m) > 1: res.append((m, i))
-		return res
+		if len(res) == 0:
+			return 'No match!'
+		else:
+			return res
 
 	def trie_matches(self, pat:str):
 		'''Method to print the matches and positions of the matches obtained from the "match" function
