@@ -101,7 +101,10 @@ class Trie:
 		for i in range(len(seq)):
 			m = self._get_match(seq[i:])
 			if m != None and len(m) > 1: res.append((m, i))
-		return res
+		if len(res) == 0:
+			return 'No match!'
+		else:
+			return res
 
 	def trie_matches(self, pat:str):
 		'''Method to print the matches and positions of the matches obtained from the "match" function
@@ -216,20 +219,20 @@ class SuffixTree(Trie):
 
 ## Testing of the functions (uncomment in the end of the file to see the class execution)
 
-def test():
-	print("\n* Teste 1 *\n")
-	test = Trie(["CTG", "CATA", "CAAGG"])
-	test.insert("GGGA")
-	test.print_tree()
-	test.trie_matches("CTGCATACAAGG")
+# def test():
+# 	print("\n* Teste 1 *\n")
+# 	test = Trie(["CTG", "CATA", "CAAGG"])
+# 	test.insert("GGGA")
+# 	test.print_tree()
+# 	test.trie_matches("CTGCATACAAGG")
 
-def test2():
-	print("\n* Teste 2 *\n")
-	patterns = ["AGAGAT", "AGC", "AGTCC", "CAGAT", "CCTA",
-	"GAGAT", "GAT", "TC"]
-	t = Trie(patterns)
-	t.print_tree()
-	t.trie_matches("GAGATCCTA")
+# def test2():
+# 	print("\n* Teste 2 *\n")
+# 	patterns = ["AGAGAT", "AGC", "AGTCC", "CAGAT", "CCTA",
+# 	"GAGAT", "GAT", "TC"]
+# 	t = Trie(patterns)
+# 	t.print_tree()
+# 	t.trie_matches("GAGATCCTA")
 
 # def test3():
 #     print("\n* Teste 3 *\n")
@@ -237,12 +240,12 @@ def test2():
 #     st = SuffixTree(seq)
 #     st.print_tree()
 #     print()
-#     print(st.find_pattern("TATA"))
-#     print(st.find_pattern("ACG"))
+#     print(st.find_pattern_in_seq("TATA"))
+#     print(st.find_pattern_in_seq("ACG"))
 #     print()
 #     st.add_suffix("GGAT")
 #     st.print_tree()
-#     print(st.get_leafes_below("C"))
+#     print(st.get_leafes_below("F"))
 
 # def test3():
 #     print("\n* Teste 3 *\n")
@@ -259,17 +262,17 @@ def test2():
 #     # st.print_tree()
 #     # print(st.get_leafes_below("C"))
 
-def test4():
-	print("\n* Teste 4 *\n")
-	seq = "TACTA"
-	st = SuffixTree(seq)
-	print(st.find_pattern_in_seq("ACTA"))
-	print(st.repeats("TA"))
+# def test4():
+# 	print("\n* Teste 4 *\n")
+# 	seq = "TACTA"
+# 	st = SuffixTree(seq)
+# 	# print(st.find_pattern_in_seq("ACTA"))
+# 	print(st.repeats("CT"))
 
-#if __name__ == "__main__":
-	#test()
-	#test2()
-	#test3()
-	#test4()
+# #if __name__ == "__main__":
+# 	#test()
+# 	#test2()
+# 	#test3()
+# 	#test4()
 
-# test3()
+# test4()
