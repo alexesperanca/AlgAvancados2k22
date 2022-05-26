@@ -42,10 +42,11 @@ class TestSuffixTree(unittest.TestCase):
     def test_get_leafes_bellow(self):
         self.assertEqual(self.t3.get_leafes_below('C'),['CTA'])
         self.assertEqual(self.t3.get_leafes_below('A'),['ACTA', 'A#$#'])
-        self.assertRaises(self.t3.get_leafes_below('G'),KeyError,'G')
+        self.assertRaises(AssertionError,self.t3.get_leafes_below,'Node inputted not present in the tree')
 
-#     def test_repeats(self):
-#         self.assertEqual(self.t3.repeats('TA'),2)
+    def test_repeats(self):
+        self.assertEqual(self.t3.repeats('TA'),1)
+        self.assertEqual(self.t3.repeats('CT'),9)
 
 
 if __name__ == '__main__':

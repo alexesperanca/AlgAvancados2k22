@@ -219,33 +219,33 @@ class SuffixTree(Trie):
 
 ## Testing of the functions (uncomment in the end of the file to see the class execution)
 
-def test():
-	print("\n* Teste 1 *\n")
-	test = Trie(["CTG", "CATA", "CAAGG"])
-	test.insert("GGGA")
-	test.print_tree()
-	test.trie_matches("CTGCATACAAGG")
+# def test():
+# 	print("\n* Teste 1 *\n")
+# 	test = Trie(["CTG", "CATA", "CAAGG"])
+# 	test.insert("GGGA")
+# 	test.print_tree()
+# 	test.trie_matches("CTGCATACAAGG")
 
-def test2():
-	print("\n* Teste 2 *\n")
-	patterns = ["AGAGAT", "AGC", "AGTCC", "CAGAT", "CCTA",
-	"GAGAT", "GAT", "TC"]
-	t = Trie(patterns)
-	t.print_tree()
-	t.trie_matches("GAGATCCTA")
+# def test2():
+# 	print("\n* Teste 2 *\n")
+# 	patterns = ["AGAGAT", "AGC", "AGTCC", "CAGAT", "CCTA",
+# 	"GAGAT", "GAT", "TC"]
+# 	t = Trie(patterns)
+# 	t.print_tree()
+# 	t.trie_matches("GAGATCCTA")
 
-def test3():
-    print("\n* Teste 3 *\n")
-    seq = "TACTA"
-    st = SuffixTree(seq)
-    st.print_tree()
-    print()
-    print(st.find_pattern_in_seq("TATA"))
-    print(st.find_pattern_in_seq("ACG"))
-    print()
-    st.add_suffix("GGAT")
-    st.print_tree()
-    print(st.get_leafes_below("F"))
+# def test3():
+#     print("\n* Teste 3 *\n")
+#     seq = "TACTA"
+#     st = SuffixTree(seq)
+#     st.print_tree()
+#     print()
+#     print(st.find_pattern_in_seq("TATA"))
+#     print(st.find_pattern_in_seq("ACG"))
+#     print()
+#     st.add_suffix("GGAT")
+#     st.print_tree()
+#     print(st.get_leafes_below("F"))
 
 # def test3():
 #     print("\n* Teste 3 *\n")
@@ -262,17 +262,17 @@ def test3():
 #     # st.print_tree()
 #     # print(st.get_leafes_below("C"))
 
-def test4():
-	print("\n* Teste 4 *\n")
-	seq = "TACTA"
-	st = SuffixTree(seq)
-	print(st.find_pattern_in_seq("ACTA"))
-	print(st.repeats("TA"))
+# def test4():
+# 	print("\n* Teste 4 *\n")
+# 	seq = "TACTA"
+# 	st = SuffixTree(seq)
+# 	# print(st.find_pattern_in_seq("ACTA"))
+# 	print(st.repeats("CT"))
 
-#if __name__ == "__main__":
-	#test()
-	#test2()
-	#test3()
-	#test4()
+# #if __name__ == "__main__":
+# 	#test()
+# 	#test2()
+# 	#test3()
+# 	#test4()
 
-test3()
+# test4()
