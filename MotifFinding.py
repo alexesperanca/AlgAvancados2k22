@@ -341,17 +341,21 @@ class MotifFinding:
         '''
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
         best_score = self.score(search)
+        best_sol = search
         best = False
+        motif = self.createMotifFromIndexes(search)
         while best is False:
-            motif = self.createMotifFromIndexes(search)
             for i in range(len(self.seqs)):
                 seq_prob, ind = motif.seq_most_probable(self.seqs[i])
                 search[i] = ind
             score = self.score(search)
             if score > best_score:
                 best_score = score
+                best_sol = search
+                motif = self.createMotifFromIndexes(search)
+            else:
                 best = True
-        return search
+        return best_sol
         
         
     # Gibbs sampling 
@@ -446,8 +450,8 @@ def test6():
     seq1 = "ATAGAGCTGA"
     seq2 = "ACGTAGATGA"
     seq3 = "AAGATAGGGG"
-    # mf = MotifFinding(4, ["AGGTACTT", "CCATACGT", "ACGTTAGT", "ACGTCCAT", "CCGTACGG"])
-    mf = MotifFinding(seqs = ["GTAAACAATATTTATAGC", "AAAATTTACCTCGCAAGG", "CCGTACTGTCAAGCGTGG", "TGAGTAAACGACGTCCCA", "TACTTAACACCCTGTCAA"])
+    mf = MotifFinding(4, ["AGGTACTT", "CCATACGT", "ACGTTAGT", "ACGTCCAT", "CCGTACGG"])
+    # mf = MotifFinding(seqs = ["GTAAACAATATTTATAGC", "AAAATTTACCTCGCAAGG", "CCGTACTGTCAAGCGTGG", "TGAGTAAACGACGTCCCA", "TACTTAACACCCTGTCAA"])
     sol = mf.exhaustiveSearch()
     print ("Solution", sol)
     print ("Score: ", mf.score(sol))
@@ -490,7 +494,7 @@ def test1():
 def test3():
     print ("\nTest :")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt")
+    mf.readFile("exemploMotifs2.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -516,7 +520,7 @@ def test4():
 
 if __name__ == '__main__':
     test1()
-    # test2()
+    test2()
     test3()
     test4()
-    # test6()
+    test6()
