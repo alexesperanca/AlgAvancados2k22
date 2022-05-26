@@ -30,7 +30,7 @@ class BoyerMoore:
         self.process_gsr()
         
     def process_bcr(self) -> dict:
-        '''Method Bad Character Rule that constructs a dictionary with all the elements of the alphabet and respective steps to advance if pattern doed not match the text/sequence
+        '''Method Bad Character Rule that that advances to the next occurrence in the pattern of the failed symbol (or if it does not exist, advance as far as possible).
 
         Returns
         -------
@@ -45,7 +45,7 @@ class BoyerMoore:
         return self.occ
 
     def process_gsr(self) -> list:
-        '''Method Good Suffix Rule that advances according to the suffix of the match obtained. It moves to the next occurrence of the pattern in the match before failure.
+        '''Method Good Suffix Rule that advances to the next occurrence in the pattern of the part that matched before failing. If the suffix does not occur again, it advances the pattern size.
 
         Returns
         -------
@@ -89,7 +89,7 @@ class BoyerMoore:
         '''
         res = []
         i = 0
-        text=text.upper()
+        text = text.upper()
         while i <= (len(text)-len(self.pattern)):
             j = len(self.pattern) - 1
             while j >= 0 and self.pattern[j] == text[j+i]:
