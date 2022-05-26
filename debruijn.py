@@ -172,6 +172,7 @@ def test3():
     print("\n* Test 3 *\n")
     orig_sequence = "ATGCAATGGTCTG"
     frags = composition(4, orig_sequence)
+    print("Frags", frags)
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
     print (dbgr.check_nearly_balanced_graph())
@@ -187,7 +188,8 @@ def test4():
     print (gr.check_balanced_graph())
     print (gr.eulerian_cycle())
 
-test1()
-test2()
-test3()
-test4()
+if __name__ == "__main__":
+    test1()
+    test2()
+    test3()
+    test4()
