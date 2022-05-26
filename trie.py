@@ -152,7 +152,7 @@ class SuffixTree(Trie):
 		'''
 		self.insert(p)
 
-	def find_pattern(self, seq:str) -> list:
+	def find_pattern_in_seq(self, seq:str) -> list:
 		'''Discovery of the tree patterns and corresponding positions present in the provided sequence
 
 		Parameters
@@ -230,18 +230,33 @@ def test2():
 	t.print_tree()
 	t.trie_matches("GAGATCCTA")
 
-def test3():
-    print("\n* Teste 3 *\n")
-    seq = "TACTA"
-    st = SuffixTree(seq)
-    st.print_tree()
-    print()
-    print(st.find_pattern("TATA"))
-    print(st.find_pattern("ACG"))
-    print()
-    st.add_suffix("GGAT")
-    st.print_tree()
-    print(st.get_leafes_below("C"))
+# def test3():
+#     print("\n* Teste 3 *\n")
+#     seq = "TACTA"
+#     st = SuffixTree(seq)
+#     st.print_tree()
+#     print()
+#     print(st.find_pattern("TATA"))
+#     print(st.find_pattern("ACG"))
+#     print()
+#     st.add_suffix("GGAT")
+#     st.print_tree()
+#     print(st.get_leafes_below("C"))
+
+# def test3():
+#     print("\n* Teste 3 *\n")
+#     seq = "TACTA"
+#     seq2 = 'ACGT'
+#     st = SuffixTree(seq)
+#     st2 = SuffixTree(seq2)
+#     # st.print_tree()
+#     # print()
+#     print(st.find_pattern("TATA"))
+#     print(st2.find_pattern("AATTTCGACGTCGATTGAT"))
+#     # print()
+#     # st.add_suffix("GGAT")
+#     # st.print_tree()
+#     # print(st.get_leafes_below("C"))
 
 def test4():
 	print("\n* Teste 4 *\n")
@@ -250,8 +265,10 @@ def test4():
 	print(st.find_pattern("ACTA"))
 	print(st.repeats("TA"))
 
-if __name__ == "__main__":
-	test()
-	test2()
-	test3()
-	test4()
+# if __name__ == "__main__":
+# 	test()
+# 	test2()
+# 	test3()
+# 	test4()
+
+# test3()
