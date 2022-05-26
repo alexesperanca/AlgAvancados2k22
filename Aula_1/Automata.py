@@ -29,20 +29,15 @@ class Automata:
         self.alphabet = alphabet
         self.transitionTable = {}
         self.pattern = pattern
-        self.buildTransitionTable(pattern)   
+        self.buildTransitionTable()   
     
-    def buildTransitionTable(self, pattern: str):
+    def buildTransitionTable(self):
         '''Method that constructs the transition table for the given pattern and alphabet previoulsy provided
-
-        Parameters
-        ----------
-        pattern : str
-            Pattern to model the transition table build
         '''
         for q in range(self.numstates):
             for a in self.alphabet:
-                prefix = pattern[0:q] + a
-                self.transitionTable[(q, a)] = overlap(prefix, pattern)
+                prefix = self.pattern[0:q] + a
+                self.transitionTable[(q, a)] = overlap(prefix, self.pattern)
 
     def printAutomata(self):
         '''Pretty print the automata data. States, alphabet, and transition table information printed

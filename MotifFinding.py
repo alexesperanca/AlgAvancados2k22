@@ -84,10 +84,12 @@ class MotifFinding:
         fic : str
             name of the file, example: 'file.txt'
         '''
-        for s in open(fic, 'r'):
+        file = open(fic, 'r')
+        for s in file:
             self.seqs.append(s.strip().upper())
         self.alphabet = self.alphabet()
-    
+        file.close()
+
     def alphabet(self) -> str:
         '''Method that determines the type of alphabet of the sequences
 
@@ -449,10 +451,33 @@ def test2():
     print ("Solution: " , sol1)
     print ("Score:" , mf.score(sol1))
 
+def test6():
+    print ("\nTest 6 - exhaustive:")
+    seq1 = "ATAGAGCTGA"
+    seq2 = "ACGTAGATGA"
+    seq3 = "AAGATAGGGG"
+    mf = MotifFinding(3, ["AGGTACTT", "CCATACGT", "ACGTTAGT", "ACGTCCAT", "CCGTACGG"])
+    sol = mf.exhaustiveSearch()
+    print ("Solution", sol)
+    print ("Score: ", mf.score(sol))
+    print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
+
+    print ("\nTest 2 - Branch and Bound:")
+    sol2 = mf.branchAndBound()
+    print ("Solution: " , sol2)
+    print ("Score:" , mf.score(sol2))
+    print("Consensus:", mf.createMotifFromIndexes(sol2).consensus())
+    
+    print ("\nTest 2 - Heuristic consensus: ")
+    sol1 = mf.heuristicConsensus()
+    print ("Solution: " , sol1)
+    print ("Score:" , mf.score(sol1))
+
+
 def test3():
     print ("\nTest 3:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt")
+    mf.readFile("exemploMotifs2.txt")
     print ("Branch and Bound:")
     sol = mf.branchAndBound()
     print ("Solution: " , sol)
@@ -462,7 +487,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs.txt")
+    mf.readFile("exemploMotifs3.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
@@ -477,7 +502,9 @@ def test4():
 
 
 if __name__ == '__main__':
-    test1()
-    test2()
-    test3()
-    test4()
+    # test1()
+    # test2()
+    # test3()
+    # test4()
+    # test6()
+    pass
