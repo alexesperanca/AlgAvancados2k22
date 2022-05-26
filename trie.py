@@ -183,6 +183,7 @@ class SuffixTree(Trie):
 		list
 			List of strings obtained from the iteration of the node given
 		'''
+		assert node in self.tree.keys(), "Node inputted not present in the tree"
 		node = node.upper()
 		res = []
 		for n in self.tree[node]:
@@ -262,13 +263,13 @@ def test4():
 	print("\n* Teste 4 *\n")
 	seq = "TACTA"
 	st = SuffixTree(seq)
-	print(st.find_pattern("ACTA"))
+	print(st.find_pattern_in_seq("ACTA"))
 	print(st.repeats("TA"))
 
-# if __name__ == "__main__":
-# 	test()
-# 	test2()
-# 	test3()
-# 	test4()
+#if __name__ == "__main__":
+	#test()
+	#test2()
+	#test3()
+	#test4()
 
 # test3()
