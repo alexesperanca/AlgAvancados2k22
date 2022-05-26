@@ -231,18 +231,18 @@ def test2():
 	t.print_tree()
 	t.trie_matches("GAGATCCTA")
 
-# def test3():
-#     print("\n* Teste 3 *\n")
-#     seq = "TACTA"
-#     st = SuffixTree(seq)
-#     st.print_tree()
-#     print()
-#     print(st.find_pattern("TATA"))
-#     print(st.find_pattern("ACG"))
-#     print()
-#     st.add_suffix("GGAT")
-#     st.print_tree()
-#     print(st.get_leafes_below("C"))
+def test3():
+    print("\n* Teste 3 *\n")
+    seq = "TACTA"
+    st = SuffixTree(seq)
+    st.print_tree()
+    print()
+    print(st.find_pattern_in_seq("TATA"))
+    print(st.find_pattern_in_seq("ACG"))
+    print()
+    st.add_suffix("GGAT")
+    st.print_tree()
+    print(st.get_leafes_below("F"))
 
 # def test3():
 #     print("\n* Teste 3 *\n")
@@ -272,4 +272,4 @@ def test4():
 	#test3()
 	#test4()
 
-# test3()
+test3()
