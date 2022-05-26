@@ -3,7 +3,7 @@
 
 """
 This module provides the :class:`OverlapGraph` class.
-This class includes diverse strategies for faster sequence analysis, sequence obtainment from graphs, and suffix/prefix iteration such as:
+This class includes diverse strategies that uses Hamiltonian methods for faster sequence analysis, sequence obtainment from graphs, and suffix/prefix iteration such as:
     - Creation of an overlap graph that essentially constructs a graph based on the portion of sequences that overlap each other (prefix and suffix)
     - Get original sequence from a path of fragmented sequences by considering their overlap 
 """
@@ -11,6 +11,13 @@ This class includes diverse strategies for faster sequence analysis, sequence ob
 from MyGraph import MyGraph
 
 class OverlapGraph(MyGraph):
+    '''DeBruijnGraph class depends on its parent class "MyGraph" and executes a graph construction with edges between overlap of prefixes and suffixes of fragments. Hereon, sequence reconstruction is possible with Hamiltonian method passing through the nodes of the graph once assuming their overlap
+
+    Parameters
+    ----------
+    MyGraph : Class
+        Essential class to construct the graph and access to the hamiltonian methods
+    '''
     def __init__(self, frags:list, reps: bool = False):
         '''Construction of a graph from the elements of the list "frags" provided. Graph can accept repeats or not, depending on the user preference
 

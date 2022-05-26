@@ -17,7 +17,7 @@ This class includes diverse strategies for graph iteration, path discovery, etc,
 from typing import Union
 
 class MyGraph:
-    '''Class MyGraph is a parent class of several different ones such as: MetabolicNetwork, OverlapGraph and DeBruijnGraph. This class essential builds graphs with a given dictionary of values or strings.
+    '''Class MyGraph is a parent class of several different ones such as: MetabolicNetwork, OverlapGraph and DeBruijnGraph. This class essentially builds graphs with a given dictionary of values or strings.
     '''
     def __init__(self, g: dict = {}):
         '''Constrution of the initial graph represented by a dictionary
@@ -801,26 +801,38 @@ class MyGraph:
         return res
 
     def check_nearly_balanced_graph(self) -> tuple:
+        '''Method that verifies if the graph possesses 2 nodes semi-balanced. They are respectivly the start and finishing elements of an eulerian path
+
+        Returns
+        -------
+        tuple
+            (Start, Finish) are respectivly the positions of a possible eulerian path
+        '''
         res = None, None
         for n in self.graph.keys():
             indeg = self.in_degree(n)
             outdeg = self.out_degree(n)
-            if indeg - outdeg == 1 and res[1] is None: res = res[0], n
-            elif indeg - outdeg == -1 and res[0] is None: res = n, res[1]
+            if indeg - outdeg == 1 and res[1] is None: res = res[0], n      # + entrada do nodo que saída (para terminar o path)
+            elif indeg - outdeg == -1 and res[0] is None: res = n, res[1]   # + saída do nodo que entrada (para começar o path)
             elif indeg == outdeg: pass
             else: return None, None
         return res
 
-    # Para construir o caminho Euleriano, fazer ciclos e caso ainda não seja Euleriano -> usar um elemento do ciclo anterior e criar um novo -> Juntar os 2 ciclos para formar 1 
-    # Isto sucessivamente
     def eulerian_path(self) -> list:
+        '''Method that builds the eulerian path. Uses the "check_nearly_balanced_graph" function to obtain the first and last member of the path and the "eulerian_cycle" function to build the cycle essential to build it 
+
+        Returns
+        -------
+        list
+            List of nodes that form the eulerian path
+        '''
         unb = self.check_nearly_balanced_graph()
         if unb[0] is None or unb[1] is None: return None
         self.graph[unb[1]][unb[0]] = None
         cycle = self.eulerian_cycle()
         for i in range(len(cycle) - 1):
             if cycle[i] == unb[1] and cycle[i + 1] == unb[0]: break
-        path = cycle[i+1:] + cycle[1:i+1]
+        path = cycle[i+1:] + cycle[1:i+1]                               # 2º "i+1" é porque no "cycle[i+1:]" já incluí o 1º e último membro do ciclo 
         return path
 
 def is_in_tuple_list(tl: Union[list, tuple], val: Union[str, int, float]) -> bool:

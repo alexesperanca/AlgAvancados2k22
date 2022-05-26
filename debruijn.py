@@ -3,31 +3,63 @@
 
 """
 This module provides the :class:`DeBruijnGraph` class.
-This class includes diverse strategies for (...), such as:
+This class includes diverse strategies for deBrujin graph construction to more easily obtain and deconstruct sequences, such as:
+    - Graph construction of edges between prefixes and suffixes
+    - Division of a sequence into fragmented element of a given size
+    - Sequence obtainment from an eulerian path acquired from "MyGraph" class
+
 """
 
 from MyGraph import MyGraph
 
 class DeBruijnGraph (MyGraph):
+    '''DeBruijnGraph class depends on its parent class "MyGraph" and executes a graph construction with edges between prefixes and suffixes of fragments. Hereon, if the graph obtained is balanced, eulerian cycles (cycle that passes throw every node and returns to the start) are obtained to generate an eulerian path
+
+    Parameters
+    ----------
+    MyGraph : class
+        Essential class to construct the graph and access to the eulerian methods
+    '''
     def __init__(self, frags:list):
-        '''_summary_
+        '''DeBruijn graph constructor initialization. Runs the method "create_deBruijn_graph" to obtain the prefix and suffix edges
 
         Parameters
         ----------
         frags : list
-            _description_
+            Elements to form the graph
         '''
         MyGraph.__init__(self, {})
         self.create_deBruijn_graph(frags)
 
-    def add_edge(self, o, d):
+    def add_edge(self, o: str, d: str):
+        '''Creation of edges between the two strings/nodes provided
+
+        Parameters
+        ----------
+        o : str
+            Parent node of "d"
+        d : str
+            Child node of "o"
+        '''
         if o not in self.graph.keys():
             self.add_vertex(o)
         if d not in self.graph.keys():
             self.add_vertex(d)
         self.graph[o][d] = None
 
-    def in_degree(self, v):
+    def in_degree(self, v: str) -> int:
+        '''Method that returns the entry degree of the given node
+
+        Parameters
+        ----------
+        v : str
+            Node to calculate the entry degree
+
+        Returns
+        -------
+        int
+            Value of the entry degree
+        '''
         res = 0
         for k in self.graph.keys():
             if v in self.graph[k]:
@@ -50,6 +82,18 @@ class DeBruijnGraph (MyGraph):
             self.add_edge(pref, suf)
 
     def seq_from_path(self, path:list) -> str:
+        '''Method that builds the original sequence from the eulerian path provided
+
+        Parameters
+        ----------
+        path : list
+            Eulerian path
+
+        Returns
+        -------
+        str
+            Sequence obtained from the "path"
+        '''
         try:
             seq = path[0]
         except:
@@ -60,12 +104,50 @@ class DeBruijnGraph (MyGraph):
         return seq 
     
 def suffix(seq:str) -> str: 
+    '''Method that obtains the suffix of the "seq" provided
+
+    Parameters
+    ----------
+    seq : str
+        Sequence to obtain the suffix
+
+    Returns
+    -------
+    str
+        Suffix of "seq"
+    '''
     return seq[1:]
     
 def prefix(seq:str) -> str:
+    '''Method that obtains the prefix of the "seq" provided
+
+    Parameters
+    ----------
+    seq : str
+        Sequence to obtain the prefix
+
+    Returns
+    -------
+    str
+        Prefix of "seq"
+    '''
     return seq[:-1]
 
 def composition(k:int, seq:str) -> list:
+    '''Method that retrieves the sequence "seq" divided into fragmented sequences of "k" size
+
+    Parameters
+    ----------
+    k : int
+        Size of the sequence fragments
+    seq : str
+        Original sequence
+
+    Returns
+    -------
+    list
+        List of the sequence fragments of "k" size
+    '''
     res = []
     for i in range(len(seq)-k+1):
         res.append(seq[i:i+k])
@@ -77,7 +159,6 @@ def test1():
     frags = ["ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
-    ## aqui será que tem de se adicionar o mesmo arco varias vezes? senão a regra de passar só uma vez vai fazer erro se não tiver -- testar na criação do grafo
 
 def test2():
     print("\n* Test 2 *\n")
