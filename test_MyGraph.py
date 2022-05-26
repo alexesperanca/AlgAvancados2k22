@@ -110,16 +110,16 @@ class TestMotifFinding(unittest.TestCase):
         self.assertEqual(self.gr2.reachable_with_dist(5), [])
 
     def test_node_has_cycle(self):
-        self.assertEqual(self.gr.node_has_cycle(2), True)
-        self.assertEqual(self.gr.node_has_cycle(1), False)
-        self.assertEqual(self.gr1.node_has_cycle(2), True)
-        self.assertEqual(self.gr1.node_has_cycle(1), False)
-        self.assertEqual(self.gr2.node_has_cycle(1), False)
+        self.assertTrue(self.gr.node_has_cycle(2))
+        self.assertFalse(self.gr.node_has_cycle(1))
+        self.assertTrue(self.gr1.node_has_cycle(2))
+        self.assertFalse(self.gr1.node_has_cycle(1))
+        self.assertFalse(self.gr2.node_has_cycle(1))
 
     def test_has_cycle(self):
-        self.assertEqual(self.gr.has_cycle(), True)
-        self.assertEqual(self.gr1.has_cycle(), True)
-        self.assertEqual(self.gr2.has_cycle(), False)
+        self.assertTrue(self.gr.has_cycle())
+        self.assertTrue(self.gr1.has_cycle())
+        self.assertFalse(self.gr2.has_cycle())
 
     def test_all_degrees(self):
         self.assertEqual(self.gr2.all_degrees(), {1: 2, 2: 2, 3: 2, 4: 1, 5: 1})
