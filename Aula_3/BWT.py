@@ -1,53 +1,65 @@
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
 
-'''
-autor: Alexandre Esperança
-data: 25/03/2022
-'''
-
-'''
-Passos:
-	1. Construção de todas as possibilidades da string inserida
-	2. Obtenção de uma lista com todos os membros finais das possibilidades e a sua posição
-	3. Obtenção de uma lista com esses membros e a sua contabilização
-	4. Mesmo do 3. mas com a lista ordenada
-	5. Criação de um dicionário que interliga cada membro da lista criada em 3 com o da 4
-'''
+"""
+This module provides the :class:`BWT` class that facilitates the analysis of big sequences and pattern discovery.
+This class includes diverse strategies, such as:
+	- Building of Burrows-Wheeler matrix that allows the user to a faster analysis of the initial sequence provided
+	- Encountering of patterns
+	- Original sequence faster retrieval
+	- Building of a Suffix Array for match search with the BWT matrix. Faster search is performed with this method 
+"""
 
 import re
 import pprint
 
 class BWT:
-	def __init__(self, seq):
+	def __init__(self, seq: str):
+		'''Initialization of the Burrows-Wheeler matrix construction 
+
+		Parameters
+		----------
+		seq : str
+			Sequence to be the model for BWT matrix
+		'''
 		self.seq = seq
 		self._build_BWT()
 
 	def _build_BWT(self):
-		self.combinations = sorted([(self.seq[i:] + self.seq[:i], i) for i in range(len(self.seq))])
-		#print(self.combinations)
-		b, pos = zip(*[(s[-1], p) for s, p in self.combinations])
+		'''Burrows-Wheeler (BWT) matrix construction where the BWT line and Ordered line are defined and joined in a dictionary
+		'''
+		self.combinations = sorted([(self.seq[i:] + self.seq[:i], i) for i in range(len(self.seq))])	# Obter todas as sequências ordenadas
+		b, pos = zip(*[(s[-1], p) for s, p in self.combinations])										# Obter apenas último membro das combinações (BWT) e nº de combinação
 		bwt = list(zip(b, pos))
 		fun1 = self._nucl_table()
-		self.bwt_line = [fun1(x) for x in [i[0] for i in bwt]]
-		#print(self.bwt_line)
+		self.bwt_line = [fun1(x) for x in [i[0] for i in bwt]]											# Obter linha BWT com a função _nucl_table que conta cada entrada dos caracteres
 		fun2 = self._nucl_table()
-		self.ord_line = [fun2(x) for x in sorted([i[0] for i in bwt])]
-		#print(self.ord_line)
-		self.bwt_dic = {k: v for k, v in zip(self.bwt_line, self.ord_line)}
-		#print(self.bwt_dic)
+		self.ord_line = [fun2(x) for x in sorted([i[0] for i in bwt])]									# Obter linha Ordenada com a função _nucl_table tbm
+		self.bwt_dic = {k: v for k, v in zip(self.bwt_line, self.ord_line)}								# Dicionário para aceder + facilmente a cada membro seguinte para recuperação da sequência
 
-	def _nucl_table(self):
+	def _nucl_table(self) -> str:
+		'''Auxiliary function that builds a dictionary with the occurences of characters provided to return the current occurrence of each character
+
+		Returns
+		-------
+		str
+			String with the current occurrence of the character given
+		'''
 		d = {}
-		def _add(x):
+		def _add(x: str) -> str:
 			nonlocal d
 			idx = d.get(x, 0)
 			d[x] = idx + 1
 			return x + str(idx)
 		return _add
 
-	def original_seq(self):
-		'''
-		A dar diferente do PP idk why, mas coincide com o que o prof fez...
+	def original_seq(self) -> str:
+		'''Method that retrieves the original sequence from the BWT matrix built
+
+		Returns
+		-------
+		str
+			Original sequence
 		'''
 		l = "$0"
 		s = ''
@@ -56,7 +68,20 @@ class BWT:
 			l = self.bwt_dic[l]
 		return s
 
-	def find_pattern(self, pat):
+	def find_pattern(self, pat: str) -> list:
+		'''Method to find a pattern in the BWT matrix built. The algorithm walks through the matrix starting from the last character of the pattern. When reaches the end, the position corresponds to the local of the match of the pattern
+		Mathod like "last_to_first"
+
+		Parameters
+		----------
+		pat : str
+			Pattern to match the BWT matrix
+
+		Returns
+		-------
+		list
+			Positions where the pattern matches
+		'''
 		dic2 = {v: k for k, v in self.bwt_dic.items()}
 		l = [i for i in dic2.keys() if i[0] == pat[-1]]
 		pos = len(pat) - 2
@@ -69,16 +94,26 @@ class BWT:
 				res.append(i)
 		return res
 
-	def suffixarray(self):
+	def suffixarray(self) -> tuple:
+		'''Method that constructs the suffix array. Retrieves a list with the initial positions of each ordered suffix
+
+		Returns
+		-------
+		tuple
+			Tuple of initial positions of each suffix
+		'''
 		d = {}
 		for seq, pos in self.combinations:
-			sufix = re.search(r'.*[^ACTG]', seq)
+			sufix = re.search(r'.*[^ACTG]', seq)		# Obtém a sequência até o símbolo "$" para adicionar no dicionário
 			d[pos] = sufix.group()
-		return d
+		return tuple(d.keys())
 
+def test():
+	seq = "TAGACAGAGA$"
+	test = BWT(seq)
+	print(test.original_seq())
+	print(test.find_pattern("AGA"))
+	print(test.suffixarray())
 
-seq = "TAGACAGAGA$"
-test = BWT(seq)
-print(test.original_seq())
-print(test.find_pattern("AGA"))
-print(test.suffixarray())
+if __name__ == "__main__":
+	test()

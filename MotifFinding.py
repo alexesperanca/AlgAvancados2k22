@@ -341,17 +341,21 @@ class MotifFinding:
         '''
         search = [randint(0, self.seqSize(i)-self.motifSize) for i in range(len(self.seqs))]
         best_score = self.score(search)
+        best_sol = search
         best = False
+        motif = self.createMotifFromIndexes(search)
         while best is False:
-            motif = self.createMotifFromIndexes(search)
             for i in range(len(self.seqs)):
                 seq_prob, ind = motif.seq_most_probable(self.seqs[i])
                 search[i] = ind
             score = self.score(search)
             if score > best_score:
                 best_score = score
+                best_sol = search
+                motif = self.createMotifFromIndexes(search)
+            else:
                 best = True
-        return search
+        return best_sol
         
         
     # Gibbs sampling 
@@ -419,16 +423,6 @@ class MotifFinding:
 
 # tests
 
-def test1(): 
-    print ("Test 1:")
-    sm = MotifFinding()
-    sm.readFile("exemploMotifs.txt")
-    sol = [25,20,2,55,59]
-    sa = sm.score(sol)
-    print(sa)
-    scm = sm.scoreMult(sol)
-    print(scm)
-
 def test2():
     print ("\nTest 2 - exhaustive:")
     seq1 = "ATAGAGCTGA"
@@ -456,26 +450,49 @@ def test6():
     seq1 = "ATAGAGCTGA"
     seq2 = "ACGTAGATGA"
     seq3 = "AAGATAGGGG"
-    mf = MotifFinding(3, ["AGGTACTT", "CCATACGT", "ACGTTAGT", "ACGTCCAT", "CCGTACGG"])
+    mf = MotifFinding(4, ["AGGTACTT", "CCATACGT", "ACGTTAGT", "ACGTCCAT", "CCGTACGG"])
+    # mf = MotifFinding(seqs = ["GTAAACAATATTTATAGC", "AAAATTTACCTCGCAAGG", "CCGTACTGTCAAGCGTGG", "TGAGTAAACGACGTCCCA", "TACTTAACACCCTGTCAA"])
     sol = mf.exhaustiveSearch()
     print ("Solution", sol)
     print ("Score: ", mf.score(sol))
     print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
 
-    print ("\nTest 2 - Branch and Bound:")
+    print ("\nTest 6 - Branch and Bound:")
     sol2 = mf.branchAndBound()
     print ("Solution: " , sol2)
     print ("Score:" , mf.score(sol2))
     print("Consensus:", mf.createMotifFromIndexes(sol2).consensus())
     
-    print ("\nTest 2 - Heuristic consensus: ")
+    print ("\nTest 6 - Heuristic consensus: ")
     sol1 = mf.heuristicConsensus()
     print ("Solution: " , sol1)
     print ("Score:" , mf.score(sol1))
+    print("Consensus:", mf.createMotifFromIndexes(sol1).consensus())
 
+    print ("\nTest 6 - stochastic consensus: ")
+    sol3 = mf.heuristicStochastic()
+    print ("Solution: " , sol3)
+    print ("Score:" , mf.score(sol3))
+    print("Consensus:", mf.createMotifFromIndexes(sol3).consensus())
+
+    print ("\nTest 6 - gibbs: ")
+    sol4 = mf.gibbs(1000)
+    print ("Solution 2: " , sol4)
+    print ("Score:" , mf.score(sol4))
+    print ("Score mult:" , mf.scoreMult(sol4))
+
+def test1(): 
+    print ("Test mf4:")
+    sm = MotifFinding()
+    sm.readFile("exemploMotifs.txt")
+    sol = [25,20,2,55,59]
+    sa = sm.score(sol)
+    print(sa)
+    scm = sm.scoreMult(sol)
+    print(scm)
 
 def test3():
-    print ("\nTest 3:")
+    print ("\nTest :")
     mf = MotifFinding()
     mf.readFile("exemploMotifs2.txt")
     print ("Branch and Bound:")
@@ -487,7 +504,7 @@ def test3():
 def test4():
     print ("\nTest 4:")
     mf = MotifFinding()
-    mf.readFile("exemploMotifs3.txt")
+    mf.readFile("exemploMotifs.txt")
     print("Heuristic stochastic")
     sol = mf.heuristicStochastic()
     print ("Solution: " , sol)
@@ -502,9 +519,8 @@ def test4():
 
 
 if __name__ == '__main__':
-    # test1()
-    # test2()
-    # test3()
-    # test4()
-    # test6()
-    pass
+    test1()
+    test2()
+    test3()
+    test4()
+    test6()
