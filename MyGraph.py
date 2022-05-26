@@ -781,7 +781,7 @@ class MyGraph:
             if indeg - outdeg == 1 and res[1] is None: res = res[0], n
             elif indeg - outdeg == -1 and res[0] is None: res = n, res[1]
             elif indeg == outdeg: pass
-            else: return None, None # pass maybe?
+            else: return None, None
         return res
 
     def eulerian_path(self) -> list:

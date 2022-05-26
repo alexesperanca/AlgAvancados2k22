@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
+"""
+This module provides the :class:`DeBruijnGraph` class.
+This class includes diverse strategies for (...), such as:
+"""
 
 from MyGraph import MyGraph
 
 class DeBruijnGraph (MyGraph):
-    
     def __init__(self, frags:list):
         MyGraph.__init__(self, {})
         self.create_deBruijn_graph(frags)
