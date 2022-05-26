@@ -165,7 +165,10 @@ class SuffixTree(Trie):
 		list
 			List of hit patterns and positions
 		'''
-		return self.match(seq)
+		if len(self.match(seq)) == 0:
+			return 'No match!'
+		else:
+			return self.match(seq)
 
 	def get_leafes_below(self, node:str) -> list:
 		'''Obtaining of all the sequences from an given node of the tree. It requires to the node be an unique character since the tree nodes are unique chars from the sequences
