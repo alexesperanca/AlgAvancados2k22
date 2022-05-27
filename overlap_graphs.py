@@ -206,7 +206,7 @@ def test4():
     print("\n* Test 4 *\n")
     frags = ["ATA",  "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA" , "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     ovgr = OverlapGraph(frags, False)
-    path = ['ACC', 'CCA', 'CAT', 'ATG']
+    path = ['acC', 'CCA', 'CAT', 'ATG']
     ovgr.print_graph()
     print (ovgr.check_if_valid_path(path))
     print (ovgr.check_if_hamiltonian_path(path))
@@ -214,6 +214,8 @@ def test4():
     print (ovgr.check_if_valid_path(path2))
     print (ovgr.check_if_hamiltonian_path(path2))
     print (ovgr.seq_from_path(path2))
+    print(ovgr.search_hamiltonian_path())
+
 
 def test5():
     print("\n* Test 5 *\n")

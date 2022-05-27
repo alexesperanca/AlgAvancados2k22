@@ -11,6 +11,8 @@ class TestMotifFinding(unittest.TestCase):
         self.frags3 = ['CAA-7', 'AAT-1', 'ATC-2', 'TCA-12', 'CAT-8', 'ATG-4', 'TGA-13', 'GAT-9', 'ATG-5', 'TGA-14', 'GAT-10', 'ATG-6', 'TGA-15', 'GAT-11', 'ATC-3']
         self.frags4 = ['ACC', 'CCA', 'CAT', 'ATG']
         self.frags5 = ['ACC', 'CCA', 'CAT', 'ATG', 'TGG', 'GGC', 'GCA', 'CAT', 'ATT', 'TTT', 'TTC', 'TCA', 'CAT', 'ATA', 'TAA']
+        self.frags6 = ['ATT', 'TTA', 'GCA', 'CAA']
+        self.frags7 = ['acC', 'CCA', 'cat', 'ATG']
 
         self.ovgr = OverlapGraph(["ATA",  "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA" , "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"], True)
         self.ovgr1 = OverlapGraph(['AAT', 'ATC', 'ATC', 'ATG', 'ATG', 'ATG', 'CAA', 'CAT', 'GAT', 'GAT', 'GAT', 'TCA', 'TGA', 'TGA', 'TGA'], True)
@@ -21,6 +23,8 @@ class TestMotifFinding(unittest.TestCase):
         self.assertTrue(self.ovgr.check_if_valid_path(self.frags2))
         self.assertTrue(self.ovgr2.check_if_valid_path(self.frags4))
         self.assertTrue(self.ovgr2.check_if_valid_path(self.frags5))
+        self.assertFalse(self.ovgr2.check_if_valid_path(self.frags6))
+        self.assertFalse(self.ovgr2.check_if_valid_path(self.frags7))
 
     def test_check_if_hamiltonian_path(self):
         self.assertFalse(self.ovgr.check_if_hamiltonian_path(self.frags1))
@@ -37,6 +41,7 @@ class TestMotifFinding(unittest.TestCase):
     def test_search_hamiltonian_path(self):
         self.assertEqual(self.ovgr.search_hamiltonian_path(), self.frags2)
         self.assertEqual(self.ovgr1.search_hamiltonian_path(), self.frags3)
+        self.assertEqual(self.ovgr2.search_hamiltonian_path(), None)
 
 if __name__ == '__main__':
     unittest.main()
