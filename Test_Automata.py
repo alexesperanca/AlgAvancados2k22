@@ -1,5 +1,4 @@
 import unittest
-from Aula_1.Automata import overlap
 from Automata import Automata
 
 class TestAutomata (unittest.TestCase):
@@ -36,9 +35,6 @@ class TestAutomata (unittest.TestCase):
 
     def test_nextState(self):
         self.assertEqual(self.t1.nextState(2,'A'),3)
-
-    # def test_overlap(self):
-    #     self.assertEqual(self.overlap('abb','ababab'),0)
 
 if __name__ == '__main__':
     unittest.main()
