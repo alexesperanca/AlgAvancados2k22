@@ -75,17 +75,17 @@ class OverlapGraph(MyGraph):
             n += 1
     
     def get_instances(self, seq:str) -> list:
-        '''Auxiliary function of "create_overlap_graph" and "create_overlap_graph_with_reps" methods where obtains the elements of the graph where "seq" occurs in the graph
+        '''Auxiliary function of "create_overlap_graph" and "create_overlap_graph_with_reps" methods that obtains the elements of the graph where "seq" occurs in the graph
 
         Parameters
         ----------
         seq : str
-            _description_
+            Sequence to encounter the occurrences of this in the graph
 
         Returns
         -------
         list
-            _description_
+            Elements where "seq" was found in the graph
         '''
         res = []
         for k in self.graph.keys():
