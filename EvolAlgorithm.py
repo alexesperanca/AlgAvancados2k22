@@ -85,15 +85,3 @@ class EvolAlgorithm:
     def printBestSolution(self):
         print("Best solution: ", self.bestsol.getGenes())
         print("Best fitness:", self.bestsol.getFitness())
-
-
-def test():
-    ea = EvolAlgorithm(100, 20, 50, 10)
-    # ea.run()
-    sol, fit = ea.run()
-    print(sol, fit)
-    ea.printBestSolution()
-
-
-if __name__ == "__main__":
-    test()

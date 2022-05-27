@@ -1,3 +1,4 @@
 # __init__.py
 
-import AlgAvancados2k22
+import Automata, BoyerMoore, BWT, debruijn, EAMotifs, EvolAlgorithm, Indiv, MetabolicNetwork, MotifFinding, Motifs, MyGraph, overlap_graphs, Popul, Sequence, trie
+

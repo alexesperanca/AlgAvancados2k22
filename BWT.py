@@ -113,17 +113,3 @@ class BWT:
 			sufix = re.search(r'.*[^ACTG]', seq)		# Obtém a sequência até o símbolo "$" para adicionar no dicionário
 			d[pos] = sufix.group()
 		return tuple(d.keys())
-
-def test():
-	seq = "TAGACAGAGA$"
-	test = BWT(seq)
-	print(test.original_seq())
-	# print(test.bwt_dic)
-	# print(test.find_pattern("AGA"))
-	print(test.suffixarray())
-	# print(test._nucl_table())
-	print(test._build_BWT())
-
-
-if __name__ == "__main__":
-	test()

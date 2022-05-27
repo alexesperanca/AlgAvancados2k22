@@ -12,11 +12,9 @@ class TestMotifFinding(unittest.TestCase):
         '''Test that sets the variables ...
         '''
         #Create object with sequences or files:
-        self.mf1 = MotifFinding(3, ["ATAGAGCTGA", "ACGTAGATGA", "AAGATAGGGG"]) #test2
-                #test6
+        self.mf1 = MotifFinding(3, ["ATAGAGCTGA", "ACGTAGATGA", "AAGATAGGGG"]) 
         self.mf2 = MotifFinding(4, ["AGGTACTT", "CCATACGT", "ACGTTAGT", "ACGTCCAT", "CCGTACGG"])
         self.mf3 = MotifFinding(seqs = ["GTAAACAATATTTATAGC", "AAAATTTACCTCGCAAGG", "CCGTACTGTCAAGCGTGG", "TGAGTAAACGACGTCCCA", "TACTTAACACCCTGTCAA"])
-                #test1 / 3 / 4
         self.mf4 = MotifFinding()
         self.mf4.readFile("exemploMotifs.txt") 
         self.mf5 = MotifFinding()
@@ -169,3 +167,5 @@ class TestMotifFinding(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.

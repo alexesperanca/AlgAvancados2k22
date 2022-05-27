@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
 import unittest
 from trie import SuffixTree, Trie
 import pprint
@@ -14,7 +17,6 @@ class Testtrie(unittest.TestCase):
     def test_print_tree(self):
         self.assertEqual(self.t1.print_tree(),pprint.pprint(self.t1, width = 1))
         self.assertEqual(self.t2.print_tree(),pprint.pprint(self.t2, width = 1))
-#não sei se isto conta
     
     def test_match(self):
         self.assertEqual(self.t1.match('CTGCATACAAGG'),[('CTG', 0), ('CATA', 3), ('CAAGG', 7)])
