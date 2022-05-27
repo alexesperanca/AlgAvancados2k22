@@ -111,9 +111,12 @@ class BWT:
 def test():
 	seq = "TAGACAGAGA$"
 	test = BWT(seq)
-	print(test.original_seq())
-	print(test.find_pattern("AGA"))
-	print(test.suffixarray())
+	# print(test.original_seq())
+	# print(test.find_pattern("AGA"))
+	# print(test.suffixarray())
+	# print(test._nucl_table())
+	# print(test._build_BWT())
+
 
 if __name__ == "__main__":
 	test()
