@@ -4,9 +4,13 @@
 
 
 import unittest
-from Indiv import Indiv, IndivInt, IndivReal
+from Indiv import all
+from Popul import all
+from EvolAlgorithm import all
+from EAMotifs import all
 
-class TestIndiv(unittest.TestCase):
+
+class testEAMotifs(unittest.TestCase):
     def setUp(self):
         '''Test that sets the variables ...
         '''

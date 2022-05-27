@@ -8,6 +8,8 @@ This class includes diverse methods, such as: mutation(), crossover(), and other
 """
 
 from random import randint, random, shuffle, uniform
+from typing import Union
+
 
 class Indiv:
 
@@ -142,7 +144,7 @@ class Indiv:
         '''
         return self.__str__()
 
-    def setFitness(self, fit: int | float) -> None:
+    def setFitness(self, fit: Union[int, float]) -> None:
         '''Method that sets the new fitness of the individual 
 
         Parameters
@@ -152,7 +154,7 @@ class Indiv:
         '''
         self.fitness = fit
 
-    def getFitness(self) -> int | float:
+    def getFitness(self) -> Union[int, float] :
         '''Method that shows the fitness of the individual 
 
         Returns
@@ -314,3 +316,9 @@ class IndivReal(Indiv):
         s = len(self.genes)
         pos = randint(0, s-1)
         self.genes[pos] = uniform(self.lb, self.ub)
+
+
+
+if __name__ == '__main__':
+    i = IndivReal(20)
+    print(i)

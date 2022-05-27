@@ -14,6 +14,8 @@ This class includes diverse strategies for this, such as:
 
 from Motifs import Motifs
 from random import randint
+from typing import Union
+
 
 
 class MotifFinding:
@@ -105,7 +107,7 @@ class MotifFinding:
         elif all (i in 'FLIMVSPTAY_HQNKDECWRG' for i in self.seqs[0]) is True: #AMINO
             return 'FLIMVSPTAY_HQNKDECWRG'
     
-    def createMotifFromIndexes(self, indexes: list, pseudocount: int | float = 0) -> Motifs:
+    def createMotifFromIndexes(self, indexes: list, pseudocount: Union[int, float] = 0) -> Motifs:
         '''Creates an instance of the Motifs Class - which calculates the probabilistic PWM (Position Weighted Matrix) profile of a given list of sequences.
         In this case, it is given also the indexes of the sequences to create this profile.
 
@@ -129,7 +131,7 @@ class MotifFinding:
 
     # SCORES
         
-    def score(self, s: list) -> float | int:
+    def score(self, s: list) -> Union[float, int]:
         '''Method that determines the additive score, given a list of indexes (calculating a profile)
 
         Parameters
@@ -151,7 +153,7 @@ class MotifFinding:
         return score
     
     
-    def scoreMult(self, s: list) -> int | float:
+    def scoreMult(self, s: list) -> Union[int, float]:
         '''Method that determines the multiplicative score, given a list of indexes (calculating a profile)
 
         Parameters
