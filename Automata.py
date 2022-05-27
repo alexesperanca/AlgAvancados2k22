@@ -10,8 +10,6 @@ This class includes diverse strategies to build transition tables and find patte
     - Find the size of the overlap between 2 different sequences
 """
 
-import re
-
 class Automata:
     '''Class that builds a transition table to iterate over for better performance and faster analysis
     '''

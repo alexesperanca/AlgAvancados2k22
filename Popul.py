@@ -10,6 +10,7 @@ This class includes a binary and a real representation of the population.
 
 from Indiv import Indiv, IndivInt, IndivReal
 from random import random
+from typing import Union
 
 
 class Popul:
@@ -86,12 +87,12 @@ class Popul:
         '''
         return max(self.indivs)
 
-    def bestFitness(self) -> int | float:
+    def bestFitness(self) -> Union[int, float]:
         '''Method that returns the best fitness of all the individuals
 
         Returns
         -------
-        int | float
+        int or float
             the best fitness 
         '''
         indv = self.bestSolution()

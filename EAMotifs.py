@@ -144,13 +144,15 @@ class EAMotifsReal (EvolAlgorithm):
         for i in range(0, len(pwm_list), len(self.motifs.alphabet)):
             dic = dict(zip(self.motifs.alphabet, pwm_list[i:]))
             mat.append(dic)
+        n_mat = mat
         for n in self.motifs.alphabet:
             soma = 0
-            for dici in mat:
+            for dici in n_mat:
                 soma += dici[n]
-            for dici in mat:
+            for dici in n_mat:
                 dici[n] = dici[n]/soma
-        return mat
+        return n_mat, mat
+
     
     def prob_seq(self, seq: str, profile: list) -> float:
         '''Calculates and returns the probability of a given sequence by the associated profile
@@ -197,6 +199,31 @@ class EAMotifsReal (EvolAlgorithm):
         seq = [list_seq[I] for I,p in enumerate(probs) if p == score_max][0]
         return seq, ind
 
+    def consensus(self, profile) -> str:
+        '''Creates a sequence consensus between two different sequences using the profile created.
+
+        Parameters
+        ----------
+        s1 : str
+            String sequence of DNA or Amino Acids
+        s2 : str
+            String sequence of DNA or Amino Acids
+
+        Returns
+        -------
+        str
+            Sequence consensus
+        '''
+        # p_max = 0 
+        cons = ''
+        # total = len(self.list_seq) + self.n*self.pseudo #só é aplicável ao pwm
+        for dic in profile:
+            m = max(*dic.values())
+            # p_max += int(m*total)
+            key = [k for k, v in dic.items() if v == m][0]
+            cons += key
+        return cons #, p_max
+
     def evaluate(self, indivs: list) -> None:
         '''Method that builds a pwm profile (normalized) for each individual, determines the most probable position of the motif and calculates the score of the final solution, setting the fitness for that individual. 
 
@@ -209,7 +236,7 @@ class EAMotifsReal (EvolAlgorithm):
             ind = indivs[i]
             sol = ind.getGenes()
             #criar função auxiliar pwm ou pssm (soma de cada coluna é igual a 1 - normalizar valores)
-            pwm = self.profile(sol) # criar o perfil pwm com a lista anterior (por ordem de 4 em 4 (se abcedario é DNA))
+            pwm, o = self.profile(sol) # criar o perfil pwm com a lista anterior (por ordem de 4 em 4 (se abcedario é DNA))
             # para cada sequencia, calcular a posição mais provavel do motif no pwm criado (vetor search)
             search = []
             for x in range(len(self.motifs.seqs)):
@@ -221,21 +248,39 @@ class EAMotifsReal (EvolAlgorithm):
             fit = self.motifs.score(search)
             ind.setFitness(fit)
 
+    
+
+import random
 
 def test1():
     print('Test 1')
-    ea = EAMotifsInt(100, 1000, 50, "AlgAvancados2k22/exemploMotifs.txt")
-    ea.run()
+    random.seed(8)
+    ea = EAMotifsInt(100, 1000, 50, "exemploMotifs.txt")
+    # ea = EAMotifsInt(200, 2000, 60, 'exemploMotifs2.txt')
+    # ea = EAMotifsInt(50, 1000, 30, 'exemploMotifs3.txt')
+    sol, fit = ea.run()
+    print(sol, fit)
+    motif = ea.motifs.createMotifFromIndexes(sol)
+    cons = motif.consensus()
+    print(cons)
     ea.printBestSolution()
 
 
 def test2():
     print('Test 2')
-    ea = EAMotifsReal(100, 2000, 50, "AlgAvancados2k22/exemploMotifs.txt")
-    ea.run()
+    random.seed(1)
+    ea = EAMotifsReal(100, 1000, 50, "exemploMotifs2.txt")
+    sol, fit = ea.run()
+    print(sol, fit)
+    o, profile = ea.profile(sol)
+    cons = ea.consensus(profile)
+    print(cons)
     ea.printBestSolution()
 
 
 if __name__ == "__main__":
     test1()
     test2()
+
+
+#ACGT ordem pwm
