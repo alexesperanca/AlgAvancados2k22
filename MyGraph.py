@@ -408,9 +408,7 @@ class MyGraph:
             Shortest path performed
         '''
         if s == d: return [s,d]
-        path = self.get_path(s, d)
-        nodes = " -> ".join(f"{i}" for i in path)
-        return nodes
+        return self.get_path(s, d)
         
     def reachable_with_dist(self, s: Union[str, int, float]) -> list:
         '''Method that returns an list of the reachable nodes from the given "s" and respective distance needed

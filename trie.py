@@ -186,7 +186,7 @@ class SuffixTree(Trie):
 		list
 			List of strings obtained from the iteration of the node given
 		'''
-		assert node in self.tree.keys(), "Node inputted not present in the tree"
+		assert node in self.tree.keys(), "Node inputted is not present in the tree"
 		node = node.upper()
 		res = []
 		for n in self.tree[node]:

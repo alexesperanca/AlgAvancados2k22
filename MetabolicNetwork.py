@@ -72,7 +72,7 @@ class MetabolicNetwork (MyGraph):
         '''
         assert nodetype in ["metabolite", "reaction"], "Nodetype given not supported"
         if nodetype in self.node_types:
-            return self.node_types[nodetype]
+            return sorted(self.node_types[nodetype])
         else: return None
     
     def load_from_file(self, filename: str):
@@ -149,6 +149,8 @@ class MetabolicNetwork (MyGraph):
         elif self.net_type == "reaction-reaction": 
             self.convert_reaction_graph(gmr)
         else: self.graph = {}
+
+        rf.close()
         
         
     def convert_metabolite_net(self, gmr: dict):
