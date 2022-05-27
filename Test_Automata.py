@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
+
 import unittest
 from Automata import Automata
 

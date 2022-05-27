@@ -397,27 +397,3 @@ class Sequence:
             
         return orfs_prot
 
-
-
-# teste
-def teste():
-    # seq_dna = input("Sequencia:")
-    seq_dna = 'ATTTAATTACAAGTCTTCAGAATGCCAGAGATATACAGGATCTAACCAATGTTAGAGTTATTAAAAAGTCTGGTATTCGCCGTAATCATGGTACCTGTCGTGATGGCCATCATCCTGGGTCTGATTTACGGTCTTGGTGAAGTATTCAACATCTTTTCTGGTGTTGGTAAAAAAGACCAGCCCGGACAAAATCATTGA'
-    s1 = Sequence(seq_dna)
-    s1.print_seq()
-
-    print("Transcricao: ")
-    print(s1.transcription())
-    print("Complemento inverso:") 
-    print(s1.comp_inverse())
-    print("Traducao: ") 
-    print(s1.translation())
-    print("ORFs:")
-    print(s1.get_aa_orfs())
-    print("Proteinas:")
-    print(s1.get_all_prots())
-    print("Maior proteina:")
-    print(s1.get_bigger_prot()) 
-
-if __name__ == "__main__": 
-    teste()

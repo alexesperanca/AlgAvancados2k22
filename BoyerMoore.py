@@ -105,16 +105,3 @@ class BoyerMoore:
             return 'No match!'
         else: 
             return res
-
-def test():
-    padrao = "ACCA"
-    texto = "ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"
-    bm = BoyerMoore('ACTG', padrao)
-    print (bm.process_bcr())
-    print (bm.process_gsr())
-    print (bm.search_pattern(texto))
-
-if __name__ == '__main__':
-    test()
-
-# result: [5, 13, 23, 37]

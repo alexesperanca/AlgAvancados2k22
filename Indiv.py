@@ -318,7 +318,3 @@ class IndivReal(Indiv):
         self.genes[pos] = uniform(self.lb, self.ub)
 
 
-
-if __name__ == '__main__':
-    i = IndivReal(20)
-    print(i)

@@ -248,39 +248,5 @@ class EAMotifsReal (EvolAlgorithm):
             fit = self.motifs.score(search)
             ind.setFitness(fit)
 
-    
-
-import random
-
-def test1():
-    print('Test 1')
-    random.seed(8)
-    ea = EAMotifsInt(100, 1000, 50, "exemploMotifs.txt")
-    # ea = EAMotifsInt(200, 2000, 60, 'exemploMotifs2.txt')
-    # ea = EAMotifsInt(50, 1000, 30, 'exemploMotifs3.txt')
-    sol, fit = ea.run()
-    print(sol, fit)
-    motif = ea.motifs.createMotifFromIndexes(sol)
-    cons = motif.consensus()
-    print(cons)
-    ea.printBestSolution()
 
 
-def test2():
-    print('Test 2')
-    random.seed(1)
-    ea = EAMotifsReal(100, 1000, 50, "exemploMotifs2.txt")
-    sol, fit = ea.run()
-    print(sol, fit)
-    o, profile = ea.profile(sol)
-    cons = ea.consensus(profile)
-    print(cons)
-    ea.printBestSolution()
-
-
-if __name__ == "__main__":
-    test1()
-    test2()
-
-
-#ACGT ordem pwm

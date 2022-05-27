@@ -124,28 +124,3 @@ def overlap(s1: str, s2: str) -> int:
     for i in range(maxov,0,-1):
         if s1[-i:] == s2[:i]: return i
     return 0
-               
-def test():
-    auto = Automata("AC", "ACA")
-    auto.printAutomata()
-    print (auto.applySeq("CACAACAA"))
-    print (auto.occurencesPattern("CACAACAA"))
-    print (auto.nextState(2, 'A'))
-    print (overlap("abb", "ababab"))
-
-if __name__ == "__main__":
-    test()
-
-#States:  4
-#Alphabet:  AC
-#Transition table:
-#0 , A  ->  1
-#0 , C  ->  0
-#1 , A  ->  1
-#1 , C  ->  2
-#2 , A  ->  3
-#2 , C  ->  0
-#3 , A  ->  1
-#3 , C  ->  2
-#[0, 0, 1, 2, 3, 1, 2, 3, 1]
-#[1, 4]
