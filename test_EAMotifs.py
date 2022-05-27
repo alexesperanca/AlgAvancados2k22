@@ -27,23 +27,44 @@ class testEAMotifs(unittest.TestCase):
         self.cons_int3 = self.EAmotif_int3.motifs.createMotifFromIndexes(self.best_sol_int3).consensus()
 
 
-        # random.seed(8)
+        random.seed(8)
         self.EAmotif_real1 = EAMotifsReal(100, 1000, 50, 'exemploMotifs.txt')
-        self.EAmotif_real2 = EAMotifsReal(200, 2000, 60, 'exemploMotifs2.txt')
-        self.EAmotif_real3 = EAMotifsReal(50, 1000, 30, 'exemploMotifs3.txt')
+        random.seed(8)
+        self.EAmotif_real2 = EAMotifsReal(100, 1000, 50, 'exemploMotifs2.txt')
+
+        self.best_sol_real1, self.bestFit_real1 = self.EAmotif_real1.run()
+        self.best_sol_real2, self.bestFit_real2 = self.EAmotif_real2.run()
+        self.o, self.prof1 = self.EAmotif_real1.profile(self.best_sol_real1)
+        self.cons_real1 = self.EAmotif_real1.consensus(self.prof1)
+        self.o2, self.prof2 = self.EAmotif_real2.profile(self.best_sol_real2)
+        self.cons_real2 = self.EAmotif_real2.consensus(self.prof2)
 
 
     def testBestSolution(self):
-        self.assertEqual(self.best_sol_int1, [0, 38, 24, 26, 1])
-        self.assertEqual(self.best_sol_int2, [33, 24, 6, 59, 1])
+        self.assertEqual(self.best_sol_int1, [48, 47, 1, 0, 44])
+        self.assertEqual(self.best_sol_int2, [28, 43, 1, 0, 58])
+        self.assertEqual(self.best_sol_int3, [0, 0, 60, 63, 281, 151, 0, 0, 178, 0])
+
+        self.assertEqual(self.best_sol_real1, [48, 47, 1, 0, 44])
+        self.assertEqual(self.best_sol_real2, [28, 43, 1, 0, 58])
+        # self.assertEqual(self.best_sol_real3, [0, 0, 60, 63, 281, 151, 0, 0, 178, 0])
 
     def testBestFitness(self):
-        self.assertEqual(self.bestFit_int1, 28)
-        self.assertEqual(self.bestFit_int2, 31)
+        self.assertEqual(self.bestFit_int1, 27)
+        self.assertEqual(self.bestFit_int2, 33)
+        self.assertEqual(self.bestFit_int3, 52)
+
+        self.assertEqual(self.bestFit_real1, 27)
+        self.assertEqual(self.bestFit_real2, 33)
+        # self.assertEqual(self.bestFit_real3, 52)
 
     def testConsensus(self):
-        self.assertEqual(self.cons_int1, 'CCTGATAC')
-        self.assertEqual(self.cons_int2, 'ACGTACAC')
+        self.assertEqual(self.cons_int1, 'AACGCTCG')
+        self.assertEqual(self.cons_int2, 'AACGTACG')
+        self.assertEqual(self.cons_int3, 'AAAATCTT')
+
+        self.assertEqual(self.cons_real1, 'ACGTA')
+        self.assertEqual(self.cons_real2, 'ACGTA')
 
 
 if __name__ == '__main__':

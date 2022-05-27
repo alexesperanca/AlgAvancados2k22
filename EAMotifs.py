@@ -269,7 +269,7 @@ def test1():
 def test2():
     print('Test 2')
     random.seed(1)
-    ea = EAMotifsReal(100, 2000, 50, "exemploMotifs.txt")
+    ea = EAMotifsReal(100, 1000, 50, "exemploMotifs2.txt")
     sol, fit = ea.run()
     print(sol, fit)
     o, profile = ea.profile(sol)
