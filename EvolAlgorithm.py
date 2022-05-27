@@ -79,7 +79,8 @@ class EvolAlgorithm:
             bs = self.popul.bestSolution()
             if bs > self.bestsol:
                 self.bestsol = bs
-            # print("Iteration:", i, " ", "Best: ", self.bestsol)
+        return self.bestsol.getGenes(), self.bestsol.getFitness()
+            # print("Iteration:", i, " ", "Best: ", self.bestsol)z
 
     def printBestSolution(self):
         print("Best solution: ", self.bestsol.getGenes())
@@ -88,7 +89,9 @@ class EvolAlgorithm:
 
 def test():
     ea = EvolAlgorithm(100, 20, 50, 10)
-    ea.run()
+    # ea.run()
+    sol, fit = ea.run()
+    print(sol, fit)
     ea.printBestSolution()
 
 
