@@ -29,19 +29,13 @@ class BWT:
 		'''Burrows-Wheeler (BWT) matrix construction where the BWT line and Ordered line are defined and joined in a dictionary
 		'''
 		self.combinations = sorted([(self.seq[i:] + self.seq[:i], i) for i in range(len(self.seq))])	# Obter todas as sequências ordenadas
-		print(self.combinations)
 		b, pos = zip(*[(s[-1], p) for s, p in self.combinations])										# Obter apenas último membro das combinações (BWT) e nº de combinação
-		print(b, pos)
 		bwt = list(zip(b, pos))
-		print(bwt)
 		fun1 = self._nucl_table()
 		self.bwt_line = [fun1(x) for x in [i[0] for i in bwt]]											# Obter linha BWT com a função _nucl_table que conta cada entrada dos caracteres
-		print(self.bwt_line)
 		fun2 = self._nucl_table()
 		self.ord_line = [fun2(x) for x in sorted([i[0] for i in bwt])]
-		print(self.ord_line)									# Obter linha Ordenada com a função _nucl_table tbm
 		self.bwt_dic = {k: v for k, v in zip(self.bwt_line, self.ord_line)}								# Dicionário para aceder + facilmente a cada membro seguinte para recuperação da sequência
-		print(self.bwt_dic)
 
 	def _nucl_table(self) -> str:
 		'''Auxiliary function that builds a dictionary with the occurences of characters provided to return the current occurrence of each character
