@@ -199,6 +199,30 @@ class EAMotifsReal (EvolAlgorithm):
         seq = [list_seq[I] for I,p in enumerate(probs) if p == score_max][0]
         return seq, ind
 
+    def evaluate(self, indivs: list) -> None:
+        '''Method that builds a pwm profile (normalized) for each individual, determines the most probable position of the motif and calculates the score of the final solution, setting the fitness for that individual. 
+
+        Parameters
+        ----------
+        indivs : list
+            list that represents the individuals (list of lists with float numbers - pwm profile)
+        '''
+        for i in range(len(indivs)):
+            ind = indivs[i]
+            sol = ind.getGenes()
+            #criar função auxiliar pwm ou pssm (soma de cada coluna é igual a 1 - normalizar valores)
+            pwm, o = self.profile(sol) # criar o perfil pwm com a lista anterior (por ordem de 4 em 4 (se abcedario é DNA))
+            # para cada sequencia, calcular a posição mais provavel do motif no pwm criado (vetor search)
+            search = []
+            for x in range(len(self.motifs.seqs)):
+                ## fazer função auxiliar para seq mais provavel (nao dá para utilizar função da Classe Motifs porque não é criada uma instancia, fazemos o perfil direto da lista)
+                seq_prob, index = self.seq_most_probable(self.motifs.seqs[x], pwm)
+                search.append(index)
+
+            # calcular o score
+            fit = self.motifs.score(search)
+            ind.setFitness(fit)
+
     def consensus(self, profile) -> str:
         '''Creates a sequence consensus between two different sequences using the profile created.
 
@@ -223,30 +247,6 @@ class EAMotifsReal (EvolAlgorithm):
             key = [k for k, v in dic.items() if v == m][0]
             cons += key
         return cons #, p_max
-
-    def evaluate(self, indivs: list) -> None:
-        '''Method that builds a pwm profile (normalized) for each individual, determines the most probable position of the motif and calculates the score of the final solution, setting the fitness for that individual. 
-
-        Parameters
-        ----------
-        indivs : list
-            list that represents the individuals (list of lists with float numbers - pwm profile)
-        '''
-        for i in range(len(indivs)):
-            ind = indivs[i]
-            sol = ind.getGenes()
-            #criar função auxiliar pwm ou pssm (soma de cada coluna é igual a 1 - normalizar valores)
-            pwm, o = self.profile(sol) # criar o perfil pwm com a lista anterior (por ordem de 4 em 4 (se abcedario é DNA))
-            # para cada sequencia, calcular a posição mais provavel do motif no pwm criado (vetor search)
-            search = []
-            for x in range(len(self.motifs.seqs)):
-                ## fazer função auxiliar para seq mais provavel (nao dá para utilizar função da Classe Motifs porque não é criada uma instancia, fazemos o perfil direto da lista)
-                seq_prob, index = self.seq_most_probable(self.motifs.seqs[x], pwm)
-                search.append(index)
-
-            # calcular o score
-            fit = self.motifs.score(search)
-            ind.setFitness(fit)
 
 
 
