@@ -33,8 +33,8 @@ class TestBWT(unittest.TestCase):
         self.assertEqual(self.t2.original_seq(),'GTAAAACACG')
 
     def test_find_pattern(self):
-        self.assertEqual(self.t1.find_pattern("AGA"),[3, 4, 5])
-        self.assertEqual(self.t2.find_pattern('GAG'),'No match!')
+        self.assertEqual(self.t1.find_pattern("AGA"), [3, 4, 5])
+        self.assertEqual(self.t2.find_pattern('GAG'), [])
 
     def test_suffixarray(self):
         self.assertEqual(self.t1.suffixarray(),(10, 9, 3, 7, 1, 5, 4, 8, 2, 6, 0))
