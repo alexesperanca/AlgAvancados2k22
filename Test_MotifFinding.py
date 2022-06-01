@@ -166,6 +166,3 @@ class TestMotifFinding(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-# -*- coding: utf-8 -*-
-# Copyright 2022 by Group 7 (MSc Bioinformatics - University of Minho).  All rights reserved.
